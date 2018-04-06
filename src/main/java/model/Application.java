@@ -1,10 +1,12 @@
 package model;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import repository.EventDao;
 
 import java.util.Arrays;
 
@@ -16,6 +18,9 @@ import java.util.Arrays;
 @SpringBootApplication
 public class Application {
 
+    @Autowired
+    private EventDao eventDao;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -25,15 +30,15 @@ public class Application {
 
 
         Event event = new Event("Saariselkä 2018");
-        event.addMember("Mihkel Märtin");
-        event.addMember("Alvar Tõruke");
-        event.addMember("Peeter Kutman");
-        event.addMember("Tõnu Riisalo");
-        event.addMember("Lauri Maisvee");
+        event.addMember("Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
+        event.addMember("Alvar Tõruke","Tõru","alvar@gmai.com","");
+        event.addMember("Peeter Kutman","Peta","","");
+        event.addMember("Tõnu Riisalo","Tõnu","","");
+        event.addMember("Lauri Maisvee","Lauri","","");
         event.addTransaction("Taksosõit Ivalost Saariselkä");
         event.addTransaction("Kolmapäevane I poeskäik");
         System.out.println(event.toString());
-
+        eventDao.add(event);
 
         return args -> {
             System.out.println("Let's inspect the beans provided by Spring Boot:");
