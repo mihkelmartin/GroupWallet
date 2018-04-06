@@ -14,6 +14,7 @@ import java.util.UUID;
  * Created by mihkel on 5.04.2018.
  */
 
+@Document
 public class Event {
 
     @Id
@@ -22,6 +23,10 @@ public class Event {
     private final @NonNull Short PIN;
     private ArrayList<Member> members = new ArrayList<>();
     private ArrayList<Transaction> transactions = new ArrayList<>();
+
+    public String getId() {
+        return id;
+    }
 
     public Event (String name){
         this.id = UUID.randomUUID().toString();
