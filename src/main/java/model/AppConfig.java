@@ -1,6 +1,8 @@
 package model;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,8 +26,13 @@ public class AppConfig {
     }
 
     public @Bean
+    MongoDatabase mongoDatabase() throws Exception {
+        return mongoDbSimpleFactory().getDb();
+    }
+
+    public @Bean
     EventDao mongdoDBEventDao() throws Exception {
-        return new MongoDBEventDao(mongoDbSimpleFactory());
+        return new MongoDBEventDao();
     }
 
 }

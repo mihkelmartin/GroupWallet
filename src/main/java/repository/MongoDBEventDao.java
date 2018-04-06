@@ -8,8 +8,6 @@ import model.Event;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.MongoDbFactory;
-
 
 
 /**
@@ -18,14 +16,11 @@ import org.springframework.data.mongodb.MongoDbFactory;
 
 public class MongoDBEventDao implements EventDao {
 
-    private MongoDatabase db;
     @Value( "${mongoDB.CollectionName}" )
     private String collectionName;
 
     @Autowired
-    public MongoDBEventDao (MongoDbFactory mongoDbFactory){
-      this.db = mongoDbFactory.getDb();
-    }
+    private MongoDatabase db;
 
     @Override
     public void add(Event event) {
