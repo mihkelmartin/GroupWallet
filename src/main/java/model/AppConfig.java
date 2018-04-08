@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import repository.EventDao;
 import repository.MongoDBEventDao;
@@ -16,17 +18,21 @@ import repository.MongoDBEventDao;
 @Configuration
 public class AppConfig {
 
+    @Value( "${mongoDB.mongoHost}" )
+    private String mongoHost;
+    @Value( "${mongoDB.mongoPort}" )
+    private Integer mongoPort;
     @Value( "${mongoDB.DBName}" )
     private String mongoDBName;
 
     public @Bean
     MongoDbFactory mongoDbSimpleFactory() throws Exception {
-        return new SimpleMongoDbFactory(new MongoClient(), mongoDBName);
+        return new SimpleMongoDbFactory(new MongoClient(mongoHost, mongoPort), mongoDBName);
     }
 
     public @Bean
-    MongoDatabase mongoDatabase() throws Exception {
-        return mongoDbSimpleFactory().getDb();
+    MongoOperations mongoOperations() throws Exception {
+        return new MongoTemplate(mongoDbSimpleFactory());
     }
 
     public @Bean
