@@ -38,7 +38,7 @@ public class Event {
         return retVal;
     }
 
-    public void addMemberToTransactions(Member member){
+    protected void addMemberToTransactions(Member member){
         for(Transaction transaction : transactions){
             transaction.addTransactionItem(member);
         }
@@ -49,7 +49,7 @@ public class Event {
         members.remove(member);
     }
 
-    public void removeMemberFromTransactions(Member member){
+    protected void removeMemberFromTransactions(Member member){
         for(Transaction transaction : transactions){
             transaction.removeTransactionItemsWithMember(member);
         }

@@ -54,6 +54,8 @@ public class Application {
         transaction.addDebitForMember(tonu.getId(), 0);
         transaction.setAutoCalculationOnForMember(mihkel.getId());
         transactionDao.save(transaction);
+        Member munajoodik = event.addMember("Munajoodik Tuslik","Tuslik","kaarelmartin@gmail.com","");
+        memberDao.save(munajoodik);
 
         return args -> {
             System.out.println("Let's inspect the beans provided by Spring Boot:");

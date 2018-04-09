@@ -32,22 +32,25 @@ public class Transaction implements Comparable<Transaction>, Ordered {
     }
 
 
-    public TransactionItem addTransactionItem(Member member) {
+    protected TransactionItem addTransactionItem(Member member) {
         TransactionItem retVal = new TransactionItem(this.id, member.getId());
         items.add(retVal);
+        calculateCredits();
         return retVal;
     }
 
-    public void removeTransactionItemsWithMember(Member member){
+    protected void removeTransactionItemsWithMember(Member member){
         for(TransactionItem item : items){
             if(item.getMemberId() == member.getId())
                 items.remove(member);
         }
+        calculateCredits();
     }
 
-    public void populateTransactionItems(ArrayList<Member> members) {
+    protected void populateTransactionItems(ArrayList<Member> members) {
         for(Member member : members){
-            addTransactionItem(member);
+            TransactionItem transactionItem = new TransactionItem(this.id, member.getId());
+            items.add(transactionItem);
         }
     }
 
