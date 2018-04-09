@@ -1,6 +1,6 @@
 package repository;
 
-import model.Event;
+import model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -10,14 +10,14 @@ import org.springframework.data.mongodb.core.MongoOperations;
  * Created by mihkel on 6.04.2018.
  */
 
-public class MongoDBEventDao implements EventDao {
+public class MongoDBTransactionDao implements TransactionDao {
 
     @Autowired
     @Qualifier("mongoOperations")
     private MongoOperations mongoOps;
 
     @Override
-    public void save(Event event) {
-        mongoOps.save(event);
+    public void save(Transaction transaction) {
+        mongoOps.save(transaction.getEvent());
     }
 }

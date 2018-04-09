@@ -9,8 +9,7 @@ import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-import repository.EventDao;
-import repository.MongoDBEventDao;
+import repository.*;
 
 /**
  * Created by mihkel on 6.04.2018.
@@ -40,4 +39,12 @@ public class AppConfig {
         return new MongoDBEventDao();
     }
 
+    public @Bean
+    MemberDao mongdoDBMemberDao() throws Exception {
+        return new MongoDBMemberDao();
+    }
+    public @Bean
+    TransactionDao mongdoDBTransactionDao() throws Exception {
+        return new MongoDBTransactionDao();
+    }
 }

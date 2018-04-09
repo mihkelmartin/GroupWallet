@@ -24,9 +24,6 @@ public class Event {
     private ArrayList<Member> members = new ArrayList<>();
     private ArrayList<Transaction> transactions = new ArrayList<>();
 
-    public String getId() {
-        return id;
-    }
 
     public Event (String name){
         this.id = UUID.randomUUID().toString();
@@ -35,7 +32,7 @@ public class Event {
     }
 
     public Member addMember(String name, String nickName, String eMail, String bankAccount){
-        Member retVal = new Member(name, nickName, eMail, bankAccount, getNextOrderNr(members));
+        Member retVal = new Member(name, nickName, eMail, bankAccount, getNextOrderNr(members), this);
         members.add(retVal);
         addMemberToTransactions(retVal);
         return retVal;
@@ -59,7 +56,7 @@ public class Event {
     }
 
     public Transaction addTransaction(String name) {
-        Transaction retVal = new Transaction(name, getNextOrderNr(transactions));
+        Transaction retVal = new Transaction(name, getNextOrderNr(transactions), this);
         transactions.add(retVal);
         retVal.populateTransactionItems(members);
         return retVal;

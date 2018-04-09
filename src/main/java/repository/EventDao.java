@@ -7,6 +7,6 @@ import model.Event;
  */
 public interface EventDao {
 
-    public void add(Event event);
+    public void save(Event event);
 
 }

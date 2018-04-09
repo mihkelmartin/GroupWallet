@@ -2,11 +2,10 @@ package model;
 
 import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -20,13 +19,103 @@ public class Transaction implements Comparable<Transaction>, Ordered {
     private boolean bmanualCalculation;
     private @NonNull int order;
     private ArrayList<TransactionItem> items = new ArrayList<>();
+    @Transient
+    private @NonNull Event event;
 
-    public Transaction(String name, int order) {
+
+    public Transaction(String name, int order, Event event) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         bmanualCalculation = false;
         this.order = order;
+        this.event = event;
     }
+
+
+    public TransactionItem addTransactionItem(Member member) {
+        TransactionItem retVal = new TransactionItem(this.id, member.getId());
+        items.add(retVal);
+        return retVal;
+    }
+
+    public void removeTransactionItemsWithMember(Member member){
+        for(TransactionItem item : items){
+            if(item.getMemberId() == member.getId())
+                items.remove(member);
+        }
+    }
+
+    public void populateTransactionItems(ArrayList<Member> members) {
+        for(Member member : members){
+            addTransactionItem(member);
+        }
+    }
+
+    public void addDebitForMember(String memberId, double debit){
+        for(TransactionItem item : items){
+            if(item.getMemberId() == memberId)
+                item.setDebit(debit);
+        }
+        calculateCredits();
+    }
+
+    public void addCreditForMember(String memberId, double credit){
+        for(TransactionItem item : items){
+            if(item.getMemberId() == memberId) {
+                item.setCredit(credit);
+                item.setBcreditAutoCalculated(false);
+            }
+        }
+        calculateCredits();
+    }
+
+    public void setAutoCalculationOnForMember(String memberId){
+        for(TransactionItem item : items){
+            if(item.getMemberId() == memberId)
+                item.setBcreditAutoCalculated(true);
+        }
+        calculateCredits();
+    }
+
+    private void calculateCredits(){
+
+        double dAutoCalculatedCredit = 0.0;
+        int lAutoCalculatedCreditCount = getAutoCalculatedCreditCount();
+        if(lAutoCalculatedCreditCount != 0) {
+            dAutoCalculatedCredit = (getDebit() - getManualCredit()) / getAutoCalculatedCreditCount();
+            for(TransactionItem item : items){
+                if(item.isBcreditAutoCalculated())
+                    item.setCredit(dAutoCalculatedCredit);
+            }
+        }
+    }
+
+    private double getDebit(){
+        double retVal = 0.0;
+        for(TransactionItem item : items){
+            retVal += item.getDebit();
+        }
+        return retVal;
+    }
+
+    private double getManualCredit(){
+        double retVal = 0.0;
+        for(TransactionItem item : items){
+            if(!item.isBcreditAutoCalculated())
+                retVal += item.getCredit();
+        }
+        return retVal;
+    }
+
+    private int getAutoCalculatedCreditCount(){
+        int retVal = 0;
+        for(TransactionItem item : items){
+            if(item.isBcreditAutoCalculated())
+                retVal ++;
+        }
+        return retVal;
+    }
+
 
     @Override
     public int getOrder() {
@@ -37,30 +126,14 @@ public class Transaction implements Comparable<Transaction>, Ordered {
         this.order = order;
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
     @Override
     public int compareTo(Transaction o) {
         return (this.getOrder() < o.getOrder() ? -1 :
                 (this.getOrder() == o.getOrder() ? 0 : 1));
-    }
-
-
-    public TransactionItem addTransactionItem(Member member) {
-        TransactionItem retVal = new TransactionItem(id, member);
-        items.add(retVal);
-        return retVal;
-    }
-
-    public void removeTransactionItemsWithMember(Member member){
-        for(TransactionItem item : items){
-            if(item.getMember() == member)
-                items.remove(member);
-        }
-    }
-
-    public void populateTransactionItems(ArrayList<Member> members) {
-        for(Member member : members){
-            addTransactionItem(member);
-        }
     }
 
 }
