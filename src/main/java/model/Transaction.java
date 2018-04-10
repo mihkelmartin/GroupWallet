@@ -1,12 +1,15 @@
 package model;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.lang.NonNull;
+import repository.TransactionDao;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * Created by mihkel on 5.04.2018.
@@ -22,34 +25,45 @@ public class Transaction implements Comparable<Transaction>, Ordered {
     @Transient
     private @NonNull Event event;
 
+    @Autowired
+    private TransactionDao transactionDao;
 
-    public Transaction(String name, int order, Event event) {
+    @Autowired
+    private Supplier<TransactionItem> transactionItemSupplier;
+
+    public Transaction(){
         this.id = UUID.randomUUID().toString();
+    }
+
+    public void update(String name, int order, Event event) {
         this.name = name;
         bmanualCalculation = false;
         this.order = order;
         this.event = event;
     }
 
+    public void addToSet(ArrayList<Transaction> transactions){
+        transactions.add(this);
+    }
 
     protected TransactionItem addTransactionItem(Member member) {
-        TransactionItem retVal = new TransactionItem(this.id, member.getId());
-        items.add(retVal);
-        calculateCredits();
+        TransactionItem retVal = transactionItemSupplier.get();
+        retVal.update(this.id, member.getId());
+        retVal.addToSet(items);
         return retVal;
     }
 
     protected void removeTransactionItemsWithMember(Member member){
         for(TransactionItem item : items){
             if(item.getMemberId() == member.getId())
-                items.remove(member);
+                items.remove(item);
         }
-        calculateCredits();
     }
 
     protected void populateTransactionItems(ArrayList<Member> members) {
         for(Member member : members){
-            TransactionItem transactionItem = new TransactionItem(this.id, member.getId());
+            TransactionItem transactionItem = transactionItemSupplier.get();
+            transactionItem.update(this.id, member.getId());
             items.add(transactionItem);
         }
     }
@@ -59,7 +73,6 @@ public class Transaction implements Comparable<Transaction>, Ordered {
             if(item.getMemberId() == memberId)
                 item.setDebit(debit);
         }
-        calculateCredits();
     }
 
     public void addCreditForMember(String memberId, double credit){
@@ -69,7 +82,6 @@ public class Transaction implements Comparable<Transaction>, Ordered {
                 item.setBcreditAutoCalculated(false);
             }
         }
-        calculateCredits();
     }
 
     public void setAutoCalculationOnForMember(String memberId){
@@ -77,10 +89,9 @@ public class Transaction implements Comparable<Transaction>, Ordered {
             if(item.getMemberId() == memberId)
                 item.setBcreditAutoCalculated(true);
         }
-        calculateCredits();
     }
 
-    private void calculateCredits(){
+    public void calculateCredits(){
 
         double dAutoCalculatedCredit = 0.0;
         int lAutoCalculatedCreditCount = getAutoCalculatedCreditCount();
@@ -131,6 +142,10 @@ public class Transaction implements Comparable<Transaction>, Ordered {
 
     public Event getEvent() {
         return event;
+    }
+
+    public void save(){
+        transactionDao.save(this);
     }
 
     @Override

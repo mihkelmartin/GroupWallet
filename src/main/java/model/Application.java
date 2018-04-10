@@ -11,6 +11,7 @@ import repository.MemberDao;
 import repository.TransactionDao;
 
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * Created by mihkel on 5.04.2018.
@@ -21,11 +22,7 @@ import java.util.Arrays;
 public class Application {
 
     @Autowired
-    private EventDao eventDao;
-    @Autowired
-    private MemberDao memberDao;
-    @Autowired
-    private TransactionDao transactionDao;
+    private Event event;
 
 
     public static void main(String[] args) {
@@ -35,8 +32,7 @@ public class Application {
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 
-
-        Event event = new Event("Saariselkä 2018");
+        event.update("Saariselkä 2018");
         Member mihkel = event.addMember("Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
         event.addMember("Alvar Tõruke","Tõru","alvar@gmai.com","");
         event.addMember("Peeter Kutman","Peta","","");
@@ -45,27 +41,29 @@ public class Application {
         event.addTransaction("Taksosõit Ivalost Saariselkä");
         Transaction transaction = event.addTransaction("Kolmapäevane I poeskäik");
         System.out.println(event.toString());
-        eventDao.save(event);
+        event.save();
         lauri.setOrder(10000);
-        memberDao.save(lauri);
+        lauri.save();
         transaction.addDebitForMember(lauri.getId(), 320);
         transaction.addDebitForMember(tonu.getId(), 225);
         transaction.addCreditForMember(mihkel.getId(), 0);
         transaction.addDebitForMember(tonu.getId(), 0);
         transaction.setAutoCalculationOnForMember(mihkel.getId());
-        transactionDao.save(transaction);
+        transaction.save();
         Member munajoodik = event.addMember("Munajoodik Tuslik","Tuslik","kaarelmartin@gmail.com","");
-        memberDao.save(munajoodik);
+        munajoodik.save();
+        event.removeMember(lauri);
+        event.save();
 
         return args -> {
             System.out.println("Let's inspect the beans provided by Spring Boot:");
 
             String[] beanNames = ctx.getBeanDefinitionNames();
+
             Arrays.sort(beanNames);
             for (String beanName : beanNames) {
                 System.out.println(beanName);
             }
-
         };
     }
 

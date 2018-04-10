@@ -4,12 +4,14 @@ import model.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.stereotype.Repository;
 
 
 /**
  * Created by mihkel on 6.04.2018.
  */
 
+@Repository
 public class MongoDBMemberDao implements MemberDao {
 
     @Autowired
