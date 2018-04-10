@@ -57,7 +57,7 @@ public class Event {
 
     public Member removeMember(Member member){
         removeMemberFromTransactions(member);
-        members.remove(member);
+        member.removeFromSet(members);
         return member;
     }
 
@@ -75,8 +75,9 @@ public class Event {
         return retVal;
     }
 
-    public void removeTransaction(Transaction transaction) {
-        transactions.remove(transaction);
+    public Transaction removeTransaction(Transaction transaction) {
+        transaction.removeFromSet(transactions);
+        return transaction;
     }
 
     public ArrayList<Transaction> getTransactions() {

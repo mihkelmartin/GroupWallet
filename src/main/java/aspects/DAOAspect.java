@@ -39,16 +39,23 @@ public class DAOAspect {
     @AfterReturning(value="(execution(* model.Event.addMember(..)) || " +
                  "execution(* model.Event.removeMember(..))) ",
             returning="retVal")
-    public void SaveMember(Object retVal) {
+    public void SaveMemberInEvent(Object retVal) {
 
         System.out.println("Running DAOAspect on adding/removing Member " + ((Member)retVal).toString());
         memberDao.save((Member) retVal);
     }
 
+    @AfterReturning(value="execution(* model.Member.update(..)) && target(bean)")
+    public void SaveMember(Object bean) {
+
+        System.out.println("Running DAOAspect on updating Member " + ((Member)bean).toString());
+        memberDao.save((Member) bean);
+    }
+
     @AfterReturning(value="(execution(* model.Event.addTransaction(..)) || " +
             "execution(* model.Event.removeTransaction(..))) ",
             returning="retVal")
-    public void SaveTransactionInEven(Object retVal) {
+    public void SaveTransactionInEvent(Object retVal) {
 
         System.out.println("Running DAOAspect on adding/removing Transaction " + ((Transaction)retVal).toString());
         transactionDao.save((Transaction) retVal);

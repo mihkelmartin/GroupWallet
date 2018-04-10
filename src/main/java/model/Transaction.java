@@ -43,6 +43,10 @@ public class Transaction implements Comparable<Transaction>, Ordered {
         transactions.add(this);
     }
 
+    public void removeFromSet(ArrayList<Transaction> transactions){
+        transactions.remove(this);
+    }
+
     protected TransactionItem addTransactionItem(Member member) {
         TransactionItem retVal = transactionItemSupplier.get();
         retVal.update(this.id, member.getId());

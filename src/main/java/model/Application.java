@@ -38,10 +38,8 @@ public class Application {
         event.addMember("Peeter Kutman","Peta","","");
         Member tonu = event.addMember("Tõnu Riisalo","Tõnu","","");
         Member lauri = event.addMember("Lauri Maisvee","Lauri","","");
-        event.addTransaction("Taksosõit Ivalost Saariselkä");
+        Transaction kustutatav = event.addTransaction("Taksosõit Ivalost Saariselkä");
         Transaction transaction = event.addTransaction("Kolmapäevane I poeskäik");
-        System.out.println(event.toString());
-        lauri.setOrder(10000);
         transaction.addDebitForMember(lauri.getId(), 320);
         transaction.addDebitForMember(tonu.getId(), 225);
         transaction.addCreditForMember(mihkel.getId(), 0);
@@ -49,6 +47,8 @@ public class Application {
         transaction.setAutoCalculationOnForMember(mihkel.getId());
         Member munajoodik = event.addMember("Munajoodik Tuslik","Tuslik","kaarelmartin@gmail.com","");
         event.removeMember(tonu);
+        lauri.update("Lauri Moss", "Lauri", "maisvee@gmail.com","EE124141242",lauri.getOrder(),lauri.getEvent());
+        event.removeTransaction(kustutatav);
 
         return args -> {
             System.out.println("Let's inspect the beans provided by Spring Boot:");
