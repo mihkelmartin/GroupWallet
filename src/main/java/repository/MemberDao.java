@@ -8,5 +8,6 @@ import model.Member;
 public interface MemberDao {
 
     public void save(Member member);
+    public void remove(Member member);
 
 }

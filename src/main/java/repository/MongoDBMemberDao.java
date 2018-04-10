@@ -22,4 +22,8 @@ public class MongoDBMemberDao implements MemberDao {
     public void save(Member member) {
         mongoOps.save(member.getEvent());
     }
+    @Override
+    public void remove(Member member) {
+        save(member);
+    }
 }

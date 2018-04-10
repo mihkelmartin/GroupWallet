@@ -1,5 +1,6 @@
 package model;
 
+import aspects.DAOAspect;
 import aspects.MoneyCalculationAspect;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
@@ -57,6 +58,11 @@ public class AppConfig {
     public @Bean
     MoneyCalculationAspect moneyCalculationAspect() {
         return new MoneyCalculationAspect();
+    }
+
+    public @Bean
+    DAOAspect daoAspect() {
+        return new DAOAspect();
     }
 
     @Bean

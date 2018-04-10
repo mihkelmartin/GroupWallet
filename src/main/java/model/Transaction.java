@@ -5,9 +5,9 @@ import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.lang.NonNull;
-import repository.TransactionDao;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -24,9 +24,6 @@ public class Transaction implements Comparable<Transaction>, Ordered {
     private ArrayList<TransactionItem> items = new ArrayList<>();
     @Transient
     private @NonNull Event event;
-
-    @Autowired
-    private TransactionDao transactionDao;
 
     @Autowired
     private Supplier<TransactionItem> transactionItemSupplier;
@@ -54,9 +51,11 @@ public class Transaction implements Comparable<Transaction>, Ordered {
     }
 
     protected void removeTransactionItemsWithMember(Member member){
-        for(TransactionItem item : items){
-            if(item.getMemberId() == member.getId())
-                items.remove(item);
+        Iterator<TransactionItem> iter = items.iterator();
+        while (iter.hasNext()) {
+            TransactionItem transactionItem = iter.next();
+            if (transactionItem.getMemberId() == member.getId())
+                iter.remove();
         }
     }
 
@@ -142,10 +141,6 @@ public class Transaction implements Comparable<Transaction>, Ordered {
 
     public Event getEvent() {
         return event;
-    }
-
-    public void save(){
-        transactionDao.save(this);
     }
 
     @Override

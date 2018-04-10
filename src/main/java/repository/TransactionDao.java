@@ -8,5 +8,6 @@ import model.Transaction;
 public interface TransactionDao {
 
     public void save(Transaction transaction);
+    public void remove(Transaction member);
 
 }

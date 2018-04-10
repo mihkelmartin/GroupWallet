@@ -1,12 +1,10 @@
 package model;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.lang.NonNull;
-import repository.MemberDao;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -28,9 +26,6 @@ public class Member implements Comparable<Member>, Ordered {
     private @NonNull int order;
     @Transient
     private @NonNull Event event;
-
-    @Autowired
-    private MemberDao memberDao;
 
     public Member (){
         this.id = UUID.randomUUID().toString();
@@ -63,10 +58,6 @@ public class Member implements Comparable<Member>, Ordered {
 
     public Event getEvent() {
         return event;
-    }
-
-    public void save(){
-        memberDao.save(this);
     }
 
     @Override

@@ -41,19 +41,14 @@ public class Application {
         event.addTransaction("Taksosõit Ivalost Saariselkä");
         Transaction transaction = event.addTransaction("Kolmapäevane I poeskäik");
         System.out.println(event.toString());
-        event.save();
         lauri.setOrder(10000);
-        lauri.save();
         transaction.addDebitForMember(lauri.getId(), 320);
         transaction.addDebitForMember(tonu.getId(), 225);
         transaction.addCreditForMember(mihkel.getId(), 0);
         transaction.addDebitForMember(tonu.getId(), 0);
         transaction.setAutoCalculationOnForMember(mihkel.getId());
-        transaction.save();
         Member munajoodik = event.addMember("Munajoodik Tuslik","Tuslik","kaarelmartin@gmail.com","");
-        munajoodik.save();
-        event.removeMember(lauri);
-        event.save();
+        event.removeMember(tonu);
 
         return args -> {
             System.out.println("Let's inspect the beans provided by Spring Boot:");

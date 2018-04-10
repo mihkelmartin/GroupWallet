@@ -1,5 +1,6 @@
 package repository;
 
+
 import model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,5 +22,9 @@ public class MongoDBTransactionDao implements TransactionDao {
     @Override
     public void save(Transaction transaction) {
         mongoOps.save(transaction.getEvent());
+    }
+    @Override
+    public void remove(Transaction member) {
+        save(member);
     }
 }

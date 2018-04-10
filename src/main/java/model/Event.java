@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
 import org.springframework.lang.NonNull;
-import repository.EventDao;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,9 +25,6 @@ public class Event {
     private final @NonNull Short PIN;
     private ArrayList<Member> members = new ArrayList<>();
     private ArrayList<Transaction> transactions = new ArrayList<>();
-
-    @Autowired
-    private EventDao eventDao;
 
     @Autowired
     private Supplier<Member> memberSupplier;
@@ -59,9 +55,10 @@ public class Event {
         }
     }
 
-    public void removeMember(Member member){
+    public Member removeMember(Member member){
         removeMemberFromTransactions(member);
         members.remove(member);
+        return member;
     }
 
     protected void removeMemberFromTransactions(Member member){
@@ -78,12 +75,12 @@ public class Event {
         return retVal;
     }
 
-    public ArrayList<Transaction> getTransactions() {
-        return transactions;
+    public void removeTransaction(Transaction transaction) {
+        transactions.remove(transaction);
     }
 
-    public void save(){
-        eventDao.save(this);
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
     }
 
     private int getNextOrderNr(ArrayList arrayList){
