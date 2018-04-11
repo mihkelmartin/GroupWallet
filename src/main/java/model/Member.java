@@ -17,7 +17,7 @@ import java.util.UUID;
 public class Member implements Comparable<Member>, Ordered {
 
     @Id
-    private final @NonNull String id;
+    private @NonNull String id;
     private @NonNull String name;
     private String nickName;
     @Indexed
@@ -27,17 +27,22 @@ public class Member implements Comparable<Member>, Ordered {
     @Transient
     private @NonNull Event event;
 
-    public Member (){
+    public Member (String name, String nickName, String eMail, String bankAccount, int order, Event event){
         this.id = UUID.randomUUID().toString();
-    }
-
-    public void update(String name, String nickName, String eMail, String bankAccount, int order, Event event) {
         this.name = name;
         this.nickName = nickName;
         this.eMail = eMail;
         this.bankAccount = bankAccount;
         this.order = order;
         this.event = event;
+    }
+
+    public void update(String name, String nickName, String eMail, String bankAccount, int order) {
+        this.name = name;
+        this.nickName = nickName;
+        this.eMail = eMail;
+        this.bankAccount = bankAccount;
+        this.order = order;
     }
 
     public void addToSet(ArrayList<Member> members){
@@ -48,11 +53,6 @@ public class Member implements Comparable<Member>, Ordered {
         members.remove(this);
     }
 
-    @Override
-    public int getOrder() {
-        return order;
-    }
-
     public String getId() {
         return id;
     }
@@ -60,6 +60,13 @@ public class Member implements Comparable<Member>, Ordered {
     public Event getEvent() {
         return event;
     }
+
+    @Override
+    public int getOrder() {
+        return order;
+    }
+
+
 
     @Override
     public int compareTo(Member o) {

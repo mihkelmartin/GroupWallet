@@ -8,6 +8,6 @@ import model.Event;
 public interface EventDao {
 
     public void save(Event event);
-    public Event findEvent(String id);
+    public Event findEvent(String attribute, String value);
 
 }

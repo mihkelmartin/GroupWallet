@@ -20,7 +20,6 @@ public class MoneyCalculationAspect {
             " && target(bean)")
     public void doCalculationTransaction(Object bean) {
         System.out.println("Running Calculation aspect on Transaction " + ((Transaction)bean).getOrder());
-        ((Transaction)bean).calculateCredits();
     }
 
     @After(value="(execution(* model.Event.addMember(..)) || " +
@@ -28,9 +27,6 @@ public class MoneyCalculationAspect {
             " && target(bean)")
     public void doCalculationEventTransactions(Object bean) {
         System.out.println("Running Calculation aspect on Event " + ((Event)bean).toString());
-        for(Transaction transaction : ((Event)bean).getTransactions()){
-            transaction.calculateCredits();
-        }
     }
 
 }

@@ -26,9 +26,9 @@ public class MongoDBEventDao implements EventDao {
     }
 
     @Override
-    public Event findEvent(String id) {
+    public Event findEvent(String attribute, String value) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("id").is(id));
+        query.addCriteria(Criteria.where(attribute).is(value));
         return mongoOps.findOne(query, Event.class);
     }
 }
