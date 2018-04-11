@@ -48,6 +48,7 @@ public class EventTest {
         Member mihkeltaastatud = eventService.findMember(fromDb, mihkelid);
         assertNotNull(mihkeltaastatud);
         memberService.remove(mihkeltaastatud);
+        transactionService.remove(transaction);
     }
 
 }

@@ -3,6 +3,7 @@ package aspects;
 import model.Event;
 import model.Member;
 import model.Transaction;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -31,33 +32,31 @@ public class DAOAspect {
 
     @AfterReturning(value="execution(* service.EventService.createNew(..))",
                     returning="retVal")
-    public void SaveNewEvent(Object retVal) {
-
-        System.out.println("Running DAOAspect on new Event " + ((Event)retVal).toString());
-        eventDao.save((Event) retVal);
+    public void SaveNewEvent(JoinPoint jp, Event retVal) {
+        eventDao.save(retVal);
+        System.out.println("Running DAOAspect on new Event " + jp.getSignature());
     }
 
     @After(value="execution(* service.EventService.update(..)) && args(event,..)")
-    public void SaveEvent(Event event) {
+    public void SaveEvent(JoinPoint jp, Event event) {
 
-        System.out.println("Running DAOAspect on Event " + event.toString());
+        System.out.println("Running DAOAspect on Event " + jp.getSignature());
         eventDao.save(event);
     }
 
-    @AfterReturning(value="execution(* service.MemberService.*(..)) || " +
-            "execution(* service.TransactionService.*(..))",
+    @AfterReturning(value="execution(* service.MemberService.*(..))",
             returning="retVal")
-    public void SaveMemberInEvent(Member retVal) {
+    public void SaveMemberInEvent(JoinPoint jp, Member retVal) {
 
-        System.out.println("Running DAOAspect on Members/Transactions (return Member) " + retVal.toString());
+        System.out.println("Running DAOAspect on Members/Transactions (return Member) " + jp.getSignature());
         memberDao.save(retVal);
     }
 
     @AfterReturning(value="execution(* service.TransactionService.*(..))",
             returning="retVal")
-    public void SaveTransactionInEvent(Transaction retVal) {
+    public void SaveTransactionInEvent(JoinPoint jp, Transaction retVal) {
 
-        System.out.println("Running DAOAspect Transactions (return Member)" + retVal.toString());
+        System.out.println("Running DAOAspect Transactions (return Member) " + jp.getSignature());
         transactionDao.save(retVal);
     }
 
