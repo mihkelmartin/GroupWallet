@@ -3,7 +3,7 @@ package model;
 import aspects.DAOAspect;
 import aspects.MoneyCalculationAspect;
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

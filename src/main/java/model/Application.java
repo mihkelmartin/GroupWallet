@@ -6,12 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import repository.EventDao;
-import repository.MemberDao;
-import repository.TransactionDao;
+
 
 import java.util.Arrays;
-import java.util.Map;
+
 
 /**
  * Created by mihkel on 5.04.2018.

@@ -4,6 +4,8 @@ import model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 
@@ -21,5 +23,12 @@ public class MongoDBEventDao implements EventDao {
     @Override
     public void save(Event event) {
         mongoOps.save(event);
+    }
+
+    @Override
+    public Event findEvent(String id) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(id));
+        return mongoOps.findOne(query, Event.class);
     }
 }

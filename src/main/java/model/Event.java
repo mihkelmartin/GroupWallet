@@ -84,6 +84,14 @@ public class Event {
         return transactions;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     private int getNextOrderNr(ArrayList arrayList){
         int newOrderNr = 1;
         if(!arrayList.isEmpty()){
