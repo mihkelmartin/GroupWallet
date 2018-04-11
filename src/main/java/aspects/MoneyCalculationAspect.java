@@ -1,10 +1,12 @@
 package aspects;
 
-import model.Event;
+import model.Member;
 import model.Transaction;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import service.TransactionService;
 
 
 /**
@@ -14,19 +16,27 @@ import org.springframework.core.annotation.Order;
 @Order(20)
 public class MoneyCalculationAspect {
 
-    @After(value="(execution(* model.Transaction.addDebitForMember(..)) || " +
-            "execution(* model.Transaction.addCreditForMember(..)) || " +
-            "execution(* model.Transaction.setAutoCalculationOnForMember(..)))" +
-            " && target(bean)")
-    public void doCalculationTransaction(Object bean) {
-        System.out.println("Running Calculation aspect on Transaction " + ((Transaction)bean).getOrder());
+    @Autowired
+    private TransactionService transactionService;
+
+    @AfterReturning(value="(execution(* service.TransactionService.addDebitForMember(..)) || " +
+            "execution(* service.TransactionService.addCreditForMember(..)) || " +
+            "execution(* service.TransactionService.setAutoCalculationForMember(..)))" +
+            " && target(bean)",
+    returning = "retVal")
+    public void doCalculationTransaction(TransactionService bean, Transaction retVal) {
+        System.out.println("Running Calculation aspect " + bean.toString());
+        bean.calculateCredits(retVal);
     }
 
-    @After(value="(execution(* model.Event.addMember(..)) || " +
-            "execution(* model.Event.removeMember(..)))" +
-            " && target(bean)")
-    public void doCalculationEventTransactions(Object bean) {
-        System.out.println("Running Calculation aspect on Event " + ((Event)bean).toString());
+    @AfterReturning(value="execution(* service.MemberService.createNew(..)) || " +
+            "execution(* service.MemberService.remove(..))",
+    returning = "retVal")
+    public void doCalculationEventTransactions(Member retVal) {
+        System.out.println("Running Calculation aspect on Event " + retVal.toString());
+        for(Transaction transaction : retVal.getEvent().getTransactions()){
+            transactionService.calculateCredits(transaction);
+        }
     }
 
 }

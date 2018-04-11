@@ -40,41 +40,46 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public void addMemberToTransactions(Member member) {
+    public Member addMemberToTransactions(Member member) {
         for(Transaction transaction : member.getEvent().getTransactions()){
             addTransactionItem(transaction, member);
         }
+        return member;
     }
 
     @Override
-    public void removeMemberToTransactions(Member member) {
+    public Member removeMemberToTransactions(Member member) {
         for(Transaction transaction : member.getEvent().getTransactions()){
             removeTransactionItemsWithMember(transaction, member);
         }
+        return member;
     }
 
-    public void addDebitForMember(Transaction transaction, Member member, double debit){
+    public Transaction addDebitForMember(Transaction transaction, Member member, double debit){
         for(TransactionItem item : transaction.getItems()){
             if(item.getMemberId() == member.getId())
                 item.setDebit(debit);
         }
+        return transaction;
     }
 
 
-    public void addCreditForMember(Transaction transaction, Member member, double credit){
+    public Transaction addCreditForMember(Transaction transaction, Member member, double credit){
         for(TransactionItem item : transaction.getItems()){
             if(item.getMemberId() == member.getId()) {
                 item.setCredit(credit);
                 item.setBcreditAutoCalculated(false);
             }
         }
+        return transaction;
     }
 
-    public void setAutoCalculationForMember(Transaction transaction, Member member, boolean bAutoCalculation){
+    public Transaction setAutoCalculationForMember(Transaction transaction, Member member, boolean bAutoCalculation){
         for(TransactionItem item : transaction.getItems()){
             if(item.getMemberId() == member.getId())
                 item.setBcreditAutoCalculated(bAutoCalculation);
         }
+        return transaction;
     }
 
     private TransactionItem addTransactionItem(Transaction transaction, Member member) {

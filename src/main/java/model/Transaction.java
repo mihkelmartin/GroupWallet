@@ -23,6 +23,9 @@ public class Transaction implements Comparable<Transaction>, Ordered {
     @Transient
     private @NonNull Event event;
 
+    public Transaction(){
+
+    }
 
     public Transaction(String name, boolean bmanualCalculation, int order, Event event){
         this.id = UUID.randomUUID().toString();

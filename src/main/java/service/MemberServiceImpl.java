@@ -32,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member removeMember(Member member) {
+    public Member remove(Member member) {
         transactionService.removeMemberToTransactions(member);
         member.removeFromSet(member.getEvent().getMembers());
         return member;

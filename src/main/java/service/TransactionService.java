@@ -12,10 +12,11 @@ public interface TransactionService {
     Transaction create(Event event, String id, String name, boolean bmanualCalculation, int order);
     Transaction update(Transaction transaction, String name, boolean bmanualCalculation, int order);
     Transaction remove(Transaction transaction);
-    void addMemberToTransactions(Member member);
-    void removeMemberToTransactions(Member member);
-    void addDebitForMember(Transaction transaction, Member member, double debit);
-    void addCreditForMember(Transaction transaction, Member member, double credit);
-    void setAutoCalculationForMember(Transaction transaction, Member member, boolean bAutoCalculation);
+    Member addMemberToTransactions(Member member);
+    Member removeMemberToTransactions(Member member);
+    Transaction addDebitForMember(Transaction transaction, Member member, double debit);
+    Transaction addCreditForMember(Transaction transaction, Member member, double credit);
+    Transaction setAutoCalculationForMember(Transaction transaction, Member member, boolean bAutoCalculation);
+    public void calculateCredits(Transaction transaction);
 
 }

@@ -20,7 +20,6 @@ import service.TransactionService;
  * Created by mihkel on 9.04.2018.
  */
 
-@EnableAspectJAutoProxy(proxyTargetClass=true)
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AppConfig.class)
 public class EventTest {
@@ -43,9 +42,9 @@ public class EventTest {
 
         Event fromDb = eventService.findEvent("id", event.getId());
         assertEquals (fromDb.getName(), "Saariselkä 2019");
-        fromDb.update("Saariselkä 2010");
+        eventService.update(fromDb,"Saariselkä 2010");
         fromDb = eventService.findEvent("id", event.getId());
-//        assertEquals (fromDb.getName(), "Saariselkä 2010");
+        assertEquals (fromDb.getName(), "Saariselkä 2010");
 
     }
 

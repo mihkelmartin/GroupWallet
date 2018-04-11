@@ -27,48 +27,39 @@ public class DAOAspect {
     @Autowired
     private TransactionDao transactionDao;
 
-    @After(value="(execution(* model.Event.update(..)) || " +
-            "execution(model.Event.new(..)))" +
-            " && target(bean)")
-    public void SaveEvent(Object bean) {
 
-        System.out.println("Running DAOAspect on Event " + ((Event)bean).toString());
-        eventDao.save((Event) bean);
+
+    @AfterReturning(value="execution(* service.EventService.createNew(..))",
+                    returning="retVal")
+    public void SaveNewEvent(Object retVal) {
+
+        System.out.println("Running DAOAspect on new Event " + ((Event)retVal).toString());
+        eventDao.save((Event) retVal);
     }
 
-    @AfterReturning(value="(execution(* model.Event.addMember(..)) || " +
-                 "execution(* model.Event.removeMember(..))) ",
+    @After(value="execution(* service.EventService.update(..)) && args(event,..)")
+    public void SaveEvent(Event event) {
+
+        System.out.println("Running DAOAspect on Event " + event.toString());
+        eventDao.save(event);
+    }
+
+    @AfterReturning(value="execution(* service.MemberService.*(..)) || " +
+            "execution(* service.TransactionService.*(..))",
             returning="retVal")
-    public void SaveMemberInEvent(Object retVal) {
+    public void SaveMemberInEvent(Member retVal) {
 
-        System.out.println("Running DAOAspect on adding/removing Member " + ((Member)retVal).toString());
-        memberDao.save((Member) retVal);
+        System.out.println("Running DAOAspect on Members/Transactions (return Member) " + retVal.toString());
+        memberDao.save(retVal);
     }
 
-    @AfterReturning(value="execution(* model.Member.update(..)) && target(bean)")
-    public void SaveMember(Object bean) {
-
-        System.out.println("Running DAOAspect on updating Member " + ((Member)bean).toString());
-        memberDao.save((Member) bean);
-    }
-
-    @AfterReturning(value="(execution(* model.Event.addTransaction(..)) || " +
-            "execution(* model.Event.removeTransaction(..))) ",
+    @AfterReturning(value="execution(* service.TransactionService.*(..))",
             returning="retVal")
-    public void SaveTransactionInEvent(Object retVal) {
+    public void SaveTransactionInEvent(Transaction retVal) {
 
-        System.out.println("Running DAOAspect on adding/removing Transaction " + ((Transaction)retVal).toString());
-        transactionDao.save((Transaction) retVal);
+        System.out.println("Running DAOAspect Transactions (return Member)" + retVal.toString());
+        transactionDao.save(retVal);
     }
 
-    @AfterReturning(value="(execution(* model.Transaction.addDebitForMember(..)) || " +
-            "execution(* model.Transaction.addCreditForMember(..)) || " +
-            "execution(* model.Transaction.setAutoCalculationOnForMember(..))) " +
-            " && target(bean)")
-    public void SaveTransaction(Object bean) {
-
-        System.out.println("Running DAOAspect on updating Transaction " + ((Transaction)bean).toString());
-        transactionDao.save((Transaction) bean);
-    }
 }
 

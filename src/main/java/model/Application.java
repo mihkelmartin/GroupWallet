@@ -50,7 +50,7 @@ public class Application {
         transactionService.addDebitForMember(transaction, tonu, 0);
         transactionService.setAutoCalculationForMember(transaction, mihkel, false);
         Member munajoodik = memberService.createNew(event,"Munajoodik Tuslik","Tuslik","kaarelmartin@gmail.com","");
-        memberService.removeMember(tonu);
+        memberService.remove(tonu);
         memberService.update(lauri,"Lauri Moss", "Lauri", "maisvee@gmail.com","EE124141242",lauri.getOrder());
         transactionService.remove(kustutatav);
 

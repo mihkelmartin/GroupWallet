@@ -12,6 +12,6 @@ public interface MemberService {
                   String bankAccount, int order);
     Member update(Member member, String name,  String nickName, String eMail,
                   String bankAccount, int order);
-    Member removeMember(Member member);
+    Member remove(Member member);
 
 }

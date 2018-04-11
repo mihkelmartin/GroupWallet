@@ -27,6 +27,10 @@ public class Member implements Comparable<Member>, Ordered {
     @Transient
     private @NonNull Event event;
 
+    public Member(){
+
+    }
+
     public Member (String name, String nickName, String eMail, String bankAccount, int order, Event event){
         this.id = UUID.randomUUID().toString();
         this.name = name;
