@@ -49,14 +49,6 @@ public class Member implements Comparable<Member>, Ordered {
         this.order = order;
     }
 
-    public void addToSet(ArrayList<Member> members){
-        members.add(this);
-    }
-
-    public void removeFromSet(ArrayList<Member> members){
-        members.remove(this);
-    }
-
     public String getId() {
         return id;
     }
@@ -69,8 +61,6 @@ public class Member implements Comparable<Member>, Ordered {
     public int getOrder() {
         return order;
     }
-
-
 
     @Override
     public int compareTo(Member o) {

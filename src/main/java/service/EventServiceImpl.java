@@ -33,7 +33,7 @@ public class EventServiceImpl implements EventService {
     public Member findMember(Event event, String id) {
         Member retVal = null;
         for( Member member : event.getMembers()){
-            if(member.getId() == id)
+            if(member.getId().equals(id))
                 retVal = member;
         }
         return retVal;
@@ -43,7 +43,7 @@ public class EventServiceImpl implements EventService {
     public Transaction findTransaction(Event event, String id) {
         Transaction retVal = null;
         for( Transaction transaction: event.getTransactions()){
-            if(transaction.getId() == id)
+            if(transaction.getId().equals(id))
                 retVal = transaction;
         }
         return retVal;

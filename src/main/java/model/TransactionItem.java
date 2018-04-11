@@ -17,21 +17,14 @@ public class TransactionItem {
     private double credit;
     private boolean bcreditAutoCalculated;
 
-    public TransactionItem(){
-
-    }
-
-    public void update(String transactionId, String memberId) {
+    public TransactionItem(String transactionId, String memberId, double debit, double credit, boolean bcreditAutoCalculated) {
         this.transactionId = transactionId;
         this.memberId = memberId;
-        this.debit = 0.0;
-        this.credit = 0.0;
-        this.bcreditAutoCalculated = true;
+        this.debit = debit;
+        this.credit = credit;
+        this.bcreditAutoCalculated = bcreditAutoCalculated;
     }
 
-    public void addToSet(ArrayList<TransactionItem> transactionItems){
-        transactionItems.add(this);
-    }
     public String getMemberId() {
         return memberId;
     }
@@ -39,7 +32,6 @@ public class TransactionItem {
     public double getDebit() {
         return debit;
     }
-
     public void setDebit(double debit) {
         this.debit = debit;
     }
@@ -47,7 +39,6 @@ public class TransactionItem {
     public double getCredit() {
         return credit;
     }
-
     public void setCredit(double credit) {
         this.credit = credit;
     }
@@ -55,7 +46,6 @@ public class TransactionItem {
     public boolean isBcreditAutoCalculated() {
         return bcreditAutoCalculated;
     }
-
     public void setBcreditAutoCalculated(boolean bcreditAutoCalculated) {
         this.bcreditAutoCalculated = bcreditAutoCalculated;
     }

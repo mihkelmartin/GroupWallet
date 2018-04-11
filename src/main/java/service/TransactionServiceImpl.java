@@ -17,7 +17,7 @@ public class TransactionServiceImpl implements TransactionService{
     public Transaction createNew(Event event, String name, boolean bmanualCalculation) {
         Transaction retVal = new Transaction(name, bmanualCalculation,
                 event.getNextOrderNr(event.getTransactions()), event);
-        retVal.addToSet(event.getTransactions());
+        event.getTransactions().add(retVal);
         populateTransactionItems(retVal, event.getMembers());
         return retVal;
     }
@@ -35,7 +35,7 @@ public class TransactionServiceImpl implements TransactionService{
 
     @Override
     public Transaction remove(Transaction transaction) {
-        transaction.removeFromSet(transaction.getEvent().getTransactions());
+        transaction.getEvent().getTransactions().remove(transaction);
         return transaction;
     }
 
@@ -57,7 +57,7 @@ public class TransactionServiceImpl implements TransactionService{
 
     public Transaction addDebitForMember(Transaction transaction, Member member, double debit){
         for(TransactionItem item : transaction.getItems()){
-            if(item.getMemberId() == member.getId())
+            if(item.getMemberId().equals(member.getId()))
                 item.setDebit(debit);
         }
         return transaction;
@@ -66,7 +66,7 @@ public class TransactionServiceImpl implements TransactionService{
 
     public Transaction addCreditForMember(Transaction transaction, Member member, double credit){
         for(TransactionItem item : transaction.getItems()){
-            if(item.getMemberId() == member.getId()) {
+            if(item.getMemberId().equals(member.getId())) {
                 item.setCredit(credit);
                 item.setBcreditAutoCalculated(false);
             }
@@ -76,24 +76,24 @@ public class TransactionServiceImpl implements TransactionService{
 
     public Transaction setAutoCalculationForMember(Transaction transaction, Member member, boolean bAutoCalculation){
         for(TransactionItem item : transaction.getItems()){
-            if(item.getMemberId() == member.getId())
+            if(item.getMemberId().equals(member.getId()))
                 item.setBcreditAutoCalculated(bAutoCalculation);
         }
         return transaction;
     }
 
     private TransactionItem addTransactionItem(Transaction transaction, Member member) {
-        TransactionItem retVal = new TransactionItem();
-        retVal.update(transaction.getId(), member.getId());
-        retVal.addToSet(transaction.getItems());
+        TransactionItem retVal = new TransactionItem(transaction.getId(), member.getId(),
+                0.0, 0.0, true);
+        transaction.getItems().add(retVal);
         return retVal;
     }
 
     private void populateTransactionItems(Transaction transaction, ArrayList<Member> members) {
         for(Member member : members){
-            TransactionItem transactionItem = new TransactionItem();
-            transactionItem.update(transaction.getId(), member.getId());
-            transactionItem.addToSet(transaction.getItems());
+            TransactionItem transactionItem = new TransactionItem(transaction.getId(), member.getId(),
+                    0.0, 0.0, true);
+            transaction.getItems().add(transactionItem);
         }
     }
 
@@ -101,7 +101,7 @@ public class TransactionServiceImpl implements TransactionService{
         Iterator<TransactionItem> iter = transaction.getItems().iterator();
         while (iter.hasNext()) {
             TransactionItem transactionItem = iter.next();
-            if (transactionItem.getMemberId() == member.getId())
+            if (transactionItem.getMemberId().equals(member.getId()))
                 iter.remove();
         }
     }

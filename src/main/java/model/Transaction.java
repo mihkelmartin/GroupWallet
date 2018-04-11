@@ -27,6 +27,14 @@ public class Transaction implements Comparable<Transaction>, Ordered {
 
     }
 
+    public Transaction(String id, String name, boolean bmanualCalculation, int order, Event event){
+        this.id = id;
+        this.name = name;
+        this.bmanualCalculation = bmanualCalculation;
+        this.order = order;
+        this.event = event;
+    }
+
     public Transaction(String name, boolean bmanualCalculation, int order, Event event){
         this.id = UUID.randomUUID().toString();
         this.name = name;
@@ -39,14 +47,6 @@ public class Transaction implements Comparable<Transaction>, Ordered {
         this.name = name;
         this.bmanualCalculation = bmanualCalculation;
         this.order = order;
-    }
-
-    public void addToSet(ArrayList<Transaction> transactions){
-        transactions.add(this);
-    }
-
-    public void removeFromSet(ArrayList<Transaction> transactions){
-        transactions.remove(this);
     }
 
     public String getId() {
@@ -64,10 +64,6 @@ public class Transaction implements Comparable<Transaction>, Ordered {
     @Override
     public int getOrder() {
         return this.order;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
     }
 
     @Override

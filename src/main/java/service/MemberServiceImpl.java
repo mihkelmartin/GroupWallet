@@ -15,7 +15,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member createNew(Event event, String name, String nickName, String eMail, String bankAccount) {
         Member retVal = new Member(name, nickName, eMail, bankAccount, event.getNextOrderNr(event.getMembers()), event);
-        retVal.addToSet(event.getMembers());
+        event.getMembers().add(retVal);
         transactionService.addMemberToTransactions(retVal);
         return retVal;
     }
@@ -34,7 +34,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member remove(Member member) {
         transactionService.removeMemberToTransactions(member);
-        member.removeFromSet(member.getEvent().getMembers());
+        member.getEvent().getMembers().remove(member);
         return member;
     }
 }
