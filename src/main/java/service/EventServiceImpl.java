@@ -26,7 +26,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event findEvent(String attribute, String value) {
-        return eventDao.findEvent(attribute, value);
+        Event event = eventDao.findEvent(attribute, value);
+        updateForeignKey(event);
+        return event;
     }
 
     @Override
@@ -47,6 +49,13 @@ public class EventServiceImpl implements EventService {
                 retVal = transaction;
         }
         return retVal;
+    }
+
+    private void updateForeignKey(Event event){
+        for(Member member : event.getMembers())
+            member.setEvent(event);
+        for(Transaction transaction : event.getTransactions())
+            transaction.setEvent(event);
     }
 }
 

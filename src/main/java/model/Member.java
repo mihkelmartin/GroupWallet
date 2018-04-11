@@ -57,6 +57,10 @@ public class Member implements Comparable<Member>, Ordered {
         return event;
     }
 
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
     @Override
     public int getOrder() {
         return order;

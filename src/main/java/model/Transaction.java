@@ -61,6 +61,10 @@ public class Transaction implements Comparable<Transaction>, Ordered {
         return event;
     }
 
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
     @Override
     public int getOrder() {
         return this.order;

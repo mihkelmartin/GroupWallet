@@ -38,7 +38,7 @@ public class EventTest {
         Member mihkel = memberService.createNew(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
         Member alvar = memberService.createNew(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
         Transaction transaction = transactionService.createNew(event, "Kolmapäevane I poeskäik", false);
-        transactionService.addDebitForMember(transaction, mihkel, 320);
+        transactionService.addDebitForMember(transaction, alvar, 320);
         String mihkelid = mihkel.getId();
         Event fromDb = eventService.findEvent("id", event.getId());
         assertEquals (fromDb.getName(), "Saariselkä 2019");
