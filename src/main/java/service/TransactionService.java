@@ -17,8 +17,6 @@ public interface TransactionService {
     TransactionItem addDebitForMember(Transaction transaction, Member member, double debit);
     TransactionItem addCreditForMember(Transaction transaction, Member member, double credit);
     TransactionItem setAutoCalculationForMember(Transaction transaction, Member member, boolean bAutoCalculation);
-    public void calculateCredits(Transaction transaction);
+    void calculateCredits(Transaction transaction);
     void loadTransactions(Event event);
-
-
 }

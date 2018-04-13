@@ -27,14 +27,6 @@ public class Transaction implements Comparable<Transaction>, Ordered {
 
     }
 
-    public Transaction(String id, String name, boolean bmanualCalculation, int order, Event event){
-        this.id = id;
-        this.name = name;
-        this.bmanualCalculation = bmanualCalculation;
-        this.order = order;
-        this.event = event;
-    }
-
     public Transaction(String name, boolean bmanualCalculation, int order, Event event){
         this.id = UUID.randomUUID().toString();
         this.name = name;

@@ -5,7 +5,6 @@ import model.Member;
 import model.Transaction;
 import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import repository.MemberDao;
 import repository.TransactionDao;
 import repository.TransactionItemDao;
 
