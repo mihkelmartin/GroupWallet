@@ -1,13 +1,11 @@
 package repository;
 
+import model.Event;
 import model.Transaction;
 
 /**
  * Created by mihkel on 6.04.2018.
  */
-public interface TransactionDao {
-
-    public void save(Transaction transaction);
-    public void remove(Transaction member);
-
+public interface TransactionDao extends GeneralDao<Transaction> {
+    void loadTransactions(Event event);
 }

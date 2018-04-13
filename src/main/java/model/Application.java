@@ -36,22 +36,22 @@ public class Application {
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 
-        Event event = eventService.createNew("Saariselkä 2018");
-        Member mihkel = memberService.createNew(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
-        memberService.createNew(event,"Alvar Tõruke","Tõru","alvar@gmai.com","");
-        memberService.createNew(event,"Peeter Kutman","Peta","","");
-        Member tonu = memberService.createNew(event,"Tõnu Riisalo","Tõnu","","");
-        Member lauri = memberService.createNew(event,"Lauri Maisvee","Lauri","","");
-        Transaction kustutatav = transactionService.createNew(event,"Taksosõit Ivalost Saariselkä", false);
-        Transaction transaction = transactionService.createNew(event,"Kolmapäevane I poeskäik", false);
+        Event event = eventService.add("Saariselkä 2018");
+        Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
+        memberService.add(event,"Alvar Tõruke","Tõru","alvar@gmai.com","");
+        memberService.add(event,"Peeter Kutman","Peta","","");
+        Member tonu = memberService.add(event,"Tõnu Riisalo","Tõnu","","");
+        Member lauri = memberService.add(event,"Lauri Maisvee","Lauri","","");
+        Transaction kustutatav = transactionService.add(event,"Taksosõit Ivalost Saariselkä", false);
+        Transaction transaction = transactionService.add(event,"Kolmapäevane I poeskäik", false);
         transactionService.addDebitForMember(transaction, lauri, 320);
         transactionService.addDebitForMember(transaction, tonu, 225);
         transactionService.addCreditForMember(transaction, mihkel, 0);
         transactionService.addDebitForMember(transaction, tonu, 0);
         transactionService.setAutoCalculationForMember(transaction, mihkel, false);
-        Member munajoodik = memberService.createNew(event,"Munajoodik Tuslik","Tuslik","kaarelmartin@gmail.com","");
+        Member munajoodik = memberService.add(event,"Munajoodik Tuslik","Tuslik","kaarelmartin@gmail.com","");
         memberService.remove(tonu);
-        memberService.update(lauri,"Lauri Moss", "Lauri", "maisvee@gmail.com","EE124141242",lauri.getOrder());
+        memberService.save(lauri,"Lauri Moss", "Lauri", "maisvee@gmail.com","EE124141242",lauri.getOrder());
         transactionService.remove(kustutatav);
 
         return args -> {

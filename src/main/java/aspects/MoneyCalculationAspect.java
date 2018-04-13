@@ -2,6 +2,7 @@ package aspects;
 
 import model.Member;
 import model.Transaction;
+import model.TransactionItem;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,12 +26,12 @@ public class MoneyCalculationAspect {
             "execution(* service.TransactionService.setAutoCalculationForMember(..)))" +
             " && target(bean)",
     returning = "retVal")
-    public void doCalculationTransaction(JoinPoint jp, TransactionService bean, Transaction retVal) {
+    public void doCalculationTransaction(JoinPoint jp, TransactionService bean, TransactionItem retVal) {
         System.out.println("Running Calculation aspect "  + jp.getSignature());
-        bean.calculateCredits(retVal);
+        bean.calculateCredits(retVal.getTransaction());
     }
 
-    @AfterReturning(value="execution(* service.MemberService.createNew(..)) || " +
+    @AfterReturning(value="execution(* service.MemberService.add(..)) || " +
             "execution(* service.MemberService.remove(..))",
     returning = "retVal")
     public void doCalculationEventTransactions(JoinPoint jp, Member retVal) {

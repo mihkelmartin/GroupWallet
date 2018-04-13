@@ -34,16 +34,16 @@ public class EventTest {
 
     @Test
     public void plainEvent(){
-        Event event = eventService.createNew("Saariselkä 2019");
-        Member mihkel = memberService.createNew(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
-        Member alvar = memberService.createNew(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
-        Transaction transaction = transactionService.createNew(event, "Kolmapäevane I poeskäik", false);
+        Event event = eventService.add("Saariselkä 2019");
+        Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
+        Member alvar = memberService.add(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
+        Transaction transaction = transactionService.add(event, "Kolmapäevane I poeskäik", false);
         transactionService.addDebitForMember(transaction, alvar, 320);
         String mihkelid = mihkel.getId();
-        Event fromDb = eventService.findEvent("id", event.getId());
+        Event fromDb = eventService.loadEvent(event.getId());
         assertEquals (fromDb.getName(), "Saariselkä 2019");
-        eventService.update(fromDb,"Saariselkä 2010");
-        fromDb = eventService.findEvent("id", event.getId());
+        eventService.save(fromDb,"Saariselkä 2010");
+        fromDb = eventService.loadEvent(event.getId());
         assertEquals (fromDb.getName(), "Saariselkä 2010");
         Member mihkeltaastatud = eventService.findMember(fromDb, mihkelid);
         assertNotNull(mihkeltaastatud);

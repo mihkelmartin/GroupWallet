@@ -41,17 +41,22 @@ public class AppConfig {
     }
 
     public @Bean
-    EventDao mongdoDBEventDao() throws Exception {
+    EventDao eventDao() throws Exception {
         return new MongoDBEventDao();
     }
 
     public @Bean
-    MemberDao mongdoDBMemberDao() throws Exception {
+    MemberDao memberDao() throws Exception {
         return new MongoDBMemberDao();
     }
     public @Bean
-    TransactionDao mongdoDBTransactionDao() throws Exception {
+    TransactionDao transactionDao() throws Exception {
         return new MongoDBTransactionDao();
+    }
+
+    public @Bean
+    TransactionItemDao transactionItemDao() throws Exception {
+        return new MongoDBTransactionItemDao();
     }
 
     public @Bean

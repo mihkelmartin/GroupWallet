@@ -1,5 +1,6 @@
 package repository;
 
+import model.Event;
 import model.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,11 +20,22 @@ public class MongoDBMemberDao implements MemberDao {
     private MongoOperations mongoOps;
 
     @Override
+    public void add(Member member) {
+        save(member);
+    }
+
+    @Override
     public void save(Member member) {
         mongoOps.save(member.getEvent());
     }
+
     @Override
     public void remove(Member member) {
         save(member);
+    }
+
+    @Override
+    public void loadMembers(Event event) {
+
     }
 }

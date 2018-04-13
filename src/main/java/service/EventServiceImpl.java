@@ -3,6 +3,7 @@ package service;
 import model.Event;
 import model.Member;
 import model.Transaction;
+import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import repository.EventDao;
 
@@ -14,20 +15,33 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private EventDao eventDao;
 
+    @Autowired
+    MemberService memberService;
+    @Autowired
+    TransactionService transactionService;
+
     @Override
-    public Event createNew(String name) {
+    public Event add(String name) {
         return new Event(name);
     }
 
     @Override
-    public void update(Event event, String name) {
+    public Event save(Event event, String name) {
         event.update(name);
+        return event;
     }
 
     @Override
-    public Event findEvent(String attribute, String value) {
-        Event event = eventDao.findEvent(attribute, value);
-        updateForeignKey(event);
+    public Event remove(Event event) {
+        return event;
+    }
+
+    @Override
+    public Event loadEvent(String id) {
+        Event event = eventDao.loadEvent(id);
+        loadMembers(event);
+        loadTransactions(event);
+        updateForeignKeys(event);
         return event;
     }
 
@@ -51,11 +65,24 @@ public class EventServiceImpl implements EventService {
         return retVal;
     }
 
-    private void updateForeignKey(Event event){
-        for(Member member : event.getMembers())
-            member.setEvent(event);
-        for(Transaction transaction : event.getTransactions())
-            transaction.setEvent(event);
+    private void loadMembers(Event event){
+        memberService.loadMembers(event);
+    }
+
+    private void loadTransactions(Event event){
+        transactionService.loadTransactions(event);
+    }
+
+    private void updateForeignKeys(Event event){
+        if(event != null) {
+            for (Member member : event.getMembers())
+                member.setEvent(event);
+            for (Transaction transaction : event.getTransactions()) {
+                transaction.setEvent(event);
+                for(TransactionItem transactionItem : transaction.getItems())
+                    transactionItem.setTransaction(transaction);
+            }
+        }
     }
 }
 

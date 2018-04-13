@@ -1,6 +1,7 @@
 package model;
 
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
@@ -16,15 +17,25 @@ public class TransactionItem {
     private double debit;
     private double credit;
     private boolean bcreditAutoCalculated;
+    @Transient
+    private Transaction transaction;
 
-    public TransactionItem(String transactionId, String memberId, double debit, double credit, boolean bcreditAutoCalculated) {
+    public TransactionItem(){
+
+    }
+
+    public TransactionItem(String transactionId, String memberId, double debit, double credit, boolean bcreditAutoCalculated, Transaction transaction) {
         this.transactionId = transactionId;
         this.memberId = memberId;
         this.debit = debit;
         this.credit = credit;
         this.bcreditAutoCalculated = bcreditAutoCalculated;
+        this.transaction = transaction;
     }
 
+    public String getTransactionId() {
+        return transactionId;
+    }
     public String getMemberId() {
         return memberId;
     }
@@ -48,5 +59,12 @@ public class TransactionItem {
     }
     public void setBcreditAutoCalculated(boolean bcreditAutoCalculated) {
         this.bcreditAutoCalculated = bcreditAutoCalculated;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 }
