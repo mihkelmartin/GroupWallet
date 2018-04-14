@@ -33,6 +33,12 @@ public class TransactionItem {
         this.transaction = transaction;
     }
 
+    public void update (double debit, double credit, boolean bcreditAutoCalculated) {
+        this.debit = debit;
+        this.credit = credit;
+        this.bcreditAutoCalculated = bcreditAutoCalculated;
+    }
+
     public String getTransactionId() {
         return transactionId;
     }

@@ -21,37 +21,37 @@ public class TransactionServiceImpl implements TransactionService{
     @Autowired
     private TransactionItemDao transactionItemDao;
 
-    @Override
+    @Autowired
+    private TransactionFactory transactionFactory;
+    @Autowired
+    private TransactionItemFactory transactionItemFactory;
+
+
     public Transaction add(Event event, String name, boolean bmanualCalculation) {
-        Transaction retVal = new Transaction(name, bmanualCalculation,
-                event.getNextOrderNr(event.getTransactions()), event);
+        Transaction retVal = transactionFactory.add(event, name, bmanualCalculation);
         event.getTransactions().add(retVal);
         populateTransactionItems(retVal, event.getMembers());
         return retVal;
     }
 
-    @Override
     public Transaction save(Transaction transaction, String name, boolean bmanualCalculation, int order) {
-        transaction.update(name, bmanualCalculation, order);
+        transactionFactory.save(transaction, name, bmanualCalculation, order);
         return transaction;
     }
 
-    @Override
     public Transaction remove(Transaction transaction) {
-        transaction.getEvent().getTransactions().remove(transaction);
         removeTransactionItemsFromTransaction(transaction);
+        transactionFactory.remove(transaction);
         return transaction;
     }
 
-    @Override
     public Member addMemberToTransactions(Member member) {
         for(Transaction transaction : member.getEvent().getTransactions()){
-            addTransactionItem(transaction, member);
+            transactionItemFactory.add(transaction, member);
         }
         return member;
     }
 
-    @Override
     public Member removeMemberFromTransactions(Member member) {
         for(Transaction transaction : member.getEvent().getTransactions()){
             removeTransactionItemsWithMember(transaction, member);
@@ -63,7 +63,7 @@ public class TransactionServiceImpl implements TransactionService{
         TransactionItem transactionItem = null;
         for(TransactionItem item : transaction.getItems()){
             if(item.getMemberId().equals(member.getId())) {
-                item.setDebit(debit);
+                transactionItemFactory.save(item, debit, item.getCredit(), item.isBcreditAutoCalculated());
                 transactionItem = item;
                 break;
             }
@@ -75,8 +75,7 @@ public class TransactionServiceImpl implements TransactionService{
         TransactionItem transactionItem = null;
         for(TransactionItem item : transaction.getItems()){
             if(item.getMemberId().equals(member.getId())) {
-                item.setCredit(credit);
-                item.setBcreditAutoCalculated(false);
+                transactionItemFactory.save(item, item.getDebit(), credit, false);
                 transactionItem = item;
                 break;
             }
@@ -88,7 +87,7 @@ public class TransactionServiceImpl implements TransactionService{
         TransactionItem transactionItem = null;
         for(TransactionItem item : transaction.getItems()){
             if(item.getMemberId().equals(member.getId())) {
-                item.setBcreditAutoCalculated(bAutoCalculation);
+                transactionItemFactory.save(item, item.getDebit(), item.getCredit(), bAutoCalculation);
                 transactionItem = item;
                 break;
             }
@@ -96,16 +95,9 @@ public class TransactionServiceImpl implements TransactionService{
         return transactionItem;
     }
 
-    private TransactionItem addTransactionItem(Transaction transaction, Member member) {
-        TransactionItem retVal = new TransactionItem(transaction.getId(), member.getId(),
-                0.0, 0.0, true, transaction);
-        transaction.getItems().add(retVal);
-        return retVal;
-    }
-
     private void populateTransactionItems(Transaction transaction, ArrayList<Member> members) {
         for(Member member : members){
-            addTransactionItem(transaction, member);
+            transactionItemFactory.add(transaction, member);
         }
     }
 
@@ -113,8 +105,10 @@ public class TransactionServiceImpl implements TransactionService{
         Iterator<TransactionItem> iter = transaction.getItems().iterator();
         while (iter.hasNext()) {
             TransactionItem transactionItem = iter.next();
-            if (transactionItem.getMemberId().equals(member.getId()))
-                removeTransactionItemFromTransaction(transaction, transactionItem);
+            if (transactionItem.getMemberId().equals(member.getId())) {
+                transactionItemFactory.remove(transaction, transactionItem);
+                iter.remove();
+            }
         }
     }
 
@@ -122,14 +116,9 @@ public class TransactionServiceImpl implements TransactionService{
         Iterator<TransactionItem> iter = transaction.getItems().iterator();
         while (iter.hasNext()) {
             TransactionItem transactionItem = iter.next();
-            removeTransactionItemFromTransaction(transaction, transactionItem);
+            transactionItemFactory.remove(transaction, transactionItem);
+            iter.remove();
         }
-    }
-
-    private TransactionItem removeTransactionItemFromTransaction(Transaction transaction, TransactionItem transactionItem){
-        TransactionItem retVal = transactionItem;
-        transaction.getItems().remove(transactionItem);
-        return retVal;
     }
 
     public void calculateCredits(Transaction transaction){
@@ -141,7 +130,7 @@ public class TransactionServiceImpl implements TransactionService{
                     getAutoCalculatedCreditCount(transaction);
             for(TransactionItem item : transaction.getItems()){
                 if(item.isBcreditAutoCalculated())
-                    item.setCredit(dAutoCalculatedCredit);
+                    transactionItemFactory.save(item, item.getDebit(), dAutoCalculatedCredit, item.isBcreditAutoCalculated());
             }
         }
     }
@@ -172,7 +161,6 @@ public class TransactionServiceImpl implements TransactionService{
         return retVal;
     }
 
-    @Override
     public void loadTransactions(Event event) {
         if(event != null) {
             transactionDao.loadTransactions(event);

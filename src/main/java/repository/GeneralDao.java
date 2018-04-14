@@ -1,7 +1,5 @@
 package repository;
 
-import model.Event;
-
 /**
  * Created by mihkel on 13.04.2018.
  */

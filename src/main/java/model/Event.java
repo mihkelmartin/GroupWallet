@@ -1,6 +1,5 @@
 package model;
 
-
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;

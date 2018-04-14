@@ -5,7 +5,6 @@ import model.Member;
 import model.Transaction;
 import model.TransactionItem;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +31,15 @@ public class DAOAspect {
     @Autowired
     private TransactionItemDao transactionItemDao;
 
-
     // Event
-    @AfterReturning(value="execution(* service.EventService.add(..))",
+    @AfterReturning(value="execution(* service.EventFactory.add(..))",
                     returning="retVal")
     public void addEvent(JoinPoint jp, Event retVal) {
         eventDao.add(retVal);
         System.out.println("Running DAOAspect Event add " + jp.getSignature());
     }
 
-    @AfterReturning(value="execution(* service.EventService.save(..))",
+    @AfterReturning(value="execution(* service.EventFactory.save(..))",
             returning="retVal")
     public void saveEvent(JoinPoint jp, Event retVal) {
 
@@ -49,7 +47,7 @@ public class DAOAspect {
         eventDao.save(retVal);
     }
 
-    @AfterReturning(value="execution(* service.EventService.remove(..))",
+    @AfterReturning(value="execution(* service.EventFactory.remove(..))",
             returning="retVal")
     public void removeEvent(JoinPoint jp, Event retVal) {
 
@@ -58,7 +56,7 @@ public class DAOAspect {
     }
 
     // Member
-    @AfterReturning(value="execution(* service.MemberService.add(..))",
+    @AfterReturning(value="execution(* service.MemberFactory.add(..))",
             returning="retVal")
     public void addMember(JoinPoint jp, Member retVal) {
 
@@ -66,7 +64,7 @@ public class DAOAspect {
         memberDao.add(retVal);
     }
 
-    @AfterReturning(value="execution(* service.MemberService.save(..))",
+    @AfterReturning(value="execution(* service.MemberFactory.save(..))",
             returning="retVal")
     public void saveMember(JoinPoint jp, Member retVal) {
 
@@ -74,7 +72,7 @@ public class DAOAspect {
         memberDao.save(retVal);
     }
 
-    @AfterReturning(value="execution(* service.MemberService.remove(..))",
+    @AfterReturning(value="execution(* service.MemberFactory.remove(..))",
             returning="retVal")
     public void removeMember(JoinPoint jp, Member retVal) {
 
@@ -84,7 +82,7 @@ public class DAOAspect {
 
 
     // Transaction
-    @AfterReturning(value="execution(* service.TransactionService.add(..))",
+    @AfterReturning(value="execution(* service.TransactionFactory.add(..))",
             returning="retVal")
     public void addTransaction(JoinPoint jp, Transaction retVal) {
 
@@ -92,7 +90,7 @@ public class DAOAspect {
         transactionDao.add(retVal);
     }
 
-    @AfterReturning(value="execution(* service.TransactionService.save(..))",
+    @AfterReturning(value="execution(* service.TransactionFactory.save(..))",
             returning="retVal")
     public void saveTransaction(JoinPoint jp, Transaction retVal) {
 
@@ -100,7 +98,7 @@ public class DAOAspect {
         transactionDao.save(retVal);
     }
 
-    @AfterReturning(value="execution(* service.TransactionService.remove(..))",
+    @AfterReturning(value="execution(* service.TransactionFactory.remove(..))",
             returning="retVal")
     public void removeTransaction(JoinPoint jp, Transaction retVal) {
 
@@ -109,29 +107,27 @@ public class DAOAspect {
     }
 
     // TransactionItem
-    @AfterReturning(value="execution(* service.TransactionService.addTransactionItem(..))",
+    @AfterReturning(value="execution(* service.TransactionItemFactory.add(..))",
             returning="retVal")
     public void addTransactionItem(JoinPoint jp, TransactionItem retVal) {
 
-        System.out.println("Running DAOAspect on TransactionItem addTransactionItem " + jp.getSignature());
+        System.out.println("Running DAOAspect on TransactionItem add " + jp.getSignature());
         transactionItemDao.add(retVal);
     }
 
-    @AfterReturning(value="(execution(* service.TransactionService.addDebitForMember(..)) || " +
-            "execution(* service.TransactionService.addCreditForMember(..)) || " +
-            "execution(* service.TransactionService.setAutoCalculationForMember(..)))",
+    @AfterReturning(value="execution(* service.TransactionItemFactory.save(..))",
             returning="retVal")
     public void updateTransactionItem(JoinPoint jp, TransactionItem retVal) {
 
-        System.out.println("Running DAOAspect on TransactionItem update " + jp.getSignature());
+        System.out.println("Running DAOAspect on TransactionItem save " + jp.getSignature());
         transactionItemDao.save(retVal);
     }
 
-    @AfterReturning(value="execution(* service.TransactionService.removeTransactionItemFromTransaction(..))",
+    @AfterReturning(value="execution(* service.TransactionItemFactory.remove(..))",
             returning="retVal")
     public void removeTransactionItemFromTransaction(JoinPoint jp, TransactionItem retVal) {
 
-        System.out.println("Running DAOAspect on TransactionItem removeTransactionItemFromTransaction " + jp.getSignature());
+        System.out.println("Running DAOAspect on TransactionItem remove " + jp.getSignature());
         transactionItemDao.remove(retVal);
     }
 

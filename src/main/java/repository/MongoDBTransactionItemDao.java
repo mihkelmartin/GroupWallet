@@ -1,15 +1,11 @@
 package repository;
 
-
-import model.Event;
 import model.Transaction;
 import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.stereotype.Repository;
-import service.EventService;
-import service.TransactionService;
 
 
 /**

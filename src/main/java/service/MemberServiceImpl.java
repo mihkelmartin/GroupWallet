@@ -16,24 +16,26 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     TransactionService transactionService;
 
+    @Autowired
+    MemberFactory memberFactory;
+
     @Override
     public Member add(Event event, String name, String nickName, String eMail, String bankAccount) {
-        Member retVal = new Member(name, nickName, eMail, bankAccount, event.getNextOrderNr(event.getMembers()), event);
-        event.getMembers().add(retVal);
+        Member retVal = memberFactory.add(event, name, nickName, eMail, bankAccount);
         transactionService.addMemberToTransactions(retVal);
         return retVal;
     }
 
     @Override
     public Member save(Member member, String name, String nickName, String eMail, String bankAccount, int order) {
-        member.update(name, nickName, eMail, bankAccount, order);
+        memberFactory.save(member, name, nickName, eMail, bankAccount, order);
         return member;
     }
 
     @Override
     public Member remove(Member member) {
         transactionService.removeMemberFromTransactions(member);
-        member.getEvent().getMembers().remove(member);
+        memberFactory.remove(member);
         return member;
     }
 

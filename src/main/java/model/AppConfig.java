@@ -60,6 +60,27 @@ public class AppConfig {
     }
 
     public @Bean
+    EventFactory eventFactory() throws Exception {
+        return new EventFactory();
+    }
+
+    public @Bean
+    MemberFactory memberFactory() throws Exception {
+        return new MemberFactory();
+    }
+
+    public @Bean
+    TransactionFactory transactionFactory() throws Exception {
+        return new TransactionFactory();
+    }
+
+    public @Bean
+    TransactionItemFactory transactionItemFactory() throws Exception {
+        return new TransactionItemFactory();
+    }
+
+
+    public @Bean
     EventService eventService() throws Exception {
         return new EventServiceImpl();
     }

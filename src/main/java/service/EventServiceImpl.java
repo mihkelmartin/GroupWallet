@@ -20,20 +20,22 @@ public class EventServiceImpl implements EventService {
     @Autowired
     TransactionService transactionService;
 
+    @Autowired
+    EventFactory eventFactory;
+
     @Override
     public Event add(String name) {
-        return new Event(name);
+        return eventFactory.add(name);
     }
 
     @Override
     public Event save(Event event, String name) {
-        event.update(name);
-        return event;
+        return eventFactory.save(event, name);
     }
 
     @Override
     public Event remove(Event event) {
-        return event;
+        return eventFactory.remove(event);
     }
 
     @Override
