@@ -22,7 +22,6 @@ public class TransactionServiceImpl implements TransactionService{
 
     public Transaction add(Event event, String name, boolean bmanualCalculation) {
         Transaction retVal = transactionFactory.add(event, name, bmanualCalculation);
-        event.getTransactions().add(retVal);
         populateTransactionItems(retVal, event.getMembers());
         return retVal;
     }

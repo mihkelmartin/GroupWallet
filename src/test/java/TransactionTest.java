@@ -37,24 +37,33 @@ public class TransactionTest {
     @Autowired
     TransactionService transactionService;
 
+    private Event event;
+    private Transaction taksosoit, poeskaik, saanisoit;
+    private String eventid, taksoid, poesid, saanid;
 
     @Before
     public void initialize(){
         mongoOperations.dropCollection(Event.class);
-    }
-
-    @Test
-    public void TransactionBasics(){
-        Event event = eventService.add("Saariselkä 2019");
+        event = eventService.add("Saariselkä 2019");
+        eventid = event.getId();
         Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
         Member alvar = memberService.add(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
         Member peeter = memberService.add(event,"Peeter Kutman","Peta","","");
         Member tonu = memberService.add(event,"Tõnu Riisalo","Tõnu","","");
-        Transaction taksosoit = transactionService.add(event,"Taksosõit Ivalost Saariselkä", false);
-        Transaction poeskaik = transactionService.add(event,"Kolmapäevane I poeskäik", false);
-        Transaction saanisoit = transactionService.add(event,"Saanisõit", false);
-        String taksoid = taksosoit.getId(), poesid = poeskaik.getId(), saanid = saanisoit.getId();
+        taksosoit = transactionService.add(event,"Taksosõit Ivalost Saariselkä", false);
+        poeskaik = transactionService.add(event,"Kolmapäevane I poeskäik", false);
+        saanisoit = transactionService.add(event,"Saanisõit", false);
+        taksoid = taksosoit.getId();
+        poesid = poeskaik.getId();
+        saanid = saanisoit.getId();
+    }
 
+    @Test
+    public void TransactionBasics(){
+        event = eventService.loadEvent(eventid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+        poeskaik = eventService.findTransaction(event, poesid);
+        saanisoit = eventService.findTransaction(event, saanid);
         assertNotNull(taksosoit);
         assertNotNull(poeskaik);
         assertNotNull(saanisoit);
@@ -63,6 +72,46 @@ public class TransactionTest {
         assertEquals(taksosoit.getItems().size(),event.getMembers().size());
         assertEquals(poeskaik.getItems().size(), event.getMembers().size());
         assertEquals(saanisoit.getItems().size(), event.getMembers().size());
+    }
+
+    @Test
+    public void TransactionUpdate() {
+        event = eventService.loadEvent(eventid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+        poeskaik = eventService.findTransaction(event, poesid);
+        saanisoit = eventService.findTransaction(event, saanid);
+        assertNotNull(taksosoit);
+        assertNotNull(poeskaik);
+        assertNotNull(saanisoit);
+        assertEquals(taksosoit.getName(), "Taksosõit Ivalost Saariselkä");
+        assertEquals(poeskaik.getName(), "Kolmapäevane I poeskäik");
+        assertEquals(saanisoit.getName(), "Saanisõit");
+
+        transactionService.save(taksosoit,"Taksosõit Ivalo lennujaamast Saariselkä", false);
+        transactionService.save(poeskaik,"Kolmapäevane poeskäik", false);
+        transactionService.save(saanisoit,"Saanisõit kambaga", false);
+
+        event = eventService.loadEvent(eventid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+        poeskaik = eventService.findTransaction(event, poesid);
+        saanisoit = eventService.findTransaction(event, saanid);
+        assertNotNull(taksosoit);
+        assertNotNull(poeskaik);
+        assertNotNull(saanisoit);
+        assertEquals(taksosoit.getName(), "Taksosõit Ivalo lennujaamast Saariselkä");
+        assertEquals(poeskaik.getName(), "Kolmapäevane poeskäik");
+        assertEquals(saanisoit.getName(), "Saanisõit kambaga");
+    }
+
+    @Test
+    public void TransactionWithoutMembers() {
+        mongoOperations.dropCollection(Event.class);
+        event = eventService.add("Saariselkä 2020");
+        eventid = event.getId();
+        taksosoit = transactionService.add(event,"Taksosõit Ivalost Saariselkä", false);
+        event = eventService.loadEvent(eventid);
+        assertEquals(event.getTransactions().size(), 1);
+
 
     }
 }

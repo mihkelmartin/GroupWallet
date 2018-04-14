@@ -47,6 +47,11 @@ public class MemberTest {
         Event event = eventService.add("Saariselkä 2019");
         Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
         String mihkelid = mihkel.getId();
+
+        event = eventService.loadEvent(event.getId());
+        mihkel = eventService.findMember(event, mihkelid);
+        assertNotNull(mihkel);
+
         Member alvar = memberService.add(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
         Member peeter = memberService.add(event,"Peeter Kutman","Peta","","");
         String peeterid = peeter.getId();

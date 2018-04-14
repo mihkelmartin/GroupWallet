@@ -24,7 +24,7 @@ public class MongoDBTransactionItemDao implements TransactionItemDao {
 
     @Override
     public void add(TransactionItem transactionItem) {
-
+        save(transactionItem);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class MongoDBTransactionItemDao implements TransactionItemDao {
 
     @Override
     public void remove(TransactionItem transactionItem) {
-
+        save(transactionItem);
     }
 
     @Override

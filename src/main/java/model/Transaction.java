@@ -45,6 +45,10 @@ public class Transaction implements Comparable<Transaction>, Ordered {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public ArrayList<TransactionItem> getItems() {
         return items;
     }

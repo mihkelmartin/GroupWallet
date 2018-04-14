@@ -13,6 +13,7 @@ public class TransactionFactory  {
     public Transaction add(Event event, String name, boolean bmanualCalculation) {
         Transaction retVal = new Transaction(name, bmanualCalculation,
                 event.getNextOrderNr(event.getTransactions()), event);
+        event.getTransactions().add(retVal);
         return retVal;
     }
 
