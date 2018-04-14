@@ -25,8 +25,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member save(Member member, String name, String nickName, String eMail, String bankAccount, int order) {
-        memberFactory.save(member, name, nickName, eMail, bankAccount, order);
+    public Member save(Member member, String name, String nickName, String eMail, String bankAccount) {
+        memberFactory.save(member, name, nickName, eMail, bankAccount, member.getOrder());
         return member;
     }
 

@@ -2,19 +2,19 @@
 
 import model.AppConfig;
 import model.Event;
-import model.Member;
-import model.Transaction;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.test.context.junit4.SpringRunner;
 import service.EventService;
-import service.MemberService;
-import service.TransactionService;
 
 /**
  * Created by mihkel on 9.04.2018.
@@ -25,30 +25,41 @@ import service.TransactionService;
 public class EventTest {
 
     @Autowired
+    @Qualifier("mongoOperations")
+    private MongoOperations mongoOperations;
+
+    @Autowired
     EventService eventService;
-    @Autowired
-    MemberService memberService;
-    @Autowired
-    TransactionService transactionService;
 
-
-    @Test
-    public void plainEvent(){
-        Event event = eventService.add("Saariselkä 2019");
-        Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
-        Member alvar = memberService.add(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
-        Transaction transaction = transactionService.add(event, "Kolmapäevane I poeskäik", false);
-        transactionService.addDebitForMember(transaction, alvar, 320);
-        String mihkelid = mihkel.getId();
-        Event fromDb = eventService.loadEvent(event.getId());
-        assertEquals (fromDb.getName(), "Saariselkä 2019");
-        eventService.save(fromDb,"Saariselkä 2010");
-        fromDb = eventService.loadEvent(event.getId());
-        assertEquals (fromDb.getName(), "Saariselkä 2010");
-        Member mihkeltaastatud = eventService.findMember(fromDb, mihkelid);
-        assertNotNull(mihkeltaastatud);
-        memberService.remove(mihkeltaastatud);
-        transactionService.remove(transaction);
+    @Before public void initialize(){
+        mongoOperations.dropCollection(Event.class);
     }
 
+    @Test
+    public void EventBasics(){
+        Event event = eventService.add("Saariselkä 2018");
+        String eventid = event.getId();
+        assertNotNull(event);
+        assertNotNull(eventid);
+
+        Event fromDb = eventService.loadEvent(eventid);
+        assertNotNull(fromDb);
+        assertEquals (event.getId(), fromDb.getId());
+        assertEquals (fromDb.getName(), "Saariselkä 2018");
+        assertEquals (event.getName(), fromDb.getName());
+
+        eventService.save(fromDb,"Saariselkä 2019");
+        eventid = fromDb.getId();
+
+        Event fromDb2 = eventService.loadEvent(eventid);
+        assertNotNull(fromDb2);
+        assertEquals (fromDb.getId(), fromDb2.getId());
+        assertEquals (fromDb2.getName(), "Saariselkä 2019");
+        assertEquals (fromDb.getName(), fromDb2.getName());
+
+        eventService.remove(fromDb2);
+
+        Event fromDb3 = eventService.loadEvent(eventid);
+        assertNull(fromDb3);
+    }
 }

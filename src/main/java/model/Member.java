@@ -52,6 +52,22 @@ public class Member implements Comparable<Member>, Ordered {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public String geteMail() {
+        return eMail;
+    }
+
+    public String getBankAccount() {
+        return bankAccount;
+    }
+
     public Event getEvent() {
         return event;
     }

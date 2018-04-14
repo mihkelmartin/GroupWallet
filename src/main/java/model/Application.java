@@ -51,7 +51,7 @@ public class Application {
         transactionService.setAutoCalculationForMember(transaction, mihkel, false);
         Member munajoodik = memberService.add(event,"Munajoodik Tuslik","Tuslik","kaarelmartin@gmail.com","");
         memberService.remove(tonu);
-        memberService.save(lauri,"Lauri Moss", "Lauri", "maisvee@gmail.com","EE124141242",lauri.getOrder());
+        memberService.save(lauri,"Lauri Moss", "Lauri", "maisvee@gmail.com","EE124141242");
         transactionService.remove(kustutatav);
 
         return args -> {

@@ -9,7 +9,7 @@ import model.Member;
 public interface MemberService {
     Member add(Event event, String name, String nickName, String eMail, String bankAccount);
     Member save(Member member, String name, String nickName, String eMail,
-                String bankAccount, int order);
+                String bankAccount);
     Member remove(Member member);
     void loadMembers(Event event);
 }
