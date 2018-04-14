@@ -5,15 +5,11 @@ import model.Member;
 import model.Transaction;
 import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import repository.EventDao;
 
 /**
  * Created by mihkel on 11.04.2018.
  */
 public class EventServiceImpl implements EventService {
-
-    @Autowired
-    private EventDao eventDao;
 
     @Autowired
     MemberService memberService;
@@ -40,7 +36,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event loadEvent(String id) {
-        Event event = eventDao.loadEvent(id);
+        Event event = eventFactory.loadEvent(id);
         loadMembers(event);
         loadTransactions(event);
         updateForeignKeys(event);

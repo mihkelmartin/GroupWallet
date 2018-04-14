@@ -10,7 +10,7 @@ import model.TransactionItem;
  */
 public interface TransactionService {
     Transaction add(Event event, String name, boolean bmanualCalculation);
-    Transaction save(Transaction transaction, String name, boolean bmanualCalculation, int order);
+    Transaction save(Transaction transaction, String name, boolean bmanualCalculation);
     Transaction remove(Transaction transaction);
     Member addMemberToTransactions(Member member);
     Member removeMemberFromTransactions(Member member);

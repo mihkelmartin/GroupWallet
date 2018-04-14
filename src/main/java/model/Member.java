@@ -65,6 +65,10 @@ public class Member implements Comparable<Member>, Ordered {
         return order;
     }
 
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
     @Override
     public int compareTo(Member o) {
         return (this.getOrder() < o.getOrder() ? -1 :

@@ -1,8 +1,14 @@
 package service;
 
 import model.Event;
+import org.springframework.beans.factory.annotation.Autowired;
+import repository.EventDao;
 
 public class EventFactory  {
+
+    @Autowired
+    private EventDao eventDao;
+
     public Event add(String name) {
         return new Event(name);
     }
@@ -13,6 +19,11 @@ public class EventFactory  {
     }
 
     public Event remove(Event event) {
+        return event;
+    }
+
+    public Event loadEvent(String id) {
+        Event event = eventDao.loadEvent(id);
         return event;
     }
 }

@@ -62,6 +62,10 @@ public class Transaction implements Comparable<Transaction>, Ordered {
         return this.order;
     }
 
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
     @Override
     public int compareTo(Transaction o) {
         return (this.getOrder() < o.getOrder() ? -1 :

@@ -3,8 +3,13 @@ package service;
 import model.Member;
 import model.Transaction;
 import model.TransactionItem;
+import org.springframework.beans.factory.annotation.Autowired;
+import repository.TransactionItemDao;
 
 public class TransactionItemFactory {
+
+    @Autowired
+    private TransactionItemDao transactionItemDao;
 
     public TransactionItem add(Transaction transaction, Member member) {
         TransactionItem retVal = new TransactionItem(transaction.getId(), member.getId(),
@@ -23,4 +28,8 @@ public class TransactionItemFactory {
         // Do nothing, triggers DAO deleting via AOP
         return transactionItem;
     }
+
+    public void loadTransactionItems(Transaction transaction){
+        transactionItemDao.loadTransactionItems(transaction);
+    };
 }
