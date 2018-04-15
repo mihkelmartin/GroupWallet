@@ -43,45 +43,70 @@ public class MemberTest {
     }
 
     @Test
-    public void MemberBasics(){
+    public void MemberSingleAdd(){
+
+        // Creation
         Event event = eventService.add("Saariselkä 2019");
         Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
         String mihkelid = mihkel.getId();
 
+        assertNotNull(mihkel);
+        assertNotNull(mihkelid);
+        assertEquals(event.getMembers().size(),1);
+
+        // Reload
         event = eventService.loadEvent(event.getId());
         mihkel = eventService.findMember(event, mihkelid);
         assertNotNull(mihkel);
+        assertEquals (mihkelid, mihkel.getId());
+        assertEquals(mihkel.getName(),"Mihkel Märtin");
+        assertEquals(mihkel.getNickName(),"Miku");
+        assertEquals(mihkel.geteMail(),"mihkelmartin@gmail.com");
+        assertEquals(mihkel.getBankAccount(),"");
+        assertEquals(event.getMembers().size(),1);
+    }
 
+    @Test
+    public void MemberSingleChange(){
+
+        Event event = eventService.add("Saariselkä 2019");
+        Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
+        String mihkelid = mihkel.getId();
+        memberService.save(mihkel,"Mihkel Kaarli poeg Märtin", "Mikuke","kaubavagun@gmail.com","EESwed");
+
+        event = eventService.loadEvent(event.getId());
+        mihkel = eventService.findMember(event, mihkelid);
+        assertEquals(mihkel.getName(),"Mihkel Kaarli poeg Märtin");
+        assertEquals(mihkel.getNickName(),"Mikuke");
+        assertEquals(mihkel.geteMail(),"kaubavagun@gmail.com");
+        assertEquals(mihkel.getBankAccount(),"EESwed");
+
+    }
+
+    @Test
+    public void MemberRemove(){
+        Event event = eventService.add("Saariselkä 2019");
+        Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
         Member alvar = memberService.add(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
         Member peeter = memberService.add(event,"Peeter Kutman","Peta","","");
-        String peeterid = peeter.getId();
         Member tonu = memberService.add(event,"Tõnu Riisalo","Tõnu","","");
         Member lauri = memberService.add(event,"Lauri Maisvee","Lauri","","");
-        assertNotNull(mihkel);
+        String mihkelid = mihkel.getId(), peeterid = peeter.getId();
+
         assertEquals(event.getMembers().size(),5);
 
-        memberService.save(mihkel,"Mihkel Kaarli poeg Märtin", "Mikuke","kaubavagun@gmail.com","EESwed");
-        Event fromdb = eventService.loadEvent(event.getId());
-        Member mihkeldb = eventService.findMember(fromdb, mihkelid);
-        assertNotNull(mihkeldb);
-        assertEquals(mihkeldb.getName(),"Mihkel Kaarli poeg Märtin");
-        assertEquals(mihkeldb.getNickName(),"Mikuke");
-        assertEquals(mihkeldb.geteMail(),"kaubavagun@gmail.com");
-        assertEquals(mihkeldb.getBankAccount(),"EESwed");
+        memberService.remove(peeter);
+        Collections.reverse(event.getMembers());
 
-        Member peeterdb = eventService.findMember(fromdb, peeterid);
-        assertNotNull(peeterdb);
+        assertEquals(event.getMembers().size(),4);
+        assertEquals(event.getMembers().get(0).getOrder(),4);
 
-        memberService.remove(peeterdb);
-        assertEquals(fromdb.getMembers().size(),4);
-        Collections.reverse(fromdb.getMembers());
-        assertEquals(fromdb.getMembers().get(0).getOrder(),4);
+        event = eventService.loadEvent(event.getId());
+        peeter = eventService.findMember(event, peeterid);
+        mihkel = eventService.findMember(event, mihkelid);
 
-        event = eventService.loadEvent(fromdb.getId());
-        peeterdb = eventService.findMember(event, peeterid);
-        assertNull(peeterdb);
-        mihkeldb = eventService.findMember(event, mihkelid);
-        assertNotNull(mihkeldb);
+        assertNull(peeter);
+        assertNotNull(mihkel);
         assertEquals(event.getMembers().size(),4);
     }
 

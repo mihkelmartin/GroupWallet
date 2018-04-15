@@ -14,6 +14,8 @@ import service.EventService;
 import service.MemberService;
 import service.TransactionService;
 
+import java.util.Collections;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -40,19 +42,26 @@ public class TransactionTest {
     private Event event;
     private Transaction taksosoit, poeskaik, saanisoit;
     private String eventid, taksoid, poesid, saanid;
+    String taksoname = "Taksosõit Ivalost Saariselkä";
+    String poesname = "Kolmapäevane I poeskäik";
+    String saanisoitname = "Saanisõit";
+    String taksonameChg = "Taksosõit Ivalo lennujaamast Saariselkä";
+    String poesnameChg = "Kolmapäevane poeskäik";
+    String saanisoitnameChg = "Saanisõit kambaga";
+
 
     @Before
     public void initialize(){
         mongoOperations.dropCollection(Event.class);
         event = eventService.add("Saariselkä 2019");
         eventid = event.getId();
-        Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
-        Member alvar = memberService.add(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
-        Member peeter = memberService.add(event,"Peeter Kutman","Peta","","");
-        Member tonu = memberService.add(event,"Tõnu Riisalo","Tõnu","","");
-        taksosoit = transactionService.add(event,"Taksosõit Ivalost Saariselkä", false);
-        poeskaik = transactionService.add(event,"Kolmapäevane I poeskäik", false);
-        saanisoit = transactionService.add(event,"Saanisõit", false);
+        memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
+        memberService.add(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
+        memberService.add(event,"Peeter Kutman","Peta","","");
+        memberService.add(event,"Tõnu Riisalo","Tõnu","","");
+        taksosoit = transactionService.add(event,taksoname, false);
+        poeskaik = transactionService.add(event,poesname, false);
+        saanisoit = transactionService.add(event,saanisoitname, false);
         taksoid = taksosoit.getId();
         poesid = poeskaik.getId();
         saanid = saanisoit.getId();
@@ -64,32 +73,36 @@ public class TransactionTest {
         taksosoit = eventService.findTransaction(event, taksoid);
         poeskaik = eventService.findTransaction(event, poesid);
         saanisoit = eventService.findTransaction(event, saanid);
+
         assertNotNull(taksosoit);
         assertNotNull(poeskaik);
         assertNotNull(saanisoit);
+
+        assertEquals(taksosoit.getId(), taksoid);
+        assertEquals(poeskaik.getId(), poesid);
+        assertEquals(saanisoit.getId(), saanid);
+
+        assertEquals(taksosoit.getName(), taksoname);
+        assertEquals(poeskaik.getName(), poesname);
+        assertEquals(saanisoit.getName(), saanisoitname);
+
         assertEquals(event.getMembers().size(), 4);
         assertEquals(event.getTransactions().size(), 3);
+
         assertEquals(taksosoit.getItems().size(),event.getMembers().size());
         assertEquals(poeskaik.getItems().size(), event.getMembers().size());
         assertEquals(saanisoit.getItems().size(), event.getMembers().size());
     }
 
     @Test
-    public void TransactionUpdate() {
+    public void TransactionChange() {
         event = eventService.loadEvent(eventid);
         taksosoit = eventService.findTransaction(event, taksoid);
         poeskaik = eventService.findTransaction(event, poesid);
         saanisoit = eventService.findTransaction(event, saanid);
-        assertNotNull(taksosoit);
-        assertNotNull(poeskaik);
-        assertNotNull(saanisoit);
-        assertEquals(taksosoit.getName(), "Taksosõit Ivalost Saariselkä");
-        assertEquals(poeskaik.getName(), "Kolmapäevane I poeskäik");
-        assertEquals(saanisoit.getName(), "Saanisõit");
-
-        transactionService.save(taksosoit,"Taksosõit Ivalo lennujaamast Saariselkä", false);
-        transactionService.save(poeskaik,"Kolmapäevane poeskäik", false);
-        transactionService.save(saanisoit,"Saanisõit kambaga", false);
+        transactionService.save(taksosoit,taksonameChg, false);
+        transactionService.save(poeskaik,poesnameChg, false);
+        transactionService.save(saanisoit,saanisoitnameChg, false);
 
         event = eventService.loadEvent(eventid);
         taksosoit = eventService.findTransaction(event, taksoid);
@@ -98,9 +111,9 @@ public class TransactionTest {
         assertNotNull(taksosoit);
         assertNotNull(poeskaik);
         assertNotNull(saanisoit);
-        assertEquals(taksosoit.getName(), "Taksosõit Ivalo lennujaamast Saariselkä");
-        assertEquals(poeskaik.getName(), "Kolmapäevane poeskäik");
-        assertEquals(saanisoit.getName(), "Saanisõit kambaga");
+        assertEquals(taksosoit.getName(), taksonameChg);
+        assertEquals(poeskaik.getName(), poesnameChg);
+        assertEquals(saanisoit.getName(), saanisoitnameChg);
     }
 
     @Test
@@ -108,10 +121,31 @@ public class TransactionTest {
         mongoOperations.dropCollection(Event.class);
         event = eventService.add("Saariselkä 2020");
         eventid = event.getId();
-        taksosoit = transactionService.add(event,"Taksosõit Ivalost Saariselkä", false);
+        taksosoit = transactionService.add(event,taksoname, false);
+        taksoid = taksosoit.getId();
+
         event = eventService.loadEvent(eventid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+
+        assertNotNull(taksosoit);
+        assertEquals(taksosoit.getName(), taksoname);
         assertEquals(event.getTransactions().size(), 1);
 
 
+    }
+
+    public void TransactionRemoveTransaction() {
+        transactionService.remove(poeskaik);
+        Collections.reverse(event.getTransactions());
+
+        assertEquals(event.getTransactions().size(), 2);
+        assertEquals(event.getTransactions().get(0).getOrder(),2);
+
+        event = eventService.loadEvent(eventid);
+        poeskaik = eventService.findTransaction(event, poesid);
+
+        assertNull(poeskaik);
+        assertEquals(event.getTransactions().size(), 2);
+        assertEquals(event.getTransactions().get(0).getOrder(),2);
     }
 }

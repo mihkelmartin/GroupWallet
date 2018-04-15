@@ -37,29 +37,34 @@ public class EventTest {
 
     @Test
     public void EventBasics(){
-        Event event = eventService.add("Saariselkä 2018");
+        String eventName = "Saariselkä 2018";
+        String eventNameChg = "Saariselkä 2019";
+
+        // Creation
+        Event event = eventService.add(eventName);
         String eventid = event.getId();
         assertNotNull(event);
         assertNotNull(eventid);
+        assertEquals (event.getName(), eventName);
 
-        Event fromDb = eventService.loadEvent(eventid);
-        assertNotNull(fromDb);
-        assertEquals (event.getId(), fromDb.getId());
-        assertEquals (fromDb.getName(), "Saariselkä 2018");
-        assertEquals (event.getName(), fromDb.getName());
+        // Reload
+        event = eventService.loadEvent(eventid);
+        assertNotNull(event);
+        assertEquals (eventid, event.getId());
+        assertEquals (event.getName(), eventName);
 
-        eventService.save(fromDb,"Saariselkä 2019");
-        eventid = fromDb.getId();
+        // Change
+        eventService.save(event,eventNameChg);
 
-        Event fromDb2 = eventService.loadEvent(eventid);
-        assertNotNull(fromDb2);
-        assertEquals (fromDb.getId(), fromDb2.getId());
-        assertEquals (fromDb2.getName(), "Saariselkä 2019");
-        assertEquals (fromDb.getName(), fromDb2.getName());
+        event = eventService.loadEvent(eventid);
+        assertNotNull(event);
+        assertEquals (eventid, event.getId());
+        assertEquals (event.getName(), eventNameChg);
 
-        eventService.remove(fromDb2);
+        // Remove
+        eventService.remove(event);
 
-        Event fromDb3 = eventService.loadEvent(eventid);
-        assertNull(fromDb3);
+        event = eventService.loadEvent(eventid);
+        assertNull(event);
     }
 }
