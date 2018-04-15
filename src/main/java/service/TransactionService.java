@@ -19,4 +19,5 @@ public interface TransactionService {
     TransactionItem setAutoCalculationForMember(Transaction transaction, Member member, boolean bAutoCalculation);
     void calculateCredits(Transaction transaction);
     void loadTransactions(Event event);
+    TransactionItem getTransactionItemForMember(Transaction transaction, Member member);
 }

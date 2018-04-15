@@ -50,6 +50,7 @@ public class TransactionTest {
     String taksonameChg = "Taksosõit Ivalo lennujaamast Saariselkä";
     String poesnameChg = "Kolmapäevane poeskäik";
     String saanisoitnameChg = "Saanisõit kambaga";
+    private double delta = 0.001;
 
 
     @Before
@@ -234,6 +235,34 @@ public class TransactionTest {
         assertEquals(5, taksosoit.getItems().size());
         assertEquals(5, poeskaik.getItems().size());
         assertEquals(5, saanisoit.getItems().size());
+
+    }
+
+    @Test
+    public void TransactionDebitCalculation(){
+
+    }
+
+    @Test
+    public void TransactionCreditCalculation(){
+        double dtaksosoit = 62.5;
+        transactionService.addDebitForMember(taksosoit, mihkel, dtaksosoit);
+        assertEquals(dtaksosoit/mihkel.getEvent().getMembers().size(),
+                transactionService.getTransactionItemForMember(taksosoit, mihkel).getCredit(), delta);
+
+    }
+
+    @Test
+    public void TransactionAutoCalculationChange(){
+
+    }
+
+    @Test
+    public void TransactionAddMemberCalculation(){
+
+    }
+    @Test
+    public void TransactionRemoveMemberCalculation(){
 
     }
 }

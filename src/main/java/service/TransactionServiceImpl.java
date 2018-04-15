@@ -96,6 +96,17 @@ public class TransactionServiceImpl implements TransactionService{
         return transactionItem;
     }
 
+    public TransactionItem getTransactionItemForMember(Transaction transaction, Member member){
+        TransactionItem transactionItem = null;
+        for(TransactionItem item : transaction.getItems()){
+            if(item.getMemberId().equals(member.getId())) {
+                transactionItem = item;
+                break;
+            }
+        }
+        return transactionItem;
+    }
+
     private void populateTransactionItems(Transaction transaction, ArrayList<Member> members) {
         for(Member member : members){
             transactionItemFactory.add(transaction, member);
