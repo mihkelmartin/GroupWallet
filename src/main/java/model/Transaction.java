@@ -49,6 +49,10 @@ public class Transaction implements Comparable<Transaction>, Ordered {
         return name;
     }
 
+    public boolean isBmanualCalculation() {
+        return bmanualCalculation;
+    }
+
     public ArrayList<TransactionItem> getItems() {
         return items;
     }

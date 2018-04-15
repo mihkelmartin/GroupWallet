@@ -87,27 +87,44 @@ public class MemberTest {
     public void MemberRemove(){
         Event event = eventService.add("Saariselkä 2019");
         Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
-        Member alvar = memberService.add(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
         Member peeter = memberService.add(event,"Peeter Kutman","Peta","","");
         Member tonu = memberService.add(event,"Tõnu Riisalo","Tõnu","","");
         Member lauri = memberService.add(event,"Lauri Maisvee","Lauri","","");
-        String mihkelid = mihkel.getId(), peeterid = peeter.getId();
+        String mihkelid = mihkel.getId(), peeterid = peeter.getId(), tonuid = tonu.getId(), lauriid = lauri.getId();
 
-        assertEquals(event.getMembers().size(),5);
+        assertEquals(event.getMembers().size(),4);
 
+        // Remove one
         memberService.remove(peeter);
         Collections.reverse(event.getMembers());
 
-        assertEquals(event.getMembers().size(),4);
-        assertEquals(event.getMembers().get(0).getOrder(),4);
+        assertEquals(event.getMembers().size(),3);
+        assertEquals(event.getMembers().get(0).getOrder(),3);
 
         event = eventService.loadEvent(event.getId());
         peeter = eventService.findMember(event, peeterid);
         mihkel = eventService.findMember(event, mihkelid);
+        tonu = eventService.findMember(event, tonuid);
+        lauri = eventService.findMember(event, lauriid);
+        Collections.reverse(event.getMembers());
 
         assertNull(peeter);
         assertNotNull(mihkel);
-        assertEquals(event.getMembers().size(),4);
+        assertNotNull(tonu);
+        assertNotNull(lauri);
+        assertEquals(event.getMembers().size(),3);
+        assertEquals(event.getMembers().get(0).getOrder(),3);
+
+        // Remove all
+        memberService.remove(mihkel);
+        memberService.remove(tonu);
+        memberService.remove(lauri);
+
+        assertEquals(event.getMembers().size(),0);
+
+        event = eventService.loadEvent(event.getId());
+
+        assertEquals(event.getMembers().size(),0);
     }
 
 }

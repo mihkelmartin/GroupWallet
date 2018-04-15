@@ -47,7 +47,8 @@ public class MemberServiceImpl implements MemberService {
     private void recalculateOrderNumbers(Member removed){
         for(Member member : removed.getEvent().getMembers()){
             if(member.getOrder() > removed.getOrder())
-                member.setOrder(member.getOrder() - 1);
+                memberFactory.save(member, member.getName(), member.getNickName(), member.geteMail(),
+                        member.getBankAccount(), member.getOrder() - 1);
         }
     }
 }

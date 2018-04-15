@@ -17,8 +17,8 @@ public class TransactionFactory  {
         return retVal;
     }
 
-    public Transaction save(Transaction transaction, String name, boolean bmanualCalculation) {
-        transaction.update(name, bmanualCalculation, transaction.getOrder());
+    public Transaction save(Transaction transaction, String name, boolean bmanualCalculation, int order) {
+        transaction.update(name, bmanualCalculation, order);
         return transaction;
     }
 

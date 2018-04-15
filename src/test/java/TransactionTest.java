@@ -40,6 +40,8 @@ public class TransactionTest {
     TransactionService transactionService;
 
     private Event event;
+    private Member mihkel, alvar, peeter, tonu;
+    private String mihkelid, alvarid, peeterid, tonuid;
     private Transaction taksosoit, poeskaik, saanisoit;
     private String eventid, taksoid, poesid, saanid;
     String taksoname = "Taksosõit Ivalost Saariselkä";
@@ -55,16 +57,22 @@ public class TransactionTest {
         mongoOperations.dropCollection(Event.class);
         event = eventService.add("Saariselkä 2019");
         eventid = event.getId();
-        memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
-        memberService.add(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
-        memberService.add(event,"Peeter Kutman","Peta","","");
-        memberService.add(event,"Tõnu Riisalo","Tõnu","","");
+        mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
+        alvar = memberService.add(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
+        peeter = memberService.add(event,"Peeter Kutman","Peta","","");
+        tonu = memberService.add(event,"Tõnu Riisalo","Tõnu","","");
+        mihkelid = mihkel.getId();
+        alvarid = alvar.getId();
+        peeterid = peeter.getId();
+        tonuid = tonu.getId();
+
         taksosoit = transactionService.add(event,taksoname, false);
         poeskaik = transactionService.add(event,poesname, false);
         saanisoit = transactionService.add(event,saanisoitname, false);
         taksoid = taksosoit.getId();
         poesid = poeskaik.getId();
         saanid = saanisoit.getId();
+
     }
 
     @Test
@@ -134,18 +142,98 @@ public class TransactionTest {
 
     }
 
+    @Test
     public void TransactionRemoveTransaction() {
+        // Remove one
         transactionService.remove(poeskaik);
         Collections.reverse(event.getTransactions());
 
-        assertEquals(event.getTransactions().size(), 2);
-        assertEquals(event.getTransactions().get(0).getOrder(),2);
+        assertEquals(2, event.getTransactions().size());
+        assertEquals(2, event.getTransactions().get(0).getOrder());
 
         event = eventService.loadEvent(eventid);
         poeskaik = eventService.findTransaction(event, poesid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+        saanisoit = eventService.findTransaction(event, saanid);
+        Collections.reverse(event.getTransactions());
 
         assertNull(poeskaik);
-        assertEquals(event.getTransactions().size(), 2);
-        assertEquals(event.getTransactions().get(0).getOrder(),2);
+        assertEquals(2, event.getTransactions().size());
+        assertEquals(2, event.getTransactions().get(0).getOrder());
+
+        // Remove all
+        transactionService.remove(taksosoit);
+        transactionService.remove(saanisoit);
+
+        assertEquals(0, event.getTransactions().size());
+
+        event = eventService.loadEvent(eventid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+        saanisoit = eventService.findTransaction(event, saanid);
+
+        assertNull(taksosoit);
+        assertNull(saanisoit);
+        assertEquals(0, event.getTransactions().size());
+
+    }
+
+    @Test
+    public void TransactionRemoveMember() {
+        // Remove two members
+        memberService.remove(mihkel);
+        memberService.remove(tonu);
+
+        assertEquals(taksosoit.getItems().size(),event.getMembers().size());
+        assertEquals(poeskaik.getItems().size(), event.getMembers().size());
+        assertEquals(saanisoit.getItems().size(), event.getMembers().size());
+
+        // Reload and test again
+        event = eventService.loadEvent(eventid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+        poeskaik = eventService.findTransaction(event, poesid);
+        saanisoit = eventService.findTransaction(event, saanid);
+
+        assertEquals(taksosoit.getItems().size(),event.getMembers().size());
+        assertEquals(poeskaik.getItems().size(), event.getMembers().size());
+        assertEquals(saanisoit.getItems().size(), event.getMembers().size());
+
+        // Remove all
+        peeter = eventService.findMember(event, peeterid);
+        alvar = eventService.findMember(event, alvarid);
+        memberService.remove(peeter);
+        memberService.remove(alvar);
+
+        assertEquals(0, taksosoit.getItems().size());
+        assertEquals(0, poeskaik.getItems().size());
+        assertEquals(0, saanisoit.getItems().size());
+
+        // Reload and test again
+        event = eventService.loadEvent(eventid);
+        poeskaik = eventService.findTransaction(event, poesid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+        saanisoit = eventService.findTransaction(event, saanid);
+
+        assertEquals(0, taksosoit.getItems().size());
+        assertEquals(0, poeskaik.getItems().size());
+        assertEquals(0, saanisoit.getItems().size());
+    }
+
+    @Test
+    public void TransactionAddMember() {
+        Member lauri = memberService.add(event,"Lauri Maisvee","Lauri","","");
+        assertEquals(5, taksosoit.getItems().size());
+        assertEquals(5, poeskaik.getItems().size());
+        assertEquals(5, saanisoit.getItems().size());
+
+        // Reload and test again
+        event = eventService.loadEvent(eventid);
+        poeskaik = eventService.findTransaction(event, poesid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+        saanisoit = eventService.findTransaction(event, saanid);
+
+        assertEquals(5, taksosoit.getItems().size());
+        assertEquals(5, poeskaik.getItems().size());
+        assertEquals(5, saanisoit.getItems().size());
+
     }
 }

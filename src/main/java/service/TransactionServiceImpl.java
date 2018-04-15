@@ -27,7 +27,7 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     public Transaction save(Transaction transaction, String name, boolean bmanualCalculation) {
-        transactionFactory.save(transaction, name, bmanualCalculation);
+        transactionFactory.save(transaction, name, bmanualCalculation, transaction.getOrder());
         return transaction;
     }
 
@@ -41,7 +41,8 @@ public class TransactionServiceImpl implements TransactionService{
     private void recalculateOrderNumbers(Transaction removed){
         for(Transaction transaction: removed.getEvent().getTransactions()){
             if(transaction.getOrder() > removed.getOrder())
-                transaction.setOrder(transaction.getOrder() - 1);
+                transactionFactory.save(transaction, transaction.getName(),
+                        transaction.isBmanualCalculation(), transaction.getOrder() - 1);
         }
     }
 
