@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -24,6 +25,7 @@ public class Member implements Comparable<Member>, Ordered {
     private String bankAccount;
     private @NonNull int order;
     @Transient
+    @JsonIgnore
     private @NonNull Event event;
 
     public Member(){

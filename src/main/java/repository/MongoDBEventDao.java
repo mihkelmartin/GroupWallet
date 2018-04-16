@@ -8,6 +8,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.List;
+
 
 /**
  * Created by mihkel on 6.04.2018.
@@ -41,4 +44,12 @@ public class MongoDBEventDao implements EventDao {
         query.addCriteria(Criteria.where("id").is(id));
         return mongoOps.findOne(query, Event.class);
     }
+
+    @Override
+    public List<Event> loadEventsByemail(String eMail) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("members.eMail").is(eMail));
+        return mongoOps.find(query, Event.class);
+    }
+
 }

@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
@@ -20,7 +21,9 @@ public class Event {
     private @NonNull String id;
     private @NonNull String name;
     private final @NonNull Short PIN;
+    @JsonIgnore
     private ArrayList<Member> members = new ArrayList<>();
+    @JsonIgnore
     private ArrayList<Transaction> transactions = new ArrayList<>();
 
     public Event (String name){
@@ -39,6 +42,10 @@ public class Event {
 
     public String getName() {
         return name;
+    }
+
+    public Short getPIN() {
+        return PIN;
     }
 
     public ArrayList<Member> getMembers() {

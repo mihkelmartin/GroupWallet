@@ -6,6 +6,8 @@ import model.Transaction;
 import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  * Created by mihkel on 11.04.2018.
  */
@@ -41,6 +43,11 @@ public class EventServiceImpl implements EventService {
         loadTransactions(event);
         updateForeignKeys(event);
         return event;
+    }
+
+    @Override
+    public List<Event> loadEventsByemail(String eMail) {
+        return eventFactory.loadEventsByemail(eMail);
     }
 
     @Override

@@ -9,7 +9,8 @@ import service.MemberService;
 import service.TransactionService;
 
 
-import java.util.Arrays;
+import java.util.*;
+import java.util.stream.Stream;
 
 
 /**
@@ -37,7 +38,7 @@ public class Application {
     String home() {
         Event event = eventService.add("Saariselkä 2018");
         Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
-        memberService.add(event,"Alvar Tõruke","Tõru","alvar@gmai.com","");
+        memberService.add(event,"Alvar Tõruke","Tõru","alvar@gmail.com","");
         memberService.add(event,"Peeter Kutman","Peta","","");
         Member tonu = memberService.add(event,"Tõnu Riisalo","Tõnu","","");
         Member lauri = memberService.add(event,"Lauri Maisvee","Lauri","","");
@@ -55,11 +56,60 @@ public class Application {
 
         return event.getId();
     }
-    @GetMapping(path = "/Event/{eventid}", produces = "application/json;charset=UTF-8")
+
+    @GetMapping(path = "/Event/add/{name}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Event addEvent(@PathVariable String name) {
+        Event event = eventService.add(name);
+        return event;
+
+    }
+
+    @GetMapping(path = "/Event/update/{eventid}/name/{name}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Event updateEvent(@PathVariable String eventid, @PathVariable String name) {
+        Event event = eventService.loadEvent(eventid);
+        eventService.save(event, name);
+        return event;
+
+    }
+
+    @GetMapping(path = "/Event/remove/{eventid}")
+    @ResponseBody
+    public void removeEvent(@PathVariable String eventid) {
+        Event event = eventService.loadEvent(eventid);
+        eventService.remove(event);
+    }
+
+    @GetMapping(path = "/Event/find/event/{eventid}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Event findEvent(@PathVariable String eventid) {
         Event event = eventService.loadEvent(eventid);
         return event;
-
     }
+
+    @GetMapping(path = "/Event/find/email/{email}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Map<String, String> findEventsByEmail(@PathVariable String email) {
+        List<Event> events = eventService.loadEventsByemail(email);
+        Map<String, String> eventNames = new HashMap<>();
+        for(Event event : events)
+            eventNames.put(event.getId(), event.getName());
+        return eventNames;
+    }
+
+    @GetMapping(path = "/Member/{eventid}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Collection<Member> GetEvents(@PathVariable String eventid) {
+        Event event = eventService.loadEvent(eventid);
+        return event.getMembers();
+    }
+
+    @GetMapping(path = "/Transaction/{eventid}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Collection<Transaction> GetTransactions(@PathVariable String eventid) {
+        Event event = eventService.loadEvent(eventid);
+        return event.getTransactions();
+    }
+
 }

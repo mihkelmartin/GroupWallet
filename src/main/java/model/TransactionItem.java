@@ -1,6 +1,7 @@
 package model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Transient;
 import org.springframework.lang.NonNull;
 
@@ -18,6 +19,7 @@ public class TransactionItem {
     private double credit;
     private boolean bcreditAutoCalculated;
     @Transient
+    @JsonIgnore
     private Transaction transaction;
 
     public TransactionItem(){

@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -21,6 +22,7 @@ public class Transaction implements Comparable<Transaction>, Ordered {
     private @NonNull int order;
     private ArrayList<TransactionItem> items = new ArrayList<>();
     @Transient
+    @JsonIgnore
     private @NonNull Event event;
 
     public Transaction(){

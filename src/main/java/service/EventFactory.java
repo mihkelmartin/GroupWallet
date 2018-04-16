@@ -4,6 +4,8 @@ import model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import repository.EventDao;
 
+import java.util.List;
+
 public class EventFactory  {
 
     @Autowired
@@ -25,5 +27,9 @@ public class EventFactory  {
     public Event loadEvent(String id) {
         Event event = eventDao.loadEvent(id);
         return event;
+    }
+
+    public List<Event> loadEventsByemail(String eMail) {
+        return eventDao.loadEventsByemail(eMail);
     }
 }

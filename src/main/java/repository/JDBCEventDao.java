@@ -3,6 +3,8 @@ package repository;
 import model.Event;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 /**
  * Created by mihkel on 6.04.2018.
@@ -33,5 +35,10 @@ public class JDBCEventDao implements EventDao {
         Event retVal = null;
         return retVal;
 
+    }
+
+    @Override
+    public List<Event> loadEventsByemail(String eMail) {
+        return null;
     }
 }
