@@ -13,9 +13,7 @@ import service.TransactionService;
 
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by mihkel on 9.04.2018.
@@ -265,12 +263,61 @@ public class TransactionTest {
         // Debit must be same as before trying to add negative
         assertEquals(ddebit, transactionService.getTransactionItemForMember(taksosoit, mihkel).getDebit(), delta);
 
-        TestSaldo(taksosoit);
+        TestSaldoAndNegativeValue(taksosoit);
     }
 
     @Test
-    public void TransactionCreditCalculation(){
+    public void TransactionCreditSimpleAdd(){
+        double dtaksosoit = 100.00;
+        double dMihkelCredit = 10.00;
+        transactionService.addDebitForMember(taksosoit, mihkel, dtaksosoit);
+        transactionService.addCreditForMember(taksosoit, mihkel, dMihkelCredit);
+        assertEquals(dMihkelCredit,
+                transactionService.getTransactionItemForMember(taksosoit, mihkel).getCredit(), delta);
+        assertEquals(false,
+                transactionService.getTransactionItemForMember(taksosoit, mihkel).isBcreditAutoCalculated());
 
+        TestSaldoAndNegativeValue(taksosoit);
+
+        // After reload
+        event = eventService.loadEvent(eventid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+        mihkel = eventService.findMember(event, mihkelid);
+
+        assertEquals(dMihkelCredit,
+                transactionService.getTransactionItemForMember(taksosoit, mihkel).getCredit(), delta);
+        assertEquals(false,
+                transactionService.getTransactionItemForMember(taksosoit, mihkel).isBcreditAutoCalculated());
+
+        TestSaldoAndNegativeValue(taksosoit);
+    }
+
+    @Test
+    public void TransactionCreditSimpleCalculation(){
+        double dtaksosoit = 100.00;
+        double dMihkelCredit = 10.00;
+        transactionService.addDebitForMember(taksosoit, mihkel, dtaksosoit);
+        transactionService.addCreditForMember(taksosoit, mihkel, dMihkelCredit);
+
+        assertEquals((dtaksosoit - dMihkelCredit) / (alvar.getEvent().getMembers().size() - 1),
+                transactionService.getTransactionItemForMember(taksosoit, alvar).getCredit(), delta);
+        assertEquals(true,
+                transactionService.getTransactionItemForMember(taksosoit, alvar).isBcreditAutoCalculated());
+
+        TestSaldoAndNegativeValue(taksosoit);
+
+        // After reload
+        event = eventService.loadEvent(eventid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+        mihkel = eventService.findMember(event, mihkelid);
+        alvar = eventService.findMember(event, alvarid);
+
+        assertEquals((dtaksosoit - dMihkelCredit) / (alvar.getEvent().getMembers().size() - 1),
+                transactionService.getTransactionItemForMember(taksosoit, alvar).getCredit(), delta);
+        assertEquals(true,
+                transactionService.getTransactionItemForMember(taksosoit, alvar).isBcreditAutoCalculated());
+
+        TestSaldoAndNegativeValue(taksosoit);
 
     }
 
@@ -287,7 +334,7 @@ public class TransactionTest {
         // Debit must be same as before trying to add negative
         assertEquals(dcredit, transactionService.getTransactionItemForMember(taksosoit, mihkel).getCredit(), delta);
 
-        TestSaldo(taksosoit);
+        TestSaldoAndNegativeValue(taksosoit);
     }
 
     @Test
@@ -304,9 +351,11 @@ public class TransactionTest {
 
     }
 
-    private void TestSaldo(Transaction transaction){
+    private void TestSaldoAndNegativeValue(Transaction transaction){
         double debit = 0.0, credit = 0.0;
         for(TransactionItem transactionItem : transaction.getItems()){
+            assertTrue(transactionItem.getCredit() >= 0);
+            assertTrue(transactionItem.getDebit() >= 0);
             debit += transactionItem.getDebit();
             credit += transactionItem.getCredit();
         }
