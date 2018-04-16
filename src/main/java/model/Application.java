@@ -3,8 +3,7 @@ package model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import service.EventService;
 import service.MemberService;
 import service.TransactionService;
@@ -54,6 +53,13 @@ public class Application {
         memberService.save(lauri,"Lauri Moss", "Lauri", "maisvee@gmail.com","EE124141242");
         transactionService.remove(kustutatav);
 
-        return event.toString();
+        return event.getId();
+    }
+    @GetMapping(path = "/Event/{eventid}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Event findEvent(@PathVariable String eventid) {
+        Event event = eventService.loadEvent(eventid);
+        return event;
+
     }
 }
