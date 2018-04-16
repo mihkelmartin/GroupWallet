@@ -64,7 +64,8 @@ public class TransactionServiceImpl implements TransactionService{
         TransactionItem transactionItem = null;
         for(TransactionItem item : transaction.getItems()){
             if(item.getMemberId().equals(member.getId())) {
-                transactionItemFactory.save(item, debit, item.getCredit(), item.isBcreditAutoCalculated());
+                if(debit >= 0)
+                    transactionItemFactory.save(item, debit, item.getCredit(), item.isBcreditAutoCalculated());
                 transactionItem = item;
                 break;
             }
@@ -76,7 +77,8 @@ public class TransactionServiceImpl implements TransactionService{
         TransactionItem transactionItem = null;
         for(TransactionItem item : transaction.getItems()){
             if(item.getMemberId().equals(member.getId())) {
-                transactionItemFactory.save(item, item.getDebit(), credit, false);
+                if(credit >= 0)
+                    transactionItemFactory.save(item, item.getDebit(), credit, false);
                 transactionItem = item;
                 break;
             }

@@ -20,7 +20,7 @@ import repository.TransactionItemDao;
  */
 @Aspect
 @Order(10)
-public class DAOAspect {
+public class DAOAspectJDBC {
 
     @Autowired
     private EventDao eventDao;
@@ -36,14 +36,14 @@ public class DAOAspect {
                     returning="retVal")
     public void addEvent(JoinPoint jp, Event retVal) {
         eventDao.add(retVal);
-        System.out.println("Running DAOAspect Event add " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC Event add " + jp.getSignature());
     }
 
     @AfterReturning(value="execution(* service.EventFactory.save(..))",
             returning="retVal")
     public void saveEvent(JoinPoint jp, Event retVal) {
 
-        System.out.println("Running DAOAspect Event save " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC Event save " + jp.getSignature());
         eventDao.save(retVal);
     }
 
@@ -51,7 +51,7 @@ public class DAOAspect {
             returning="retVal")
     public void removeEvent(JoinPoint jp, Event retVal) {
 
-        System.out.println("Running DAOAspect Event remove " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC Event remove " + jp.getSignature());
         eventDao.remove(retVal);
     }
 
@@ -60,7 +60,7 @@ public class DAOAspect {
             returning="retVal")
     public void addMember(JoinPoint jp, Member retVal) {
 
-        System.out.println("Running DAOAspect on Member add " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC on Member add " + jp.getSignature());
         memberDao.add(retVal);
     }
 
@@ -68,7 +68,7 @@ public class DAOAspect {
             returning="retVal")
     public void saveMember(JoinPoint jp, Member retVal) {
 
-        System.out.println("Running DAOAspect on Member save " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC on Member save " + jp.getSignature());
         memberDao.save(retVal);
     }
 
@@ -76,7 +76,7 @@ public class DAOAspect {
             returning="retVal")
     public void removeMember(JoinPoint jp, Member retVal) {
 
-        System.out.println("Running DAOAspect on Member remove " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC on Member remove " + jp.getSignature());
         memberDao.remove(retVal);
     }
 
@@ -86,7 +86,7 @@ public class DAOAspect {
             returning="retVal")
     public void addTransaction(JoinPoint jp, Transaction retVal) {
 
-        System.out.println("Running DAOAspect on Transaction add " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC on Transaction add " + jp.getSignature());
         transactionDao.add(retVal);
     }
 
@@ -94,7 +94,7 @@ public class DAOAspect {
             returning="retVal")
     public void saveTransaction(JoinPoint jp, Transaction retVal) {
 
-        System.out.println("Running DAOAspect on Transaction save " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC on Transaction save " + jp.getSignature());
         transactionDao.save(retVal);
     }
 
@@ -102,7 +102,7 @@ public class DAOAspect {
             returning="retVal")
     public void removeTransaction(JoinPoint jp, Transaction retVal) {
 
-        System.out.println("Running DAOAspect on Transaction remove " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC on Transaction remove " + jp.getSignature());
         transactionDao.remove(retVal);
     }
 
@@ -111,7 +111,7 @@ public class DAOAspect {
             returning="retVal")
     public void addTransactionItem(JoinPoint jp, TransactionItem retVal) {
 
-        System.out.println("Running DAOAspect on TransactionItem add " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC on TransactionItem add " + jp.getSignature());
         transactionItemDao.add(retVal);
     }
 
@@ -119,7 +119,7 @@ public class DAOAspect {
             returning="retVal")
     public void updateTransactionItem(JoinPoint jp, TransactionItem retVal) {
 
-        System.out.println("Running DAOAspect on TransactionItem save " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC on TransactionItem save " + jp.getSignature());
         transactionItemDao.save(retVal);
     }
 
@@ -127,7 +127,7 @@ public class DAOAspect {
             returning="retVal")
     public void removeTransactionItemFromTransaction(JoinPoint jp, TransactionItem retVal) {
 
-        System.out.println("Running DAOAspect on TransactionItem remove " + jp.getSignature());
+        System.out.println("Running DAOAspectJDBC on TransactionItem remove " + jp.getSignature());
         transactionItemDao.remove(retVal);
     }
 

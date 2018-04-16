@@ -1,7 +1,4 @@
-import model.AppConfig;
-import model.Event;
-import model.Member;
-import model.Transaction;
+import model.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -239,17 +236,58 @@ public class TransactionTest {
     }
 
     @Test
-    public void TransactionDebitCalculation(){
+    public void TransactionDebitSimpleAdd(){
 
-    }
-
-    @Test
-    public void TransactionCreditCalculation(){
         double dtaksosoit = 62.5;
         transactionService.addDebitForMember(taksosoit, mihkel, dtaksosoit);
         assertEquals(dtaksosoit/mihkel.getEvent().getMembers().size(),
                 transactionService.getTransactionItemForMember(taksosoit, mihkel).getCredit(), delta);
 
+        // After reload
+        event = eventService.loadEvent(eventid);
+        taksosoit = eventService.findTransaction(event, taksoid);
+        mihkel = eventService.findMember(event, mihkelid);
+        assertEquals(dtaksosoit/mihkel.getEvent().getMembers().size(),
+                transactionService.getTransactionItemForMember(taksosoit, mihkel).getCredit(), delta);
+
+    }
+
+    @Test
+    public void TransactionDebitNegativeAdd(){
+        // Add debit
+        double dtaksosoit = 62.5;
+        transactionService.addDebitForMember(taksosoit, mihkel, dtaksosoit);
+        // Get debit value
+        double ddebit = transactionService.getTransactionItemForMember(taksosoit, mihkel).getDebit();
+        // Add negative debit
+        transactionService.addDebitForMember(taksosoit, mihkel, -10.10);
+
+        // Debit must be same as before trying to add negative
+        assertEquals(ddebit, transactionService.getTransactionItemForMember(taksosoit, mihkel).getDebit(), delta);
+
+        TestSaldo(taksosoit);
+    }
+
+    @Test
+    public void TransactionCreditCalculation(){
+
+
+    }
+
+    @Test
+    public void TransactionCreditNegativeAdd(){
+        // Add debit
+        double dtaksosoit = 62.5;
+        transactionService.addDebitForMember(taksosoit, mihkel, dtaksosoit);
+        // Get calculated credit value
+        double dcredit = transactionService.getTransactionItemForMember(taksosoit, mihkel).getCredit();
+        // Add negative credit
+        transactionService.addCreditForMember(taksosoit, mihkel, -10.10);
+
+        // Debit must be same as before trying to add negative
+        assertEquals(dcredit, transactionService.getTransactionItemForMember(taksosoit, mihkel).getCredit(), delta);
+
+        TestSaldo(taksosoit);
     }
 
     @Test
@@ -264,5 +302,14 @@ public class TransactionTest {
     @Test
     public void TransactionRemoveMemberCalculation(){
 
+    }
+
+    private void TestSaldo(Transaction transaction){
+        double debit = 0.0, credit = 0.0;
+        for(TransactionItem transactionItem : transaction.getItems()){
+            debit += transactionItem.getDebit();
+            credit += transactionItem.getCredit();
+        }
+        assertEquals(debit, credit, delta);
     }
 }

@@ -1,6 +1,7 @@
 package model;
 
-import aspects.DAOAspect;
+import aspects.DAOAspectJDBC;
+import aspects.DAOAspectMongoDB;
 import aspects.MoneyCalculationAspect;
 import com.mongodb.MongoClient;
 
@@ -56,7 +57,7 @@ public class AppConfig {
 
     public @Bean
     TransactionItemDao transactionItemDao() throws Exception {
-        return new MongoDBTransactionItemDao();
+        return new JDBCTransactionItemDao();
     }
 
     public @Bean
@@ -101,8 +102,8 @@ public class AppConfig {
     }
 
     public @Bean
-    DAOAspect daoAspect() {
-        return new DAOAspect();
+    DAOAspectMongoDB daoAspect() {
+        return new DAOAspectMongoDB();
     }
 
 }
