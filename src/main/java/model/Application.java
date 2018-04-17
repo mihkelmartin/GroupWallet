@@ -90,7 +90,7 @@ public class Application {
     @GetMapping(path = "/Event/find/email/{email}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Map<String, String> findEventsByEmail(@PathVariable String email) {
-        List<Event> events = eventService.loadEventsByemail(email);
+        List<Event> events = eventService.loadEventsByEmail(email);
         Map<String, String> eventNames = new HashMap<>();
         for(Event event : events)
             eventNames.put(event.getId(), event.getName());

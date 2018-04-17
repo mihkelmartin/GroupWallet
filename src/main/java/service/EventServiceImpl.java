@@ -52,7 +52,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> loadEventsByemail(String eMail) {
+    public List<Event> loadEventsByEmail(String eMail) {
         return eventDao.loadEventsByemail(eMail);
     }
 

@@ -14,7 +14,7 @@ public interface EventService {
     Event save(Event event, String name);
     Event remove(Event event);
     Event loadEvent(String id);
-    List<Event> loadEventsByemail(String eMail);
+    List<Event> loadEventsByEmail(String eMail);
     Member findMember(Event event, String id);
     Transaction findTransaction(Event event, String id);
 }
