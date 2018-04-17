@@ -1,7 +1,5 @@
 package model;
 
-import aspects.DAOAspectJDBC;
-import aspects.DAOAspectMongoDB;
 import aspects.MoneyCalculationAspect;
 import com.mongodb.MongoClient;
 
@@ -57,27 +55,7 @@ public class AppConfig {
 
     public @Bean
     TransactionItemDao transactionItemDao() throws Exception {
-        return new JDBCTransactionItemDao();
-    }
-
-    public @Bean
-    EventFactory eventFactory() throws Exception {
-        return new EventFactory();
-    }
-
-    public @Bean
-    MemberFactory memberFactory() throws Exception {
-        return new MemberFactory();
-    }
-
-    public @Bean
-    TransactionFactory transactionFactory() throws Exception {
-        return new TransactionFactory();
-    }
-
-    public @Bean
-    TransactionItemFactory transactionItemFactory() throws Exception {
-        return new TransactionItemFactory();
+        return new MongoDBTransactionItemDao();
     }
 
 
@@ -99,11 +77,6 @@ public class AppConfig {
     public @Bean
     MoneyCalculationAspect moneyCalculationAspect() {
         return new MoneyCalculationAspect();
-    }
-
-    public @Bean
-    DAOAspectMongoDB daoAspect() {
-        return new DAOAspectMongoDB();
     }
 
 }

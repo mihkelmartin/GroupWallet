@@ -27,7 +27,6 @@ public class MoneyCalculationAspect {
             " && target(bean)",
     returning = "retVal")
     public void doCalculationTransaction(JoinPoint jp, TransactionService bean, TransactionItem retVal) {
-        System.out.println("Running Calculation aspect "  + jp.getSignature());
         bean.calculateCredits(retVal.getTransaction());
     }
 
@@ -35,7 +34,6 @@ public class MoneyCalculationAspect {
             "execution(* service.MemberService.remove(..))",
     returning = "retVal")
     public void doCalculationEventTransactions(JoinPoint jp, Member retVal) {
-        System.out.println("Running Calculation aspect on Event "  + jp.getSignature());
         for(Transaction transaction : retVal.getEvent().getTransactions()){
             transactionService.calculateCredits(transaction);
         }

@@ -5,6 +5,8 @@ import model.Member;
 import model.Transaction;
 import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import repository.TransactionDao;
+import repository.TransactionItemDao;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,41 +17,50 @@ import java.util.Iterator;
 public class TransactionServiceImpl implements TransactionService{
 
     @Autowired
-    private TransactionFactory transactionFactory;
+    private TransactionDao transactionDao;
+
     @Autowired
-    private TransactionItemFactory transactionItemFactory;
+    private TransactionItemDao transactionItemDao;
 
 
     public Transaction add(Event event, String name, boolean bmanualCalculation) {
-        Transaction retVal = transactionFactory.add(event, name, bmanualCalculation);
+        Transaction retVal = new Transaction(name, bmanualCalculation,
+                event.getNextOrderNr(event.getTransactions()), event);
+        event.getTransactions().add(retVal);
+        transactionDao.add(retVal);
         populateTransactionItems(retVal, event.getMembers());
         return retVal;
     }
 
     public Transaction save(Transaction transaction, String name, boolean bmanualCalculation) {
-        transactionFactory.save(transaction, name, bmanualCalculation, transaction.getOrder());
+        transaction.update(name, bmanualCalculation, transaction.getOrder());
+        transactionDao.save(transaction);
         return transaction;
     }
 
     public Transaction remove(Transaction transaction) {
         removeTransactionItemsFromTransaction(transaction);
-        transactionFactory.remove(transaction);
+        transaction.getEvent().getTransactions().remove(transaction);
+        transactionDao.remove(transaction);
         recalculateOrderNumbers(transaction);
         return transaction;
     }
 
     private void recalculateOrderNumbers(Transaction removed){
         for(Transaction transaction: removed.getEvent().getTransactions()){
-            if(transaction.getOrder() > removed.getOrder())
-                transactionFactory.save(transaction, transaction.getName(),
-                        transaction.isBmanualCalculation(), transaction.getOrder() - 1);
+            if(transaction.getOrder() > removed.getOrder()) {
+                transaction.update(transaction.getName(), transaction.isBmanualCalculation(), transaction.getOrder() - 1);
+                transactionDao.save(transaction);
+            }
         }
     }
 
     public Member addMemberToTransactions(Member member) {
         for(Transaction transaction : member.getEvent().getTransactions()){
-            transactionItemFactory.add(transaction, member);
-        }
+            TransactionItem retVal = new TransactionItem(transaction.getId(), member.getId(),
+                    0.0, 0.0, true, transaction);
+            transaction.getItems().add(retVal);
+            transactionItemDao.add(retVal);        }
         return member;
     }
 
@@ -64,9 +75,11 @@ public class TransactionServiceImpl implements TransactionService{
         TransactionItem transactionItem = null;
         for(TransactionItem item : transaction.getItems()){
             if(item.getMemberId().equals(member.getId())) {
-                if(debit >= 0)
-                    transactionItemFactory.save(item, debit, item.getCredit(), item.isBcreditAutoCalculated());
                 transactionItem = item;
+                if(debit >= 0) {
+                    transactionItem.update(debit, transactionItem.getCredit(), transactionItem.isBcreditAutoCalculated());
+                    transactionItemDao.save(transactionItem);
+                }
                 break;
             }
         }
@@ -77,9 +90,11 @@ public class TransactionServiceImpl implements TransactionService{
         TransactionItem transactionItem = null;
         for(TransactionItem item : transaction.getItems()){
             if(item.getMemberId().equals(member.getId())) {
-                if(credit >= 0)
-                    transactionItemFactory.save(item, item.getDebit(), credit, false);
                 transactionItem = item;
+                if(credit >= 0) {
+                    transactionItem.update(transactionItem.getDebit(), credit, false);
+                    transactionItemDao.save(transactionItem);
+                }
                 break;
             }
         }
@@ -90,8 +105,9 @@ public class TransactionServiceImpl implements TransactionService{
         TransactionItem transactionItem = null;
         for(TransactionItem item : transaction.getItems()){
             if(item.getMemberId().equals(member.getId())) {
-                transactionItemFactory.save(item, item.getDebit(), item.getCredit(), bAutoCalculation);
                 transactionItem = item;
+                transactionItem.update(transactionItem.getDebit(), transactionItem.getCredit(), bAutoCalculation);
+                transactionItemDao.save(transactionItem);
                 break;
             }
         }
@@ -111,7 +127,10 @@ public class TransactionServiceImpl implements TransactionService{
 
     private void populateTransactionItems(Transaction transaction, ArrayList<Member> members) {
         for(Member member : members){
-            transactionItemFactory.add(transaction, member);
+            TransactionItem retVal = new TransactionItem(transaction.getId(), member.getId(),
+                    0.0, 0.0, true, transaction);
+            transaction.getItems().add(retVal);
+            transactionItemDao.add(retVal);
         }
     }
 
@@ -120,7 +139,7 @@ public class TransactionServiceImpl implements TransactionService{
         while (iter.hasNext()) {
             TransactionItem transactionItem = iter.next();
             if (transactionItem.getMemberId().equals(member.getId())) {
-                transactionItemFactory.remove(transaction, transactionItem);
+                transactionItemDao.remove(transactionItem);
                 iter.remove();
             }
         }
@@ -130,7 +149,7 @@ public class TransactionServiceImpl implements TransactionService{
         Iterator<TransactionItem> iter = transaction.getItems().iterator();
         while (iter.hasNext()) {
             TransactionItem transactionItem = iter.next();
-            transactionItemFactory.remove(transaction, transactionItem);
+            transactionItemDao.remove(transactionItem);
             iter.remove();
         }
     }
@@ -143,8 +162,9 @@ public class TransactionServiceImpl implements TransactionService{
             dAutoCalculatedCredit = (getDebit(transaction) - getManualCredit(transaction)) /
                     getAutoCalculatedCreditCount(transaction);
             for(TransactionItem item : transaction.getItems()){
-                if(item.isBcreditAutoCalculated())
-                    transactionItemFactory.save(item, item.getDebit(), dAutoCalculatedCredit, item.isBcreditAutoCalculated());
+                if(item.isBcreditAutoCalculated()) {
+                    item.update(item.getDebit(), dAutoCalculatedCredit, item.isBcreditAutoCalculated());
+                    transactionItemDao.save(item);                }
             }
         }
     }
@@ -177,9 +197,9 @@ public class TransactionServiceImpl implements TransactionService{
 
     public void loadTransactions(Event event) {
         if(event != null) {
-            transactionFactory.loadTransactions(event);
+            transactionDao.loadTransactions(event);
             for(Transaction transaction : event.getTransactions()){
-                transactionItemFactory.loadTransactionItems(transaction);
+                transactionItemDao.loadTransactionItems(transaction);
             }
         }
     }

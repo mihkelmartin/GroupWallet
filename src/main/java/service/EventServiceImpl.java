@@ -5,6 +5,7 @@ import model.Member;
 import model.Transaction;
 import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import repository.EventDao;
 
 import java.util.List;
 
@@ -19,26 +20,31 @@ public class EventServiceImpl implements EventService {
     TransactionService transactionService;
 
     @Autowired
-    EventFactory eventFactory;
+    private EventDao eventDao;
 
     @Override
     public Event add(String name) {
-        return eventFactory.add(name);
+        Event event = new Event(name);
+        eventDao.save(event);
+        return event;
     }
 
     @Override
     public Event save(Event event, String name) {
-        return eventFactory.save(event, name);
+        event.update(name);
+        eventDao.save(event);
+        return event;
     }
 
     @Override
     public Event remove(Event event) {
-        return eventFactory.remove(event);
+        eventDao.remove(event);
+        return event;
     }
 
     @Override
     public Event loadEvent(String id) {
-        Event event = eventFactory.loadEvent(id);
+        Event event = eventDao.loadEvent(id);
         loadMembers(event);
         loadTransactions(event);
         updateForeignKeys(event);
@@ -47,7 +53,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> loadEventsByemail(String eMail) {
-        return eventFactory.loadEventsByemail(eMail);
+        return eventDao.loadEventsByemail(eMail);
     }
 
     @Override
