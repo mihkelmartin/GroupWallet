@@ -3,6 +3,7 @@ package model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import service.EventService;
 import service.MemberService;
@@ -17,9 +18,8 @@ import java.util.*;
  */
 
 
-
 @SpringBootApplication
-@RestController
+@Controller
 public class Application {
 
     @Autowired
@@ -35,7 +35,7 @@ public class Application {
 
     @RequestMapping("/")
     String home() {
-        Event event = eventService.add("Saariselkä 2018");
+        Event event = eventService.add("Muremõtted 2019");
         Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
         memberService.add(event,"Alvar Tõruke","Tõru","alvar@gmail.com","");
         memberService.add(event,"Peeter Kutman","Peta","","");
@@ -53,7 +53,7 @@ public class Application {
         memberService.save(lauri,"Lauri Moss", "Lauri", "maisvee@gmail.com","EE124141242");
         transactionService.remove(kustutatav);
 
-        return event.getId();
+        return "index";
     }
 
     @GetMapping(path = "/Event/add/{name}", produces = "application/json;charset=UTF-8")
@@ -89,12 +89,12 @@ public class Application {
 
     @GetMapping(path = "/Event/find/email/{email}", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public Map<String, String> findEventsByEmail(@PathVariable String email) {
+    public List<Event> findEventsByEmail(@PathVariable String email) {
         List<Event> events = eventService.loadEventsByEmail(email);
         Map<String, String> eventNames = new HashMap<>();
         for(Event event : events)
             eventNames.put(event.getId(), event.getName());
-        return eventNames;
+        return events;
     }
 
     @GetMapping(path = "/Member/{eventid}", produces = "application/json;charset=UTF-8")
