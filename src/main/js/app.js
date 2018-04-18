@@ -13,7 +13,8 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {events: []};
+		this.state = {events: ['{"id":"6ca4a784-3b37-481d-b6ae-01843cec6849","name":"Muremõtted 2019","pin":"5652"}',
+		'{"id":"6ca4a784-3b37-481d-b6ae-01843cec6811","name":"Muremõtted 2019","pin":"5652"}']};
 	}
 
 	componentDidMount() {
@@ -29,18 +30,16 @@ class App extends React.Component {
                    }})
       .then((response) => {response.text();console.log(response);})
       .then((responseJson) => {
-        this.setState({
-          events: ['{"idstr":"6ca4a784-3b37-481d-b6ae-01843cec6849","name":"Muremõtted 2019","pin":5652}']
-
-        }); console.log(responseJson);
+                console.log(responseJson);
        })
       .catch( error => {console.log(error);
          });
+      console.log(this.state.events);
     }
 
 	render() {
 		return (
-            <EventList events={this.state.events}/>
+           <EventList events={this.state.events}/>
 		)
 	}
 }
@@ -48,15 +47,20 @@ class App extends React.Component {
 
 // tag::employee-list[]
 class EventList extends React.Component{
+	componentDidMount() {
+
+      console.log(this.props.events.map);
+    }
+
 	render() {
-	     console.log(events);
-		var events = this.props.events.map(event =>
-			<Event key={event.idstr} event={event}/>
+           	var events = this.props.events.map(event =>
+			<Event key={event.id} event={event}/>
 		);
 		return (
 			<table>
 				<tbody>
 					<tr>
+						<th>ID</th>
 						<th>Name</th>
 						<th>PIN</th>
 					</tr>
@@ -73,6 +77,7 @@ class Event extends React.Component{
 	render() {
 		return (
 			<tr>
+				<td>{this.props.event.id}</td>
 				<td>{this.props.event.name}</td>
 				<td>{this.props.event.pin}</td>
 			</tr>
