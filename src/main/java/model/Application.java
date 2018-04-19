@@ -1,9 +1,6 @@
 package model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.ir.debug.JSONWriter;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import service.EventService;
 import service.MemberService;
 import service.TransactionService;
-
 
 import java.util.*;
 
@@ -93,15 +89,8 @@ public class Application {
 
     @GetMapping(path = "/Event/find/email/{email}", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public String findEventsByEmail(@PathVariable String email) throws JsonProcessingException {
-        List<Event> events = eventService.loadEventsByEmail(email);
-        Map<String, String> eventNames = new HashMap<>();
-        for(Event event : events)
-            eventNames.put(event.getId(), event.getName());
-        ObjectMapper objectMapper = new ObjectMapper();
-        String retVal = objectMapper.writeValueAsString(events);
-        return retVal;
-        //"\"events\" : [{\"id\":\"f6258d4c-56fa-4982-88fd-1a8b32764710\",\"name\":\"Saariselkä 2018\",\"pin\":9160}]";
+    public List<Event> findEventsByEmail(@PathVariable String email) throws JsonProcessingException {
+        return eventService.loadEventsByEmail(email);
     }
 
     @GetMapping(path = "/Member/{eventid}", produces = "application/json;charset=UTF-8")

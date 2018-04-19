@@ -20,6 +20,7 @@ public class Event {
     @Id
     private @NonNull String id;
     private @NonNull String name;
+    @JsonIgnore
     private final @NonNull Short PIN;
     @JsonIgnore
     private ArrayList<Member> members = new ArrayList<>();
@@ -44,6 +45,7 @@ public class Event {
         return name;
     }
 
+    @JsonIgnore
     public Short getPIN() {
         return PIN;
     }

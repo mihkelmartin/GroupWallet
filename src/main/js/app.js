@@ -3,38 +3,30 @@
 // tag::vars[]
 const React = require('react');
 const ReactDOM = require('react-dom');
-//const client = require('./Client');
-const axios = require('axios');
-var message = 'Initial message';
-// end::vars[]
+var $ = require('jquery');
 
 // tag::app[]
 class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {events: ['{"id":"6ca4a784-3b37-481d-b6ae-01843cec6849","name":"Muremõtted 2019","pin":"5652"}',
-		'{"id":"6ca4a784-3b37-481d-b6ae-01843cec6811","name":"Muremõtted 2019","pin":"5652"}']};
+		this.state = {events: [], email:'mihkelmartin@gmail.com'};
 	}
 
-	componentDidMount() {
-//	this.setState({events: ['{"id":"f6258d4c-56fa-4982-88fd-1a8b32764710","name":"Saariselkä 2018","pin":"9160"}']});
-//  	client({method: 'GET', path: '/Event/find/email/mihkelmartin@gmail.com'}).done(response => {
-//			this.setState({events: response.entity.events});
-//		});
 
-    fetch('/Event/find/email/mihkelmartin@gmail.com', {
-        headers : {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-                   }})
-      .then((response) => {response.text();console.log(response);})
-      .then((responseJson) => {
-                console.log(responseJson);
-       })
-      .catch( error => {console.log(error);
-         });
-      console.log(this.state.events);
+	componentDidMount() {
+       var url = '/Event/find/email/' + this.state.email;
+		$.ajax({
+      		url: url,
+      		dataType: 'json',
+      		cache: false,
+      		success: function(data) {
+        		this.setState({events: data});
+      		}.bind(this),
+      		error: function(xhr, status, err) {
+        		console.error(err.toString());
+      		}.bind(this)
+		});
     }
 
 	render() {
@@ -47,11 +39,6 @@ class App extends React.Component {
 
 // tag::employee-list[]
 class EventList extends React.Component{
-	componentDidMount() {
-
-      console.log(this.props.events.map);
-    }
-
 	render() {
            	var events = this.props.events.map(event =>
 			<Event key={event.id} event={event}/>
@@ -60,9 +47,7 @@ class EventList extends React.Component{
 			<table>
 				<tbody>
 					<tr>
-						<th>ID</th>
 						<th>Name</th>
-						<th>PIN</th>
 					</tr>
 					{events}
 				</tbody>
@@ -77,9 +62,7 @@ class Event extends React.Component{
 	render() {
 		return (
 			<tr>
-				<td>{this.props.event.id}</td>
 				<td>{this.props.event.name}</td>
-				<td>{this.props.event.pin}</td>
 			</tr>
 		)
 	}
@@ -93,25 +76,3 @@ ReactDOM.render(
 )
 
 // end::render[]
-
-function generateErrorHTMLOutput(error) {
-  return  '<h4>Result</h4>' +
-          '<h5>Message:</h5> ' +
-          '<pre>' + error.message + '</pre>' +
-          '<h5>Status:</h5> ' +
-          '<pre>' + error.response.status + ' ' + error.response.statusText + '</pre>' +
-          '<h5>Headers:</h5>' +
-          '<pre>' + JSON.stringify(error.response.headers, null, '\t') + '</pre>' +
-          '<h5>Data:</h5>' +
-          '<pre>' + JSON.stringify(error.response.data, null, '\t') + '</pre>';
-}
-
-function generateSuccessHTMLOutput(response) {
-  return  '<h4>Result</h4>' +
-          '<h5>Status:</h5> ' +
-          '<pre>' + response.status + ' ' + response.statusText + '</pre>' +
-          '<h5>Headers:</h5>' +
-          '<pre>' + JSON.stringify(response.headers, null, '\t') + '</pre>' +
-          '<h5>Data:</h5>' +
-          '<pre>' + JSON.stringify(response.data, null, '\t') + '</pre>';
-}
