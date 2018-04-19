@@ -5,6 +5,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 var $ = require('jquery');
 
+
 // tag::app[]
 class App extends React.Component {
 
@@ -31,15 +32,20 @@ class App extends React.Component {
 
 	render() {
 		return (
-           <EventList events={this.state.events}/>
+		    <div>
+                <SearchBar/>
+                <EventList events={this.state.events}/>
+            </div>
 		)
 	}
 }
 // end::app[]
 
+
 // tag::employee-list[]
-class EventList extends React.Component{
-	render() {
+class EventList extends React.Component {
+
+        render(){
            	var events = this.props.events.map(event =>
 			<Event key={event.id} event={event}/>
 		);
@@ -68,6 +74,19 @@ class Event extends React.Component{
 	}
 }
 // end::event[]
+
+// tag::search bar
+class SearchBar extends React.Component {
+	render() {
+		return (
+		<div>
+              <input type="text" name="E-mail"/>
+              <input type="submit" name="Otsi"/>
+        </div>
+        )
+	}
+}
+
 
 // tag::render[]
 ReactDOM.render(
