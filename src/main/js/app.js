@@ -6,7 +6,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 var $ = require('jquery');
 
-import {BrowserRouter, Route, Switch, withRouter} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, Link} from 'react-router-dom';
 import {Event} from './event.js';
 
 // tag::app[]
@@ -86,7 +86,7 @@ class EventElement extends React.Component{
 	render() {
 		return (
 			<tr>
-				<td><a href="Event" onClick={this.onEventClick}>{this.props.event.name}</a></td>
+				<td><Link to='/Event' onClick={this.onEventClick}>{this.props.event.name}</Link></td>
 				<td><input type="number" name="PIN" /></td>
 			</tr>
 		)
