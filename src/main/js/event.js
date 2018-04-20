@@ -11,8 +11,10 @@ export class Event extends React.Component {
 
 	}
 	render() {
+	        console.log(this.props.eventId);
+
 		return (
-		    <p>Siia tuleb Event suurlehekülg</p>
+		    <p>Siia tuleb Event suurlehekülg. Event {this.props.eventId}</p>
 		)
 	}
 }

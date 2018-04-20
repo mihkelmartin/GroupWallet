@@ -6,7 +6,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 var $ = require('jquery');
 
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, withRouter} from 'react-router-dom';
 import {Event} from './event.js';
 
 // tag::app[]
@@ -14,16 +14,10 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {events: [], email:' ', selectedEvent:''};
-		this.handleEventSelected = this.handleEventSelected.bind(this);
+		this.state = {events: [], email:' '};
 		this.handleEmailChange = this.handleEmailChange.bind(this);
 	}
 
-    handleEventSelected(eventSelected){
-        this.setState({
-          selectedEvent: eventSelected
-        });
-    }
     handleEmailChange(email) {
         this.setState({
           email: email
@@ -46,7 +40,7 @@ class App extends React.Component {
         return (
             <div>
                 <SearchBar currentEmail = {this.state.email} onEmailChange = {this.handleEmailChange}/>
-                <EventList events={this.state.events} onEventSelected = {this.handleEventSelected}/>
+                <EventList events={this.state.events} onEventSelected = {this.props.onEventSelected}/>
             </div>
 		)
 	}
@@ -85,7 +79,6 @@ class EventElement extends React.Component{
 
 	    onEventClick(e)
         {
-            e.preventDefault();
             this.props.onEventSelected(this.props.event.id);
         }
 
@@ -93,7 +86,7 @@ class EventElement extends React.Component{
 	render() {
 		return (
 			<tr>
-				<td><a href="Event">{this.props.event.name}</a></td>
+				<td><a href="Event" onClick={this.onEventClick}>{this.props.event.name}</a></td>
 				<td><input type="number" name="PIN" /></td>
 			</tr>
 		)
@@ -123,12 +116,26 @@ class SearchBar extends React.Component {
 }
 
 class Main extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {selectedEvent:''};
+		this.handleEventSelected = this.handleEventSelected.bind(this);
+	}
+
+    handleEventSelected(eventSelected){
+        this.setState({
+          selectedEvent: eventSelected
+        });
+        console.log(this.state.selectedEvent);
+    }
 	render() {
+        console.log(this.state.selectedEvent);
 		return (
             <BrowserRouter>
                 <Switch>
-                  <Route exact path='/' component={App}/>
-                  <Route path='/Event' component={Event}/>
+                  <Route exact path='/' render={(props) => <App{...props} onEventSelected = {this.handleEventSelected}/>}/>
+                  <Route path='/Event' render={(props) => <Event{...props} eventId = {this.state.selectedEvent}/>}/>
                 </Switch>
             </BrowserRouter>
         )
