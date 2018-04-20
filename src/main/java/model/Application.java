@@ -33,7 +33,7 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @RequestMapping(value={"/"})
+    @RequestMapping(value={"/","Event"})
     String home() {
         Event event = eventService.add("Muremõtted 2019");
         Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");

@@ -6,6 +6,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 var $ = require('jquery');
 
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {Event} from './event.js';
 
 // tag::app[]
@@ -42,21 +43,12 @@ class App extends React.Component {
         });
     }
 	render() {
-        const isEventSelect = this.state.selectedEvent === '';
-        const result = isEventSelect ? (
+        return (
             <div>
                 <SearchBar currentEmail = {this.state.email} onEmailChange = {this.handleEmailChange}/>
                 <EventList events={this.state.events} onEventSelected = {this.handleEventSelected}/>
             </div>
-
-        ) :
-        (
-            <Event even/>
-        )
-        return (
-            result
 		)
-
 	}
 }
 // end::app[]
@@ -101,7 +93,7 @@ class EventElement extends React.Component{
 	render() {
 		return (
 			<tr>
-				<td><a href="" onClick={this.onEventClick}>{this.props.event.name}</a></td>
+				<td><a href="Event">{this.props.event.name}</a></td>
 				<td><input type="number" name="PIN" /></td>
 			</tr>
 		)
@@ -130,10 +122,22 @@ class SearchBar extends React.Component {
 	}
 }
 
+class Main extends React.Component {
+	render() {
+		return (
+            <BrowserRouter>
+                <Switch>
+                  <Route exact path='/' component={App}/>
+                  <Route path='/Event' component={Event}/>
+                </Switch>
+            </BrowserRouter>
+        )
+	}
+}
 
 // tag::render[]
 ReactDOM.render(
-	<App/>,
+	<Main/>,
  	document.getElementById('react')
 )
 
