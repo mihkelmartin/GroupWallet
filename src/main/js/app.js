@@ -4,6 +4,7 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 var $ = require('jquery');
+const event = require('./event.js');
 
 
 // tag::app[]
@@ -11,29 +12,33 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {events: [], email:'mihkelmartin@gmail.com'};
+		this.state = {events: [], email:' '};
+		this.handleEmailChange = this.handleEmailChange.bind(this);
 	}
 
-
-	componentDidMount() {
-       var url = '/Event/find/email/' + this.state.email;
-		$.ajax({
-      		url: url,
-      		dataType: 'json',
-      		cache: false,
-      		success: function(data) {
-        		this.setState({events: data});
-      		}.bind(this),
-      		error: function(xhr, status, err) {
-        		console.error(err.toString());
-      		}.bind(this)
-		});
+    handleEmailChange(email) {
+        this.setState({
+          email: email
+        }, () => {
+           var url = '/Event/find/email/' + this.state.email;
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                cache: false,
+                success: function(data) {
+                    this.setState({events: data});
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    console.error(err.toString());
+                }.bind(this)
+            });
+            console.log(this.state.email)
+        });
     }
-
 	render() {
 		return (
 		    <div>
-                <SearchBar/>
+                <SearchBar currentEmail = {this.state.email} onEmailChange = {this.handleEmailChange}/>
                 <EventList events={this.state.events}/>
             </div>
 		)
@@ -47,13 +52,14 @@ class EventList extends React.Component {
 
         render(){
            	var events = this.props.events.map(event =>
-			<Event key={event.id} event={event}/>
+			<EventElement key={event.id} event={event}/>
 		);
 		return (
 			<table>
 				<tbody>
 					<tr>
 						<th>Name</th>
+						<th>PIN</th>
 					</tr>
 					{events}
 				</tbody>
@@ -64,11 +70,12 @@ class EventList extends React.Component {
 // end::employee-list[]
 
 // tag::event[]
-class Event extends React.Component{
+class EventElement extends React.Component{
 	render() {
 		return (
 			<tr>
-				<td>{this.props.event.name}</td>
+				<td><a href="event.js">{this.props.event.name}</a></td>
+				<td><input type="number" name="PIN" /></td>
 			</tr>
 		)
 	}
@@ -77,11 +84,20 @@ class Event extends React.Component{
 
 // tag::search bar
 class SearchBar extends React.Component {
+	constructor(props) {
+		super(props);
+		this.onEmailTextChange = this.onEmailTextChange.bind(this);
+	}
+
+    onEmailTextChange(emailInput)
+    {
+        this.props.onEmailChange(emailInput.target.value);
+    }
+
 	render() {
 		return (
 		<div>
-              <input type="text" name="E-mail"/>
-              <input type="submit" name="Otsi"/>
+              <input type="text" name="E-mail" value = {this.props.email} onChange={this.onEmailTextChange}/>
         </div>
         )
 	}
