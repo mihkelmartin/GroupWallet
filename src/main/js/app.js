@@ -1,21 +1,28 @@
 'use strict';
 
+
 // tag::vars[]
 const React = require('react');
 const ReactDOM = require('react-dom');
 var $ = require('jquery');
-const event = require('./event.js');
 
+import {Event} from './event.js';
 
 // tag::app[]
 class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {events: [], email:' '};
+		this.state = {events: [], email:' ', selectedEvent:''};
+		this.handleEventSelected = this.handleEventSelected.bind(this);
 		this.handleEmailChange = this.handleEmailChange.bind(this);
 	}
 
+    handleEventSelected(eventSelected){
+        this.setState({
+          selectedEvent: eventSelected
+        });
+    }
     handleEmailChange(email) {
         this.setState({
           email: email
@@ -32,16 +39,24 @@ class App extends React.Component {
                     console.error(err.toString());
                 }.bind(this)
             });
-            console.log(this.state.email)
         });
     }
 	render() {
-		return (
-		    <div>
+        const isEventSelect = this.state.selectedEvent === '';
+        const result = isEventSelect ? (
+            <div>
                 <SearchBar currentEmail = {this.state.email} onEmailChange = {this.handleEmailChange}/>
-                <EventList events={this.state.events}/>
+                <EventList events={this.state.events} onEventSelected = {this.handleEventSelected}/>
             </div>
+
+        ) :
+        (
+            <Event even/>
+        )
+        return (
+            result
 		)
+
 	}
 }
 // end::app[]
@@ -52,7 +67,7 @@ class EventList extends React.Component {
 
         render(){
            	var events = this.props.events.map(event =>
-			<EventElement key={event.id} event={event}/>
+			<EventElement key={event.id} event={event} onEventSelected = {this.props.onEventSelected}/>
 		);
 		return (
 			<table>
@@ -71,10 +86,22 @@ class EventList extends React.Component {
 
 // tag::event[]
 class EventElement extends React.Component{
+	constructor(props) {
+		super(props);
+		this.onEventClick = this.onEventClick.bind(this);
+	}
+
+	    onEventClick(e)
+        {
+            e.preventDefault();
+            this.props.onEventSelected(this.props.event.id);
+        }
+
+
 	render() {
 		return (
 			<tr>
-				<td><a href="event.js">{this.props.event.name}</a></td>
+				<td><a href="" onClick={this.onEventClick}>{this.props.event.name}</a></td>
 				<td><input type="number" name="PIN" /></td>
 			</tr>
 		)
@@ -106,8 +133,8 @@ class SearchBar extends React.Component {
 
 // tag::render[]
 ReactDOM.render(
-   <App />,
-	document.getElementById('react')
+	<App/>,
+ 	document.getElementById('react')
 )
 
 // end::render[]
