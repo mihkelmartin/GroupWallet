@@ -38,7 +38,7 @@ class App extends React.Component {
     }
 	render() {
         return (
-            <div className="">
+            <div>
                 <SearchBar currentEmail = {this.state.email} onEmailChange = {this.handleEmailChange}/>
                 <div className="ui divider"></div>
                 <EventList events={this.state.events} onEventSelected = {this.props.onEventSelected}/>
@@ -109,9 +109,10 @@ class SearchBar extends React.Component {
 
 	render() {
 		return (
-		<div>
-              <input type="text" name="E-mail" value = {this.props.email} onChange={this.onEmailTextChange}/>
-        </div>
+		    <div className="icon input">
+                <input type="text" placeholder="Event member e-mail..." value = {this.props.email} onChange={this.onEmailTextChange}/>
+                <i className="search icon"></i>
+            </div>
         )
 	}
 }
