@@ -33,7 +33,7 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @RequestMapping(value={"/"})
+    @RequestMapping(value={"/","Event"})
     String home() {
         Event event = eventService.add("Muremõtted 2019");
         Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
@@ -69,7 +69,7 @@ public class Application {
         Event retVal = null;
         Event event = eventService.loadEvent(eventid);
         if(event != null)
-            if(event.getId().equals(pin))
+            if(event.getPIN().equals(pin))
                 retVal = event;
 
         return retVal;
@@ -81,7 +81,7 @@ public class Application {
         Collection<Member> retVal = null;
         Event event = eventService.loadEvent(eventid);
         if(event != null)
-            if(event.getId().equals(pin))
+            if(event.getPIN().equals(event.getPIN()))
                 retVal = event.getMembers();
         return retVal;
     }
@@ -92,7 +92,7 @@ public class Application {
         Collection<Transaction> retVal = null;
         Event event = eventService.loadEvent(eventid);
         if(event != null)
-            if(event.getId().equals(pin))
+            if(event.getPIN().equals(pin))
                 retVal = event.getTransactions();
         return retVal;
     }
