@@ -38,8 +38,9 @@ class App extends React.Component {
     }
 	render() {
         return (
-            <div>
+            <div className="">
                 <SearchBar currentEmail = {this.state.email} onEmailChange = {this.handleEmailChange}/>
+                <div className="ui divider"></div>
                 <EventList events={this.state.events} onEventSelected = {this.props.onEventSelected}/>
             </div>
 		)
@@ -56,11 +57,11 @@ class EventList extends React.Component {
 			<EventElement key={event.id} event={event} onEventSelected = {this.props.onEventSelected}/>
 		);
 		return (
-			<table>
+			<table className="ui collapsing celled table">
 				<tbody>
 					<tr>
-						<th>Name</th>
-						<th>PIN</th>
+						<th className = "center aligned">Name</th>
+						<th className = "center aligned">PIN</th>
 					</tr>
 					{events}
 				</tbody>
