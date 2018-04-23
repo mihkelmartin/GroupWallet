@@ -36,7 +36,7 @@ export class Event extends React.Component {
             <div className='ui centered card'>
                 <div className='content'>
                     <div className='header'>
-                      <input type="text" defaultvalue = {this.props.eventId} onChange={this.onEmailTextChange}/>
+                      <input type="text" defaultValue = {this.props.eventId} onChange={this.onEmailTextChange}/>
                     </div>
                     <div className='extra content'>
                         <span className='right floated edit icon'>
