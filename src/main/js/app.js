@@ -92,7 +92,7 @@ class EventElement extends React.Component{
 		return (
 			<tr>
 				<td><Link to='/Event' onClick={this.onEventClick}>{this.props.event.name}</Link></td>
-				<td><input type="number" name="PIN" /></td>
+				<td><input id = "EventPIN" type="number" name="PIN" /></td>
 			</tr>
 		)
 	}

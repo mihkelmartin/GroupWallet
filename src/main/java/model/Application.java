@@ -56,6 +56,47 @@ public class Application {
         return "index";
     }
 
+
+    @GetMapping(path = "/Event/find/email/{email}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public List<Event> findEventsByEmail(@PathVariable String email) throws JsonProcessingException {
+        return eventService.loadEventsByEmail(email);
+    }
+
+    @GetMapping(path = "/Event/event/{eventid}/PIN/{pin}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Event findEvent(@PathVariable String eventid, @PathVariable  Short pin) {
+        Event retVal = null;
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getId().equals(pin))
+                retVal = event;
+
+        return retVal;
+    }
+
+    @GetMapping(path = "/Members/Event/{eventid}/PIN/{pin}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Collection<Member> GetEvents(@PathVariable String eventid, @PathVariable  Short pin) {
+        Collection<Member> retVal = null;
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getId().equals(pin))
+                retVal = event.getMembers();
+        return retVal;
+    }
+
+    @GetMapping(path = "/Transactions/Event/{eventid}/PIN/{pin}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Collection<Transaction> GetTransactions(@PathVariable String eventid, @PathVariable  Short pin) {
+        Collection<Transaction> retVal = null;
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getId().equals(pin))
+                retVal = event.getTransactions();
+        return retVal;
+    }
+
     @GetMapping(path = "/Event/add/{name}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Event addEvent(@PathVariable String name) {
@@ -78,33 +119,6 @@ public class Application {
     public void removeEvent(@PathVariable String eventid) {
         Event event = eventService.loadEvent(eventid);
         eventService.remove(event);
-    }
-
-    @GetMapping(path = "/Event/find/event/{eventid}", produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public Event findEvent(@PathVariable String eventid) {
-        Event event = eventService.loadEvent(eventid);
-        return event;
-    }
-
-    @GetMapping(path = "/Event/find/email/{email}", produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public List<Event> findEventsByEmail(@PathVariable String email) throws JsonProcessingException {
-        return eventService.loadEventsByEmail(email);
-    }
-
-    @GetMapping(path = "/Member/{eventid}", produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public Collection<Member> GetEvents(@PathVariable String eventid) {
-        Event event = eventService.loadEvent(eventid);
-        return event.getMembers();
-    }
-
-    @GetMapping(path = "/Transaction/{eventid}", produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public Collection<Transaction> GetTransactions(@PathVariable String eventid) {
-        Event event = eventService.loadEvent(eventid);
-        return event.getTransactions();
     }
 
 }
