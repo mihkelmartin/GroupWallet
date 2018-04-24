@@ -135,10 +135,8 @@ class Main extends React.Component {
         this.setState({
           selectedEvent: eventSelected
         });
-        console.log(this.state.selectedEvent);
     }
 	render() {
-        console.log(this.state.selectedEvent);
 		return (
             <BrowserRouter>
                 <Switch>

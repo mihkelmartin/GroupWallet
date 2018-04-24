@@ -8,16 +8,30 @@ export class EventDashBoard extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {members: []};
 
+        var url = '/Members/Event/' + this.props.eventId + '/PIN/9999';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+               this.setState({members : data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(err.toString());
+            }.bind(this)
+        });
 	}
-	render() {
+
+ 	render() {
 		return (
 		    <div>
 		        <Event eventId = {this.props.eventId}/>
                 <div className="ui divider"></div>
-                <MemberList eventId = {this.props.eventId}/>
+                <MemberList eventId = {this.props.eventId} members={this.state.members}/>
                 <div className="ui divider"></div>
-                <TransactionList/>
+                <TransactionList eventId = {this.props.eventId} members={this.state.members}/>
                 <div className="ui divider"></div>
 		    </div>
 		)
@@ -29,14 +43,44 @@ export class Event extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {eventName:''};
+	    this.handleEventNameChange = this.handleEventNameChange.bind(this);
 
+        var url = '/Event/event/' + this.props.eventId + '/PIN/9999';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+               this.setState({eventName : data.name});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(err.toString());
+            }.bind(this)
+        });
 	}
+
+    handleEventNameChange(event) {
+        this.setState({eventName: event.target.value});
+        var url = '/Event/update/' + this.props.eventId + '/name/' + event.target.value;
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(err.toString());
+            }.bind(this)
+        });
+    }
+
 	render() {
 		return (
             <div className='ui centered card'>
                 <div className='content'>
                     <div className='header'>
-                      <input type="text" defaultValue = {this.props.eventId} onChange={this.onEmailTextChange}/>
+                      <input type="text" value={this.state.eventName} onChange={this.handleEventNameChange}/>
                     </div>
                     <div className='extra content'>
                         <span className='right floated edit icon'>
@@ -52,32 +96,16 @@ export class Event extends React.Component {
 	}
 }
 
+
 export class MemberList extends React.Component {
+
 
 	constructor(props) {
 		super(props);
 	}
-	render() {
-	    var url = '/Members/Event/' + this.props.eventId + '/PIN/9999';
-	    var membersdb = [];
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            cache: false,
-            success: function(data) {
-                for(var i = 0, len = data.length; i < len; ++i)
-                    membersdb.push(data[i]);
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(err.toString());
-            }.bind(this)
-        });
 
-        var memberscpy = Array.from(membersdb);
-        console.log(membersdb);
-        console.log(memberscpy);
-        var members = memberscpy.map( (member) => <Member key={member.id} member={member}/> );
-        console.log(members);
+	render() {
+     	var members = this.props.members.map( (member) => <Member key={member.id} member={member}/> );
 		return (
             <div className='ui three column centered grid'>
                 <div className='column'>
@@ -112,10 +140,10 @@ export class Member extends React.Component {
 	render() {
 		return (
 			<tr>
-				<td><input type="text" value={this.props.member.name}/></td>
-				<td><input type="text" value={this.props.member.nickName}/></td>
-				<td><input type="text" value={this.props.member.eMail}/></td>
-				<td><input type="text" value={this.props.member.bankAccount}/></td>
+				<td><input type="text" defaultValue={this.props.member.name}/></td>
+				<td><input type="text" defaultValue={this.props.member.nickName}/></td>
+				<td><input type="text" defaultValue={this.props.member.eMail}/></td>
+				<td><input type="text" defaultValue={this.props.member.bankAccount}/></td>
 			</tr>
 	    )
 	}
@@ -125,13 +153,39 @@ export class TransactionList extends React.Component {
 
 	constructor(props) {
 		super(props);
-
+		this.state = {transactions: []};
 	}
+
+	componentDidMount(){
+        var url = '/Transactions/Event/' + this.props.eventId + '/PIN/9999';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+               this.setState({transactions: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(err.toString());
+            }.bind(this)
+        });
+	}
+
 	render() {
+            var membernames = this.props.members.map( member => <th key={member.id} className = "center aligned">{member.nickName}</th>);
+            var transactions = this.state.transactions.map( transaction=> <Transaction  key={transaction.id} transaction={transaction}/> );
 		return (
             <div className='ui three column centered grid'>
                 <div className='column'>
-                    <Transaction/>
+                    <table className="ui collapsing celled table">
+                        <tbody>
+                            <tr>
+     				           <td><p> </p></td>
+                               {membernames}
+                            </tr>
+                               {transactions}
+                        </tbody>
+                    </table>
                     <div className='ui basic content center aligned segment'>
                         <button className='ui basic button icon' onClick={this.handleFormOpen}>
                             <i className='plus icon' />
@@ -150,9 +204,16 @@ export class Transaction extends React.Component {
 
 	}
 	render() {
+	    var transactionitems = this.props.transaction.items.map(transactionitem =>
+	         <td key={transactionitem.transactionId + transactionitem.memberId}>
+	         <input type="number" defaultValue={transactionitem.debit}/>
+	         <input type="number" defaultValue={transactionitem.credit}/></td>);
 		return (
-                <p>Esimene poeskäik</p>
-		)
+			<tr>
+				<td><input type="text" defaultValue={this.props.transaction.name}/></td>
+				{transactionitems}
+			</tr>
+	    )
 	}
 }
 

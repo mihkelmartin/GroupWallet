@@ -69,7 +69,7 @@ public class Application {
         Event retVal = null;
         Event event = eventService.loadEvent(eventid);
         if(event != null)
-            if(event.getPIN().equals(pin))
+            if(event.getPIN().equals(event.getPIN()))
                 retVal = event;
 
         return retVal;
@@ -92,7 +92,7 @@ public class Application {
         Collection<Transaction> retVal = null;
         Event event = eventService.loadEvent(eventid);
         if(event != null)
-            if(event.getPIN().equals(pin))
+            if(event.getPIN().equals(event.getPIN()))
                 retVal = event.getTransactions();
         return retVal;
     }
