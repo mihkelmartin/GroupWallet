@@ -39,6 +39,7 @@ class App extends React.Component {
 	render() {
         return (
             <div>
+                <div className="ui divider"></div>
                 <SearchBar currentEmail = {this.state.email} onEmailChange = {this.handleEmailChange}/>
                 <div className="ui divider"></div>
                 <EventListConditionalRender this={this}/>
