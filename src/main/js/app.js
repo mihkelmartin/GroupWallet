@@ -41,13 +41,19 @@ class App extends React.Component {
             <div>
                 <SearchBar currentEmail = {this.state.email} onEmailChange = {this.handleEmailChange}/>
                 <div className="ui divider"></div>
-                <EventList events={this.state.events} onEventSelected = {this.props.onEventSelected}/>
+                <EventListConditionalRender this={this}/>
             </div>
 		)
 	}
 }
 // end::app[]
 
+function EventListConditionalRender(props){
+    if(props.this.state.events.length != 0){
+     return  <EventList events={props.this.state.events} onEventSelected = {props.this.props.onEventSelected}/>;
+    }
+    return (null);
+}
 
 // tag::employee-list[]
 class EventList extends React.Component {
