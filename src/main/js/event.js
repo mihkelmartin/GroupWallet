@@ -99,11 +99,6 @@ export class Event extends React.Component {
 
 export class MemberList extends React.Component {
 
-
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
      	var members = this.props.members.map( (member) => <Member key={member.id} member={member}/> );
 		return (
@@ -133,10 +128,6 @@ export class MemberList extends React.Component {
 
 export class Member extends React.Component {
 
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		return (
 			<tr>
@@ -151,10 +142,7 @@ export class Member extends React.Component {
 
 export class TransactionList extends React.Component {
 
-	constructor(props) {
-		super(props);
-		this.state = {transactions: []};
-	}
+    state = {transactions: []};
 
 	componentDidMount(){
         var url = '/Transactions/Event/' + this.props.eventId + '/PIN/9999';
@@ -199,10 +187,6 @@ export class TransactionList extends React.Component {
 
 export class Transaction extends React.Component {
 
-	constructor(props) {
-		super(props);
-
-	}
 	render() {
 	    var transactionitems = this.props.transaction.items.map(transactionitem =>
 	         <td key={transactionitem.transactionId + transactionitem.memberId}>

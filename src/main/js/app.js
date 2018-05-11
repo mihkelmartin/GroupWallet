@@ -12,13 +12,8 @@ import {EventDashBoard} from './event.js';
 // tag::app[]
 class App extends React.Component {
 
-	constructor(props) {
-		super(props);
-		this.state = {events: [], email:' '};
-		this.handleEmailChange = this.handleEmailChange.bind(this);
-	}
-
-    handleEmailChange(email) {
+    state = {events: [], email:' '};
+    handleEmailChange = (email) => {
         this.setState({
           email: email
         }, () => {
@@ -84,16 +79,10 @@ class EventList extends React.Component {
 
 // tag::event[]
 class EventElement extends React.Component{
-	constructor(props) {
-		super(props);
-		this.onEventClick = this.onEventClick.bind(this);
-	}
 
-	    onEventClick(e)
-        {
-            this.props.onEventSelected(this.props.event.id);
-        }
-
+    onEventClick = (e) => {
+        this.props.onEventSelected(this.props.event.id);
+    }
 
 	render() {
 		return (
@@ -108,13 +97,8 @@ class EventElement extends React.Component{
 
 // tag::search bar
 class SearchBar extends React.Component {
-	constructor(props) {
-		super(props);
-		this.onEmailTextChange = this.onEmailTextChange.bind(this);
-	}
 
-    onEmailTextChange(emailInput)
-    {
+    onEmailTextChange = (emailInput) => {
         this.props.onEmailChange(emailInput.target.value);
     }
 
@@ -132,17 +116,14 @@ class SearchBar extends React.Component {
 
 class Main extends React.Component {
 
-	constructor(props) {
-		super(props);
-		this.state = {selectedEvent:''};
-		this.handleEventSelected = this.handleEventSelected.bind(this);
-	}
+    state = {selectedEvent:''};
 
-    handleEventSelected(eventSelected){
+    handleEventSelected = (eventSelected) => {
         this.setState({
           selectedEvent: eventSelected
         });
     }
+
 	render() {
 		return (
             <BrowserRouter>
