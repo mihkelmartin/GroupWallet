@@ -53,7 +53,7 @@ public class Application {
         memberService.save(lauri,"Lauri Moss", "Lauri", "maisvee@gmail.com","EE124141242");
         transactionService.remove(kustutatav);
 
-        return "index";
+        return "index.html";
     }
 
 
