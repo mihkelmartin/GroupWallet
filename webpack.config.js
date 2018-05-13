@@ -2,10 +2,11 @@ var path = require('path');
 
 
 module.exports = {
+    mode : 'none',
     entry: './src/main/js/app.js',
     devtool: 'sourcemaps',
     devServer: {
-      port: 8081
+      port: 8080
     },
     cache: true,
     output: {
@@ -13,7 +14,7 @@ module.exports = {
         filename: './src/main/resources/static/built/bundle.js'
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: path.join(__dirname, '.'),
                 exclude: /(node_modules)/,
