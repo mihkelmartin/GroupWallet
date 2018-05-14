@@ -57,12 +57,14 @@ public class Application {
     }
 
 
+    @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Event/find/email/{email}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public List<Event> findEventsByEmail(@PathVariable String email) throws JsonProcessingException {
         return eventService.loadEventsByEmail(email);
     }
 
+    @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Event/event/{eventid}/PIN/{pin}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Event findEvent(@PathVariable String eventid, @PathVariable  Short pin) {
@@ -75,6 +77,7 @@ public class Application {
         return retVal;
     }
 
+    @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Members/Event/{eventid}/PIN/{pin}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Collection<Member> GetEvents(@PathVariable String eventid, @PathVariable  Short pin) {
@@ -86,6 +89,7 @@ public class Application {
         return retVal;
     }
 
+    @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Transactions/Event/{eventid}/PIN/{pin}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Collection<Transaction> GetTransactions(@PathVariable String eventid, @PathVariable  Short pin) {
@@ -97,6 +101,7 @@ public class Application {
         return retVal;
     }
 
+    @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Event/add/{name}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Event addEvent(@PathVariable String name) {
@@ -105,6 +110,7 @@ public class Application {
 
     }
 
+    @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Event/update/{eventid}/name/{name}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Event updateEvent(@PathVariable String eventid, @PathVariable String name) {
@@ -114,6 +120,7 @@ public class Application {
 
     }
 
+    @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Event/remove/{eventid}")
     @ResponseBody
     public void removeEvent(@PathVariable String eventid) {
