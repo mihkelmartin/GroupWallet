@@ -10,8 +10,8 @@ module.exports = {
     },
     cache: true,
     output: {
-        path: __dirname,
-        filename: './src/main/resources/static/built/bundle.js'
+        path: path.join(__dirname,'/src/main/resources/static'),
+        filename: 'built/bundle.js'
     },
     module: {
         rules: [
