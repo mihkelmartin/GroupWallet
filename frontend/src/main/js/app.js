@@ -8,6 +8,8 @@ var $ = require('jquery');
 
 import {BrowserRouter, Route, Switch, Link} from 'react-router-dom';
 import {EventDashBoard} from './event.js';
+import {getBackEndUrl} from './getProperties';
+
 
 // tag::app[]
 class App extends React.Component {
@@ -17,7 +19,7 @@ class App extends React.Component {
         this.setState({
           email: email
         }, () => {
-           var url = '/Event/find/email/' + this.state.email;
+           var url = getBackEndUrl() + 'Event/find/email/' + this.state.email;
             $.ajax({
                 url: url,
                 dataType: 'json',

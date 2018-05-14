@@ -3,6 +3,9 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 var $ = require('jquery');
 
+import {getBackEndUrl} from './getProperties';
+
+
 // tag::EventDashBoard[]
 export class EventDashBoard extends React.Component {
 
@@ -10,7 +13,7 @@ export class EventDashBoard extends React.Component {
 		super(props);
 		this.state = {members: []};
 
-        var url = '/Members/Event/' + this.props.eventId + '/PIN/9999';
+        var url = getBackEndUrl() + 'Members/Event/' + this.props.eventId + '/PIN/9999';
         $.ajax({
             url: url,
             dataType: 'json',
@@ -46,7 +49,7 @@ export class Event extends React.Component {
 		this.state = {eventName:''};
 	    this.handleEventNameChange = this.handleEventNameChange.bind(this);
 
-        var url = '/Event/event/' + this.props.eventId + '/PIN/9999';
+        var url = getBackEndUrl() + 'Event/event/' + this.props.eventId + '/PIN/9999';
         $.ajax({
             url: url,
             dataType: 'json',
@@ -62,7 +65,7 @@ export class Event extends React.Component {
 
     handleEventNameChange(event) {
         this.setState({eventName: event.target.value});
-        var url = '/Event/update/' + this.props.eventId + '/name/' + event.target.value;
+        var url = getBackEndUrl() + 'Event/update/' + this.props.eventId + '/name/' + event.target.value;
         $.ajax({
             url: url,
             dataType: 'json',
@@ -102,7 +105,7 @@ export class MemberList extends React.Component {
 	render() {
      	var members = this.props.members.map( (member) => <Member key={member.id} member={member}/> );
 		return (
-            <div className='ui three column centered grid'>
+            <div className='ui three column grid'>
                 <div className='column'>
                     <table className="ui collapsing celled table">
                         <tbody>
@@ -135,6 +138,13 @@ export class Member extends React.Component {
 				<td><input type="text" defaultValue={this.props.member.nickName}/></td>
 				<td><input type="text" defaultValue={this.props.member.eMail}/></td>
 				<td><input type="text" defaultValue={this.props.member.bankAccount}/></td>
+				<td>
+                    <div className='extra content'>
+                        <span className='right floated trash icon'>
+                            <i className='trash icon' />
+                        </span>
+                    </div>
+                </td>
 			</tr>
 	    )
 	}
@@ -145,7 +155,7 @@ export class TransactionList extends React.Component {
     state = {transactions: []};
 
 	componentDidMount(){
-        var url = '/Transactions/Event/' + this.props.eventId + '/PIN/9999';
+        var url = getBackEndUrl() + 'Transactions/Event/' + this.props.eventId + '/PIN/9999';
         $.ajax({
             url: url,
             dataType: 'json',
@@ -163,7 +173,7 @@ export class TransactionList extends React.Component {
             var membernames = this.props.members.map( member => <th key={member.id} className = "center aligned">{member.nickName}</th>);
             var transactions = this.state.transactions.map( transaction=> <Transaction  key={transaction.id} transaction={transaction}/> );
 		return (
-            <div className='ui three column centered grid'>
+            <div className='ui three column grid'>
                 <div className='column'>
                     <table className="ui collapsing celled table">
                         <tbody>
