@@ -3,7 +3,7 @@ var path = require('path');
 
 module.exports = {
     mode : 'none',
-    entry: './src/main/js/app.js',
+    entry: './src/main/js/groupwallet.js',
     devtool: 'sourcemaps',
     devServer: {
       port: 8080
