@@ -35,22 +35,44 @@ public class Application {
 
     @RequestMapping(value={"/","Event"})
     String home() {
-        Event event = eventService.add("Muremõtted 2019");
-        Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
-        memberService.add(event,"Alvar Tõruke","Tõru","alvar@gmail.com","");
-        memberService.add(event,"Peeter Kutman","Peta","","");
-        Member tonu = memberService.add(event,"Tõnu Riisalo","Tõnu","","");
-        Member lauri = memberService.add(event,"Lauri Maisvee","Lauri","","");
-        Transaction kustutatav = transactionService.add(event,"Taksosõit Ivalost Saariselkä", false);
-        Transaction transaction = transactionService.add(event,"Kolmapäevane I poeskäik", false);
+
+        Member mihkelmock = new Member();
+        Member alvarmock = new Member();
+        Member peetermock = new Member();
+        Member tonumock = new Member();
+        Member laurimock = new Member();
+        Member munajoodikmock = new Member();
+        mihkelmock.setName("Mihkel Märtin"); mihkelmock.setNickName("Miku");mihkelmock.seteMail("mihkelmartin@gmail.com");mihkelmock.setBankAccount("");
+        alvarmock.setName("Alvar Tõruke"); alvarmock.setNickName("Tõru");alvarmock.seteMail("alvar@gmail.com");alvarmock.setBankAccount("");
+        peetermock.setName("Peeter Kutman"); peetermock.setNickName("Peta");
+        tonumock.setName("Tõnu Riisalo"); tonumock.setNickName("Tõnu");
+        laurimock.setName("Lauri Maisvee"); laurimock.setNickName("Lauri");
+        munajoodikmock.setName("Munajoodik Tuslik"); munajoodikmock.setNickName("Tuslik");munajoodikmock.seteMail("kaarelmartin@gmail.com");
+
+        Transaction taksomock = new Transaction();
+        Transaction poesmock = new Transaction();
+        taksomock.setName("Taksosõit Ivalost Saariselkä");
+        poesmock.setName("Kolmapäevane I poeskäik");
+
+        Event newEvent = new Event();
+        newEvent.setName("Muremõtted 2019");
+        Event event = eventService.add(newEvent);
+        Member mihkel = memberService.add(event,mihkelmock);
+        memberService.add(event, alvarmock);
+        memberService.add(event, peetermock);
+        Member tonu = memberService.add(event, tonumock);
+        Member lauri = memberService.add(event, laurimock);
+        Transaction kustutatav = transactionService.add(event, taksomock);
+        Transaction transaction = transactionService.add(event, poesmock);
         transactionService.addDebitForMember(transaction, lauri, 320);
         transactionService.addDebitForMember(transaction, tonu, 225);
         transactionService.addCreditForMember(transaction, mihkel, 0);
         transactionService.addDebitForMember(transaction, tonu, 0);
         transactionService.setAutoCalculationForMember(transaction, mihkel, false);
-        Member munajoodik = memberService.add(event,"Munajoodik Tuslik","Tuslik","kaarelmartin@gmail.com","");
+        Member munajoodik = memberService.add(event, munajoodikmock);
         memberService.remove(tonu);
-        memberService.save(lauri,"Lauri Moss", "Lauri", "maisvee@gmail.com","EE124141242");
+        laurimock.setName("Lauri Moss");laurimock.seteMail("maisvee@gmail.com");laurimock.setBankAccount("EE124141242");
+        memberService.save(lauri, laurimock);
         transactionService.remove(kustutatav);
 
         return "index.html";
@@ -105,7 +127,9 @@ public class Application {
     @GetMapping(path = "/Event/add/{name}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Event addEvent(@PathVariable String name) {
-        Event event = eventService.add(name);
+        Event newEvent = new Event();
+        newEvent.setName(name);
+        Event event = eventService.add(newEvent);
         return event;
 
     }
@@ -115,7 +139,9 @@ public class Application {
     @ResponseBody
     public Event updateEvent(@PathVariable String eventid, @PathVariable String name) {
         Event event = eventService.loadEvent(eventid);
-        eventService.save(event, name);
+        Event newEvent = new Event();
+        newEvent.setName(name);
+        eventService.save(event, newEvent);
         return event;
 
     }

@@ -23,15 +23,16 @@ public class EventServiceImpl implements EventService {
     private EventDao eventDao;
 
     @Override
-    public Event add(String name) {
-        Event event = new Event(name);
+    public Event add(Event newEvent) {
+        Event event = new Event();
+        event.update(newEvent);
         eventDao.save(event);
         return event;
     }
 
     @Override
-    public Event save(Event event, String name) {
-        event.update(name);
+    public Event save(Event event, Event updatedEvent) {
+        event.update(updatedEvent);
         eventDao.save(event);
         return event;
     }

@@ -47,24 +47,45 @@ public class TransactionTest {
     String saanisoitnameChg = "Saanisõit kambaga";
     private double delta = 0.001;
 
+    private Member mihkelmock = new Member();
+    private Member peetermock = new Member();
+    private Member tonumock = new Member();
+    private Member laurimock = new Member();
+    private Member alvarmock = new Member();
+    private Transaction taksomock = new Transaction();
+    private Transaction poesmock = new Transaction();
+    private Transaction saanimock = new Transaction();
 
     @Before
     public void initialize(){
         mongoOperations.dropCollection(Event.class);
-        event = eventService.add("Saariselkä 2019");
+        Event newEvent = new Event();
+        newEvent.setName("Saariselkä 2019");
+        event = eventService.add(newEvent);
         eventid = event.getId();
-        mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
-        alvar = memberService.add(event, "Alvar Tõruke","Tõru","alvar@gmai.com","");
-        peeter = memberService.add(event,"Peeter Kutman","Peta","","");
-        tonu = memberService.add(event,"Tõnu Riisalo","Tõnu","","");
+
+        mihkelmock.setName("Mihkel Märtin"); mihkelmock.setNickName("Miku");mihkelmock.seteMail("mihkelmartin@gmail.com");mihkelmock.setBankAccount("");
+        peetermock.setName("Peeter Kutman"); peetermock.setNickName("Peta");
+        tonumock.setName("Tõnu Riisalo"); tonumock.setNickName("Tõnu");
+        laurimock.setName("Lauri Maisvee"); laurimock.setNickName("Lauri");
+        alvarmock.setName("Alvar Tõruke"); alvarmock.setNickName("Tõru");alvarmock.seteMail("alvar@gmail.com");alvarmock.setBankAccount("");
+        taksomock.setName(taksoname);
+        poesmock.setName(poesname);
+        saanimock.setName(saanisoitname);
+
+
+        mihkel = memberService.add(event, mihkelmock);
+        alvar = memberService.add(event, alvarmock);
+        peeter = memberService.add(event, peetermock);
+        tonu = memberService.add(event, tonumock);
         mihkelid = mihkel.getId();
         alvarid = alvar.getId();
         peeterid = peeter.getId();
         tonuid = tonu.getId();
 
-        taksosoit = transactionService.add(event,taksoname, false);
-        poeskaik = transactionService.add(event,poesname, false);
-        saanisoit = transactionService.add(event,saanisoitname, false);
+        taksosoit = transactionService.add(event, taksomock);
+        poeskaik = transactionService.add(event, poesmock);
+        saanisoit = transactionService.add(event, saanimock);
         taksoid = taksosoit.getId();
         poesid = poeskaik.getId();
         saanid = saanisoit.getId();
@@ -104,9 +125,12 @@ public class TransactionTest {
         taksosoit = eventService.findTransaction(event, taksoid);
         poeskaik = eventService.findTransaction(event, poesid);
         saanisoit = eventService.findTransaction(event, saanid);
-        transactionService.save(taksosoit,taksonameChg, false);
-        transactionService.save(poeskaik,poesnameChg, false);
-        transactionService.save(saanisoit,saanisoitnameChg, false);
+        taksomock.setName(taksonameChg);
+        poesmock.setName(poesnameChg);
+        saanimock.setName(saanisoitnameChg);
+        transactionService.save(taksosoit, taksomock);
+        transactionService.save(poeskaik,poesmock);
+        transactionService.save(saanisoit,saanimock);
 
         event = eventService.loadEvent(eventid);
         taksosoit = eventService.findTransaction(event, taksoid);
@@ -123,9 +147,12 @@ public class TransactionTest {
     @Test
     public void TransactionWithoutMembers() {
         mongoOperations.dropCollection(Event.class);
-        event = eventService.add("Saariselkä 2020");
+        Event newEvent = new Event();
+        newEvent.setName("Saariselkä 2020");
+        event = eventService.add(newEvent);
         eventid = event.getId();
-        taksosoit = transactionService.add(event,taksoname, false);
+        taksomock.setName(taksoname);
+        taksosoit = transactionService.add(event,taksomock);
         taksoid = taksosoit.getId();
 
         event = eventService.loadEvent(eventid);
@@ -216,7 +243,7 @@ public class TransactionTest {
 
     @Test
     public void TransactionAddMember() {
-        Member lauri = memberService.add(event,"Lauri Maisvee","Lauri","","");
+        Member lauri = memberService.add(event, laurimock);
         assertEquals(5, taksosoit.getItems().size());
         assertEquals(5, poeskaik.getItems().size());
         assertEquals(5, saanisoit.getItems().size());

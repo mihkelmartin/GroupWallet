@@ -18,56 +18,67 @@ public class Member implements Comparable<Member>, Ordered {
 
     @Id
     private @NonNull String id;
-    private @NonNull String name;
-    private String nickName;
+    private @NonNull String name = "";
+    private String nickName = "";
     @Indexed
-    private String eMail;
-    private String bankAccount;
-    private @NonNull int order;
+    private String eMail = "";
+    private String bankAccount = "";
+    private @NonNull int order = 0;
     @Transient
     @JsonIgnore
-    private @NonNull Event event;
+    private @NonNull Event event = null;
 
-    public Member(){
-
+    public Member (){
+        setId(UUID.randomUUID().toString());
     }
 
-    public Member (String name, String nickName, String eMail, String bankAccount, int order, Event event){
-        this.id = UUID.randomUUID().toString();
-        this.name = name;
-        this.nickName = nickName;
-        this.eMail = eMail;
-        this.bankAccount = bankAccount;
-        this.order = order;
-        this.event = event;
-    }
-
-    public void update(String name, String nickName, String eMail, String bankAccount, int order) {
-        this.name = name;
-        this.nickName = nickName;
-        this.eMail = eMail;
-        this.bankAccount = bankAccount;
-        this.order = order;
+    public void update(Member member) {
+        setName(member.name);
+        setNickName(member.nickName);
+        seteMail(member.eMail);
+        setBankAccount(member.bankAccount);
+        setOrder(member.order);
+        setEvent(member.getEvent());
     }
 
     public String getId() {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getNickName() {
         return nickName;
     }
 
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     public String geteMail() {
         return eMail;
     }
 
+    public void seteMail(String eMail) {
+        this.eMail = eMail;
+    }
+
     public String getBankAccount() {
         return bankAccount;
+    }
+
+    public void setBankAccount(String bankAccount) {
+        this.bankAccount = bankAccount;
     }
 
     public Event getEvent() {

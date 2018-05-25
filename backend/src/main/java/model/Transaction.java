@@ -17,30 +17,23 @@ public class Transaction implements Comparable<Transaction>, Ordered {
 
     @Id
     private @NonNull String id;
-    private @NonNull String name;
-    private boolean bmanualCalculation;
-    private @NonNull int order;
+    private @NonNull String name = "";
+    private boolean bmanualCalculation = false;
+    private @NonNull int order = 0;
     private ArrayList<TransactionItem> items = new ArrayList<>();
     @Transient
     @JsonIgnore
-    private @NonNull Event event;
+    private @NonNull Event event = null;
 
     public Transaction(){
-
-    }
-
-    public Transaction(String name, boolean bmanualCalculation, int order, Event event){
         this.id = UUID.randomUUID().toString();
-        this.name = name;
-        this.bmanualCalculation = bmanualCalculation;
-        this.order = order;
-        this.event = event;
     }
 
-    public void update(String name, boolean bmanualCalculation, int order) {
-        this.name = name;
-        this.bmanualCalculation = bmanualCalculation;
-        this.order = order;
+    public void update(Transaction transaction) {
+        setName(transaction.getName());
+        setBmanualCalculation(transaction.isBmanualCalculation());
+        setOrder(transaction.getOrder());
+        setEvent(transaction.getEvent());
     }
 
     public String getId() {
@@ -51,8 +44,16 @@ public class Transaction implements Comparable<Transaction>, Ordered {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public boolean isBmanualCalculation() {
         return bmanualCalculation;
+    }
+
+    public void setBmanualCalculation(boolean bmanualCalculation) {
+        this.bmanualCalculation = bmanualCalculation;
     }
 
     public ArrayList<TransactionItem> getItems() {
@@ -70,6 +71,10 @@ public class Transaction implements Comparable<Transaction>, Ordered {
     @Override
     public int getOrder() {
         return this.order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     @Override

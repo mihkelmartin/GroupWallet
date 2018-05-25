@@ -9,8 +9,8 @@ import model.TransactionItem;
  * Created by mihkel on 11.04.2018.
  */
 public interface TransactionService {
-    Transaction add(Event event, String name, boolean bmanualCalculation);
-    Transaction save(Transaction transaction, String name, boolean bmanualCalculation);
+    Transaction add(Event event, Transaction newTransaction);
+    Transaction save(Transaction transaction, Transaction updatedTranaction);
     Transaction remove(Transaction transaction);
     Member addMemberToTransactions(Member member);
     Member removeMemberFromTransactions(Member member);

@@ -41,7 +41,10 @@ public class EventTest {
         String eventNameChg = "Saariselkä 2019";
 
         // Creation
-        Event event = eventService.add(eventName);
+        Event newEvent = new Event();
+        newEvent.setName(eventName);
+
+        Event event = eventService.add(newEvent);
         String eventid = event.getId();
         assertNotNull(event);
         assertNotNull(eventid);
@@ -54,7 +57,8 @@ public class EventTest {
         assertEquals (event.getName(), eventName);
 
         // Change
-        eventService.save(event,eventNameChg);
+        newEvent.setName(eventNameChg);
+        eventService.save(event, newEvent);
 
         event = eventService.loadEvent(eventid);
         assertNotNull(event);

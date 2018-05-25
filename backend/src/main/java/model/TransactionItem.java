@@ -15,12 +15,12 @@ public class TransactionItem {
 
     private @NonNull String transactionId;
     private @NonNull String memberId;
-    private double debit;
-    private double credit;
-    private boolean bcreditAutoCalculated;
+    private double debit = 0.0;
+    private double credit = 0.0;
+    private boolean bcreditAutoCalculated = true;
     @Transient
     @JsonIgnore
-    private Transaction transaction;
+    private Transaction transaction = null;
 
     public TransactionItem(){
 

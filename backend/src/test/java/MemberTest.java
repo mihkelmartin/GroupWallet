@@ -37,17 +37,29 @@ public class MemberTest {
     @Autowired
     MemberService memberService;
 
+    private Member mihkelmock = new Member();
+    private Member peetermock = new Member();
+    private Member tonumock = new Member();
+    private Member laurimock = new Member();
+
+
     @Before
     public void initialize(){
         mongoOperations.dropCollection(Event.class);
+        mihkelmock.setName("Mihkel Märtin"); mihkelmock.setNickName("Miku");mihkelmock.seteMail("mihkelmartin@gmail.com");mihkelmock.setBankAccount("");
+        peetermock.setName("Peeter Kutman"); peetermock.setNickName("Peta");
+        tonumock.setName("Tõnu Riisalo"); tonumock.setNickName("Tõnu");
+        laurimock.setName("Lauri Maisvee"); laurimock.setNickName("Lauri");
     }
 
     @Test
     public void MemberSingleAdd(){
 
         // Creation
-        Event event = eventService.add("Saariselkä 2019");
-        Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
+        Event newEvent = new Event();
+        newEvent.setName("Saariselkä 2019");
+        Event event = eventService.add(newEvent);
+        Member mihkel = memberService.add(event,mihkelmock);
         String mihkelid = mihkel.getId();
 
         assertNotNull(mihkel);
@@ -69,10 +81,16 @@ public class MemberTest {
     @Test
     public void MemberSingleChange(){
 
-        Event event = eventService.add("Saariselkä 2019");
-        Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
+        Event newEvent = new Event();
+        newEvent.setName("Saariselkä 2019");
+        Event event = eventService.add(newEvent);
+        Member mihkel = memberService.add(event,mihkelmock);
         String mihkelid = mihkel.getId();
-        memberService.save(mihkel,"Mihkel Kaarli poeg Märtin", "Mikuke","kaubavagun@gmail.com","EESwed");
+        mihkelmock.setName("Mihkel Kaarli poeg Märtin");
+        mihkelmock.seteMail("kaubavagun@gmail.com");
+        mihkelmock.setNickName("Mikuke");
+        mihkelmock.setBankAccount("EESwed");
+        memberService.save(mihkel, mihkelmock);
 
         event = eventService.loadEvent(event.getId());
         mihkel = eventService.findMember(event, mihkelid);
@@ -85,11 +103,13 @@ public class MemberTest {
 
     @Test
     public void MemberRemove(){
-        Event event = eventService.add("Saariselkä 2019");
-        Member mihkel = memberService.add(event,"Mihkel Märtin","Miku","mihkelmartin@gmail.com","");
-        Member peeter = memberService.add(event,"Peeter Kutman","Peta","","");
-        Member tonu = memberService.add(event,"Tõnu Riisalo","Tõnu","","");
-        Member lauri = memberService.add(event,"Lauri Maisvee","Lauri","","");
+        Event newEvent = new Event();
+        newEvent.setName("Saariselkä 2019");
+        Event event = eventService.add(newEvent);
+        Member mihkel = memberService.add(event, mihkelmock);
+        Member peeter = memberService.add(event, peetermock);
+        Member tonu = memberService.add(event, tonumock);
+        Member lauri = memberService.add(event, laurimock);
         String mihkelid = mihkel.getId(), peeterid = peeter.getId(), tonuid = tonu.getId(), lauriid = lauri.getId();
 
         assertEquals(event.getMembers().size(),4);

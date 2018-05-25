@@ -19,7 +19,7 @@ public class Event {
 
     @Id
     private @NonNull String id;
-    private @NonNull String name;
+    private @NonNull String name = "";
     @JsonIgnore
     private final @NonNull Short PIN;
     @JsonIgnore
@@ -27,14 +27,13 @@ public class Event {
     @JsonIgnore
     private ArrayList<Transaction> transactions = new ArrayList<>();
 
-    public Event (String name){
+    public Event (){
         this.id = UUID.randomUUID().toString();
-        this.name = name;
         this.PIN = (short) Math.floor(Math.random()*(10000));
     }
 
-    public void update(String name){
-        this.name = name;
+    public void update(Event event){
+        setName(event.name);
     }
 
     public String getId() {
@@ -43,6 +42,10 @@ public class Event {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @JsonIgnore

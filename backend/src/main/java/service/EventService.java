@@ -10,8 +10,8 @@ import java.util.List;
  * Created by mihkel on 11.04.2018.
  */
 public interface EventService {
-    Event add(String name);
-    Event save(Event event, String name);
+    Event add(Event newEvent);
+    Event save(Event event, Event updatedEvent);
     Event remove(Event event);
     Event loadEvent(String id);
     List<Event> loadEventsByEmail(String eMail);

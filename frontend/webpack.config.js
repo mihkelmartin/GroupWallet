@@ -6,12 +6,14 @@ module.exports = {
     entry: './src/main/js/groupwallet.js',
     devtool: 'sourcemaps',
     devServer: {
-      port: 8080
+      port: 8080,
+      historyApiFallback: true
     },
     cache: true,
     output: {
         path: path.join(__dirname,'/src/main/resources/static'),
-        filename: 'built/bundle.js'
+        filename: 'built/bundle.js',
+        publicPath: '/'
     },
     module: {
         rules: [

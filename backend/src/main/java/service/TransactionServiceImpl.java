@@ -23,17 +23,25 @@ public class TransactionServiceImpl implements TransactionService{
     private TransactionItemDao transactionItemDao;
 
 
-    public Transaction add(Event event, String name, boolean bmanualCalculation) {
-        Transaction retVal = new Transaction(name, bmanualCalculation,
-                event.getNextOrderNr(event.getTransactions()), event);
+    public Transaction add(Event event, Transaction newTransaction) {
+        // Set technical attributes before copy
+        newTransaction.setEvent(event);
+        newTransaction.setOrder(event.getNextOrderNr(event.getTransactions()));
+
+        Transaction retVal = new Transaction();
+        retVal.update(newTransaction);
+
         event.getTransactions().add(retVal);
         transactionDao.add(retVal);
         populateTransactionItems(retVal, event.getMembers());
         return retVal;
     }
 
-    public Transaction save(Transaction transaction, String name, boolean bmanualCalculation) {
-        transaction.update(name, bmanualCalculation, transaction.getOrder());
+    public Transaction save(Transaction transaction, Transaction updatedTransaction) {
+        // Set technical attributes before copy
+        updatedTransaction.setEvent(transaction.getEvent());
+
+        transaction.update(updatedTransaction);
         transactionDao.save(transaction);
         return transaction;
     }
@@ -49,7 +57,7 @@ public class TransactionServiceImpl implements TransactionService{
     private void recalculateOrderNumbers(Transaction removed){
         for(Transaction transaction: removed.getEvent().getTransactions()){
             if(transaction.getOrder() > removed.getOrder()) {
-                transaction.update(transaction.getName(), transaction.isBmanualCalculation(), transaction.getOrder() - 1);
+                transaction.setOrder(transaction.getOrder() - 1);
                 transactionDao.save(transaction);
             }
         }

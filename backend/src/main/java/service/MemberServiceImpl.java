@@ -18,8 +18,14 @@ public class MemberServiceImpl implements MemberService {
     private MemberDao memberDao;
 
     @Override
-    public Member add(Event event, String name, String nickName, String eMail, String bankAccount) {
-        Member retVal = new Member(name, nickName, eMail, bankAccount, event.getNextOrderNr(event.getMembers()), event);
+    public Member add(Event event, Member newMember) {
+        // Set technical attributes before copy
+        newMember.setEvent(event);
+        newMember.setOrder(event.getNextOrderNr(event.getMembers()));
+
+        Member retVal = new Member();
+        retVal.update(newMember);
+
         event.getMembers().add(retVal);
         memberDao.add(retVal);
         transactionService.addMemberToTransactions(retVal);
@@ -27,8 +33,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member save(Member member, String name, String nickName, String eMail, String bankAccount) {
-        member.update(name, nickName, eMail, bankAccount, member.getOrder());
+    public Member save(Member member, Member updatedMember) {
+        // Set technical attributes before copy
+        updatedMember.setEvent(member.getEvent());
+
+        member.update(updatedMember);
         memberDao.save(member);
         return member;
     }
