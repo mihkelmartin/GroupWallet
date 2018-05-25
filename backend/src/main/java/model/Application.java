@@ -135,15 +135,11 @@ public class Application {
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
-    @GetMapping(path = "/Event/update/{eventid}/name/{name}", produces = "application/json;charset=UTF-8")
+    @PostMapping(path = "/Event/update/{token}")
     @ResponseBody
-    public Event updateEvent(@PathVariable String eventid, @PathVariable String name) {
-        Event event = eventService.loadEvent(eventid);
-        Event newEvent = new Event();
-        newEvent.setName(name);
-        eventService.save(event, newEvent);
-        return event;
-
+    public void updateEvent(@PathVariable String token, @RequestBody Event updatedEvent) {
+        Event event = eventService.loadEvent(updatedEvent.getId());
+        eventService.save(event, updatedEvent);
     }
 
     @CrossOrigin(origins = "${clientcors.url}")

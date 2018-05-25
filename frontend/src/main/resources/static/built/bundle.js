@@ -129,7 +129,6 @@ var Groupwallet = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
-            console.log('GroupWallet render ', this.selectedEvent);
             return React.createElement(
                 _reactRouterDom.BrowserRouter,
                 null,
@@ -17806,7 +17805,6 @@ var EventDashBoard = function (_React$Component) {
   _createClass(EventDashBoard, [{
     key: 'render',
     value: function render() {
-      console.log('EventDashBoard render');
       return React.createElement(
         'div',
         null,
@@ -17850,6 +17848,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // tag::vars[]
 var React = __webpack_require__(4);
 var $ = __webpack_require__(63);
+var event_array;
 
 var Event = function (_React$Component) {
     _inherits(Event, _React$Component);
@@ -17869,6 +17868,7 @@ var Event = function (_React$Component) {
             cache: false,
             success: function (data) {
                 this.setState({ eventName: data.name });
+                event_array = data;
             }.bind(_this),
             error: function (xhr, status, err) {
                 console.error(err.toString());
@@ -17881,10 +17881,15 @@ var Event = function (_React$Component) {
         key: 'handleEventNameChange',
         value: function handleEventNameChange(event) {
             this.setState({ eventName: event.target.value });
-            var url = (0, _getProperties.getBackEndUrl)() + 'Event/update/' + this.props.eventId + '/name/' + event.target.value;
+            event_array.name = event.target.value;
+            console.log(event_array);
+
+            var url = (0, _getProperties.getBackEndUrl)() + '/Event/update/9999';
             $.ajax({
                 url: url,
-                dataType: 'json',
+                type: "POST",
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify(event_array),
                 cache: false,
                 success: function (data) {}.bind(this),
                 error: function (xhr, status, err) {

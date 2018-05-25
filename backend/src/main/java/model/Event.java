@@ -32,8 +32,8 @@ public class Event {
         this.PIN = (short) Math.floor(Math.random()*(10000));
     }
 
-    public void update(Event event){
-        setName(event.name);
+    public void update(Event updatedEvent){
+        setName(updatedEvent.name);
     }
 
     public String getId() {

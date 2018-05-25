@@ -1,13 +1,14 @@
 // tag::vars[]
 const React = require('react');
 var $ = require('jquery');
+var eventObject;
 
 import {getBackEndUrl} from './getProperties';
 
 class Event extends React.Component {
 
 	constructor(props) {
-		super(props);
+        super(props);
 		this.state = {eventName:''};
 	    this.handleEventNameChange = this.handleEventNameChange.bind(this);
 
@@ -18,6 +19,7 @@ class Event extends React.Component {
             cache: false,
             success: function(data) {
                this.setState({eventName : data.name});
+               eventObject = data;
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
@@ -27,10 +29,13 @@ class Event extends React.Component {
 
     handleEventNameChange(event) {
         this.setState({eventName: event.target.value});
-        var url = getBackEndUrl() + 'Event/update/' + this.props.eventId + '/name/' + event.target.value;
+        eventObject.name = event.target.value
+        var url = getBackEndUrl() + '/Event/update/9999';
         $.ajax({
             url: url,
-            dataType: 'json',
+            type: "POST",
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify(eventObject),
             cache: false,
             success: function(data) {
             }.bind(this),
