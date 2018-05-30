@@ -5,10 +5,10 @@ class Member extends React.Component {
 	render() {
 		return (
 			<tr>
-				<td><input type="text" defaultValue={this.props.member.name}/></td>
-				<td><input type="text" defaultValue={this.props.member.nickName}/></td>
-				<td><input type="text" defaultValue={this.props.member.eMail}/></td>
-				<td><input type="text" defaultValue={this.props.member.bankAccount}/></td>
+				<td><input className='ui input' defaultValue={this.props.member.name}/></td>
+				<td><input className='ui input' defaultValue={this.props.member.nickName}/></td>
+				<td><input className='ui input' defaultValue={this.props.member.eMail}/></td>
+				<td><input className='ui input' defaultValue={this.props.member.bankAccount}/></td>
 				<td>
                     <div className='extra content'>
                         <span className='right floated trash icon'>

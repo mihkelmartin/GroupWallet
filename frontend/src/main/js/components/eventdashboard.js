@@ -17,7 +17,8 @@ class EventDashBoard extends React.Component {
 		super(props);
 		this.state = {members: []};
 
-        var url = getBackEndUrl() + 'Members/Event/' + this.props.eventId + '/PIN/9999';
+        var url = getBackEndUrl() + 'Members/Event/' + this.props.eventId + '/PIN/' + this.props.pin;
+        console.log(url);
         $.ajax({
             url: url,
             dataType: 'json',
@@ -34,7 +35,7 @@ class EventDashBoard extends React.Component {
  	render() {
 		return (
 		    <div>
-		        <Event eventId = {this.props.eventId}/>
+		        <Event eventId = {this.props.eventId} pin = {this.props.pin}/>
                 <div className="ui divider"></div>
                 <MemberList eventId = {this.props.eventId} members={this.state.members}/>
                 <div className="ui divider"></div>

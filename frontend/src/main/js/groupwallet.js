@@ -8,15 +8,17 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import MainDashBoard from './components/maindashboard.js';
 import EventDashBoard from './components/eventdashboard.js';
 
+var pin;
 
 class Groupwallet extends React.Component {
 
     state = {selectedEvent:''};
 
-    handleEventSelected = (eventSelected) => {
+    handleEventSelected = (eventSelected, pinGiven) => {
         this.setState({
           selectedEvent: eventSelected
         });
+        pinGiven == "" ? pin = -1 : pin = pinGiven;
     }
 
 	render() {
@@ -24,7 +26,7 @@ class Groupwallet extends React.Component {
             <BrowserRouter>
                 <Switch>
                   <Route exact path='/' render={(props) => <MainDashBoard{...props} onEventSelected = {this.handleEventSelected}/>}/>
-                  <Route path='/Event' render={(props) => <EventDashBoard{...props} eventId = {this.state.selectedEvent}/>}/>
+                  <Route path='/Event/:eventId' render={(props) => <EventDashBoard{...props} eventId = {props.match.params.eventId} pin={pin}/>}/>
                 </Switch>
             </BrowserRouter>
         )

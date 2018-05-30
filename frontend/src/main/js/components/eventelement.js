@@ -8,14 +8,14 @@ import {Link} from 'react-router-dom';
 class EventElement extends React.Component{
 
     onEventClick = (e) => {
-        this.props.onEventSelected(this.props.event.id);
+        this.props.onEventSelected(this.props.event.id, this.refs.EventPIN.value);
     }
 
 	render() {
 		return (
 			<tr>
-				<td><Link to='/Event' onClick={this.onEventClick}>{this.props.event.name}</Link></td>
-				<td><input id = "EventPIN" type="number" name="PIN" /></td>
+				<td><Link to={'/Event/'+this.props.event.id} onClick={this.onEventClick}>{this.props.event.name}</Link></td>
+				<td><input ref = "EventPIN" type="number" name="PIN" /></td>
 			</tr>
 		)
 	}
