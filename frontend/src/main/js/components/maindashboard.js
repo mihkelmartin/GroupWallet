@@ -11,7 +11,7 @@ import {getBackEndUrl} from './getProperties';
 // tag::MainDashBoard[]
 class MainDashBoard extends React.Component {
 
-    state = {events: [], email:' '};
+    state = {events: [], email:' ', newFormVisible : false};
     handleEmailChange = (email) => {
         this.setState({
           email: email
@@ -30,13 +30,21 @@ class MainDashBoard extends React.Component {
             });
         });
     }
+
+    setNewFormVisibility = (isVisible) => {
+        this.setState({newFormVisible: isVisible});
+        if(isVisible)
+            this.setState({events: []});
+    }
+
 	render() {
         return (
             <div>
                 <div className="ui divider"></div>
-                <SearchBar currentEmail = {this.state.email} onEmailChange = {this.handleEmailChange}/>
+                <SearchBar currentEmail = {this.state.email}
+                    onEmailChange = {this.handleEmailChange} setNewFormVisibility = {this.setNewFormVisibility}/>
                 <div className="ui divider"></div>
-                <EventListConditionalRender this={this}/>
+                <EventListConditionalRender this={this} setNewFormVisibility = {this.setNewFormVisibility}/>
             </div>
 		)
 	}

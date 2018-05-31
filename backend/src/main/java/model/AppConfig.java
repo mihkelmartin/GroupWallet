@@ -29,7 +29,7 @@ public class AppConfig {
     @Value( "${mongoDB.DBName}" )
     private String mongoDBName;
 
-    public @Bean
+     public @Bean
     MongoDbFactory mongoDbSimpleFactory() throws Exception {
         return new SimpleMongoDbFactory(new MongoClient(mongoHost, mongoPort), mongoDBName);
     }
@@ -37,6 +37,11 @@ public class AppConfig {
     public @Bean
     MongoOperations mongoOperations() throws Exception {
         return new MongoTemplate(mongoDbSimpleFactory());
+    }
+
+    public @Bean
+    EmailServiceImpl getEmailService()  {
+        return new EmailServiceImpl();
     }
 
     public @Bean
