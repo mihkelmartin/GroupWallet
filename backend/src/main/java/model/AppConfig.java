@@ -45,6 +45,11 @@ public class AppConfig {
     }
 
     public @Bean
+    RecaptchaService getRecaptchaService()  {
+        return new RecaptchaService();
+    }
+
+    public @Bean
     EventDao eventDao() throws Exception {
         return new MongoDBEventDao();
     }

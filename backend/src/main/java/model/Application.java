@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import service.EventService;
 import service.MemberService;
+import service.RecaptchaService;
 import service.TransactionService;
 
 import java.util.*;
@@ -28,6 +29,9 @@ public class Application {
     MemberService memberService;
     @Autowired
     TransactionService transactionService;
+    @Autowired
+    RecaptchaService recaptchaService;
+
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -78,6 +82,12 @@ public class Application {
         return "index.html";
     }
 
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/{ReCAPTCHAToken}", produces = "text/plain")
+    @ResponseBody
+    public String verifyReCAPTCHAToken(@PathVariable String ReCAPTCHAToken) throws JsonProcessingException {
+        return recaptchaService.verifyRecaptcha("",ReCAPTCHAToken);
+    }
 
     @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Event/find/email/{email}", produces = "application/json;charset=UTF-8")
