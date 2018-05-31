@@ -3,9 +3,9 @@ const React = require('react');
 // tag::SearchBar
 class SearchBar extends React.Component {
 
-    onEmailTextChange = (evt) => {
+    onSubmit = (evt) => {
         this.props.onEmailChange((this.refs.eventEmail.value));
-        this.setNewFormVisibility(false);
+        this.setNewFormVisibility();
         evt.preventDefault();
     }
 
@@ -15,12 +15,12 @@ class SearchBar extends React.Component {
 
 	render() {
 		return (
-		<form onSubmit={this.onEmailTextChange}>
+		<form onSubmit={this.onSubmit}>
             <div className="ui centered header">
                 <div className="icon input">
                     <input ref="eventEmail" type="text" placeholder="Event member e-mail..." value = {this.props.email}
                                             onFocus={this.setNewFormVisibility}/>
-                    <i className="search icon" onClick={this.onEmailTextChange}></i>
+                    <i className="search icon" onClick={this.onSubmit}></i>
                 </div>
             </div>
         </form>
