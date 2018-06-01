@@ -18,15 +18,16 @@ class AddEvent extends React.Component {
     state = {msgText : 'Fill in and press Enter', eventname : '', email : ''};
 
     setResult = (data) => {
-        console.log(data);
-        if(data == "success"){
+        if(data.id == null){
             this.setState({
-              msgText: 'Verified'
-            });
+                 msgText: 'Adding new event failed'
+             });
+             captcha.reset();
+
         } else {
-            this.setState({
-                msgText: 'Bot test failed, try again'
-            });
+             this.setState({
+               msgText: 'New event added'
+             });
         }
     }
     onChange = (token) => {
@@ -34,10 +35,15 @@ class AddEvent extends React.Component {
           msgText: 'Verifying...'
         });
 
-        var url = getBackEndUrl() + token;
+        var url = getBackEndUrl() + '/Event/add/' + token;
+        var eventJson = '{"name" : "' + this.refs.eventNameField.value +
+                          '", "ownerEmail" : "' + this.refs.eMailField.value + '"}';
+        console.log(eventJson);
         $.ajax({
             url: url,
-            dataType: 'text',
+            type: "POST",
+            contentType: 'application/json;charset=UTF-8',
+            data: eventJson,
             cache: false,
             success: this.setResult,
             error: function(xhr, status, err) {
@@ -48,8 +54,8 @@ class AddEvent extends React.Component {
     }
 
     onSubmit = (evt) => {
-        evt.preventDefault();
         captcha.execute();
+        evt.preventDefault();
     }
 
 
@@ -59,8 +65,8 @@ class AddEvent extends React.Component {
             <div className='ui centered card'>
                 <div className='content'>
                     <div className='header'>
-                        <input type="text" placeholder="Event name"/>
-                        <input type="text" placeholder="e-mail"/>
+                        <input ref="eventNameField" type="text" placeholder="Event name"/>
+                        <input ref="eMailField" type="text" placeholder="e-mail"/>
                         <input type="submit" style={{display:"none"}}/>
                         <p>{this.state.msgText}</p>
                         <ReCAPTCHA

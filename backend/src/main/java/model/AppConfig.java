@@ -40,16 +40,6 @@ public class AppConfig {
     }
 
     public @Bean
-    EmailServiceImpl getEmailService()  {
-        return new EmailServiceImpl();
-    }
-
-    public @Bean
-    RecaptchaService getRecaptchaService()  {
-        return new RecaptchaService();
-    }
-
-    public @Bean
     EventDao eventDao() throws Exception {
         return new MongoDBEventDao();
     }
