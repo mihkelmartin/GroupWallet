@@ -25,9 +25,8 @@ class AddEvent extends React.Component {
              captcha.reset();
 
         } else {
-             this.setState({
-               msgText: 'New event added'
-             });
+             alert('New event added');
+             this.props.setNewFormVisibility(false);
         }
     }
     onChange = (token) => {

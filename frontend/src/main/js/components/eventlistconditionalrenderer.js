@@ -19,7 +19,7 @@ export function EventListConditionalRender(props){
 
     const eventlist =  <EventList events={props.this.state.events} onEventSelected = {props.this.props.onEventSelected}/>;
 
-    const addevent = <AddEvent/>;
+    const addevent = <AddEvent setNewFormVisibility={props.this.setNewFormVisibility}/>;
 
     function setNewFormVisibility() {
         props.this.setNewFormVisibility(true);
