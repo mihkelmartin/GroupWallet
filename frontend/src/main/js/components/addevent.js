@@ -25,8 +25,8 @@ class AddEvent extends React.Component {
              captcha.reset();
 
         } else {
-             alert('New event added');
              this.props.setNewFormVisibility(false);
+             this.props.handleEmailChange(data.ownerEmail);
         }
     }
     onChange = (token) => {

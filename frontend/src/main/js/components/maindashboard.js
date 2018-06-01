@@ -44,7 +44,7 @@ class MainDashBoard extends React.Component {
                 <SearchBar currentEmail = {this.state.email}
                     onEmailChange = {this.handleEmailChange} setNewFormVisibility = {this.setNewFormVisibility}/>
                 <div className="ui divider"></div>
-                <EventListConditionalRender this={this} setNewFormVisibility = {this.setNewFormVisibility}/>
+                <EventListConditionalRender this={this}/>
             </div>
 		)
 	}
