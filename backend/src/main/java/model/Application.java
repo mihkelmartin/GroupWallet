@@ -6,10 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import service.EventService;
-import service.MemberService;
-import service.RecaptchaService;
-import service.TransactionService;
+import service.*;
 
 import java.util.*;
 
@@ -31,6 +28,9 @@ public class Application {
     TransactionService transactionService;
     @Autowired
     RecaptchaService recaptchaService;
+    @Autowired
+    EmailServiceImpl emailService;
+
 
 
     public static void main(String[] args) {
@@ -83,10 +83,37 @@ public class Application {
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
-    @GetMapping(path = "/{ReCAPTCHAToken}", produces = "text/plain")
+    @PostMapping(path = "/Event/add/{ReCAPTCHAToken}", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public String verifyReCAPTCHAToken(@PathVariable String ReCAPTCHAToken) throws JsonProcessingException {
-        return recaptchaService.verifyRecaptcha("",ReCAPTCHAToken);
+    public Event addEvent(@PathVariable String ReCAPTCHAToken, @RequestBody Event newEvent) {
+
+        Event event = null;
+        if(recaptchaService.verifyRecaptcha("",ReCAPTCHAToken).equals("")){
+            event = eventService.add(newEvent);
+
+            // Add default Member
+            Member member = new Member();
+            member.setName("Member");
+            member.seteMail(event.getOwnerEmail());
+            memberService.add(event, member);
+
+            // Add default Transaction
+            Transaction transaction = new Transaction();
+            transaction.setName("1. Spending");
+            transactionService.add(event, transaction);
+
+            emailService.sendSimpleMessage(event.getOwnerEmail(), event.getName(),event.getPIN().toString());
+        }
+        return event;
+    }
+
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @PostMapping(path = "/Event/update/{token}")
+    @ResponseBody
+    public void updateEvent(@PathVariable String token, @RequestBody Event updatedEvent) {
+        Event event = eventService.loadEvent(updatedEvent.getId());
+        eventService.save(event, updatedEvent);
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
@@ -133,24 +160,7 @@ public class Application {
         return retVal;
     }
 
-    @CrossOrigin(origins = "${clientcors.url}")
-    @GetMapping(path = "/Event/add/{name}", produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public Event addEvent(@PathVariable String name) {
-        Event newEvent = new Event();
-        newEvent.setName(name);
-        Event event = eventService.add(newEvent);
-        return event;
 
-    }
-
-    @CrossOrigin(origins = "${clientcors.url}")
-    @PostMapping(path = "/Event/update/{token}")
-    @ResponseBody
-    public void updateEvent(@PathVariable String token, @RequestBody Event updatedEvent) {
-        Event event = eventService.loadEvent(updatedEvent.getId());
-        eventService.save(event, updatedEvent);
-    }
 
     @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Event/remove/{eventid}")

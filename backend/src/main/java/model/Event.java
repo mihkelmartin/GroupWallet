@@ -20,8 +20,15 @@ public class Event {
     @Id
     private @NonNull String id;
     private @NonNull String name = "";
+    private @NonNull String ownerEmail = "";
     @JsonIgnore
-    private final @NonNull Short PIN;
+    private final @NonNull Long PIN;
+    @JsonIgnore
+    private @NonNull Short failedLogins = 0;
+    @JsonIgnore
+    private @NonNull String securityToken = "";
+    @JsonIgnore
+    private @NonNull String securityTokenGenTS = "";
     @JsonIgnore
     private ArrayList<Member> members = new ArrayList<>();
     @JsonIgnore
@@ -29,11 +36,12 @@ public class Event {
 
     public Event (){
         this.id = UUID.randomUUID().toString();
-        this.PIN = (short) Math.floor(Math.random()*(10000));
+        this.PIN = (long) Math.floor(Math.random()*(100000));
     }
 
     public void update(Event updatedEvent){
-        setName(updatedEvent.name);
+        setName(updatedEvent.getName());
+        setOwnerEmail(updatedEvent.getOwnerEmail());
     }
 
     public String getId() {
@@ -48,8 +56,40 @@ public class Event {
         this.name = name;
     }
 
+    public String getOwnerEmail() {
+        return ownerEmail;
+    }
+
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail;
+    }
+
+    public Short getFailedLogins() {
+        return failedLogins;
+    }
+
+    public void setFailedLogins(Short failedLogins) {
+        this.failedLogins = failedLogins;
+    }
+
+    public String getSecurityToken() {
+        return securityToken;
+    }
+
+    public void setSecurityToken(String securityToken) {
+        this.securityToken = securityToken;
+    }
+
+    public String getSecurityTokenGenTS() {
+        return securityTokenGenTS;
+    }
+
+    public void setSecurityTokenGenTS(String securityTokenGenTS) {
+        this.securityTokenGenTS = securityTokenGenTS;
+    }
+
     @JsonIgnore
-    public Short getPIN() {
+    public Long getPIN() {
         return PIN;
     }
 

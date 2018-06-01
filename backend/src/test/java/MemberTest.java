@@ -1,7 +1,6 @@
 import model.AppConfig;
 import model.Event;
 import model.Member;
-import model.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +11,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.test.context.junit4.SpringRunner;
 import service.EventService;
 import service.MemberService;
-import service.TransactionService;
+
 
 import java.util.Collections;
 

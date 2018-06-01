@@ -51,7 +51,7 @@ public class RecaptchaService {
 
             return errorMessage + " " + errorCodes;
         }else {
-            return "success";
+            return "";
         }
     }
 }
