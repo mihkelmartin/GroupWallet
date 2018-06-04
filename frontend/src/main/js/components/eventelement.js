@@ -15,7 +15,7 @@ class EventElement extends React.Component{
 		return (
 			<tr>
 				<td><Link to={'/Event/'+this.props.event.id} onClick={this.onEventClick}>{this.props.event.name}</Link></td>
-				<td><input ref = "EventPIN" type="number" name="PIN" /></td>
+				<td><input ref = "EventPIN" type="number" placeholder="Enter PIN and click link" name="PIN" /></td>
 			</tr>
 		)
 	}

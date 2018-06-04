@@ -47,6 +47,11 @@ public class AppConfig {
     }
 
     public @Bean
+    LoginService loginService() throws Exception {
+        return new LoginService();
+    }
+
+    public @Bean
     JavaMailSender javaMailSender() throws Exception {
 
         JavaMailSenderImpl sender = new JavaMailSenderImpl();

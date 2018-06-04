@@ -6,9 +6,7 @@ import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
 import org.springframework.lang.NonNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by mihkel on 5.04.2018.
@@ -22,13 +20,17 @@ public class Event {
     private @NonNull String name = "";
     private @NonNull String ownerEmail = "";
     @JsonIgnore
-    private final @NonNull Long PIN;
+    private @NonNull Long PIN;
+    @JsonIgnore
+    private @NonNull Date eventCreatedTS;
+    @JsonIgnore
+    private @NonNull Date eventAccessedTS = null;
     @JsonIgnore
     private @NonNull Short failedLogins = 0;
     @JsonIgnore
     private @NonNull String securityToken = "";
     @JsonIgnore
-    private @NonNull String securityTokenGenTS = "";
+    private @NonNull Date securityTokenGenTS = null;
     @JsonIgnore
     private ArrayList<Member> members = new ArrayList<>();
     @JsonIgnore
@@ -36,7 +38,10 @@ public class Event {
 
     public Event (){
         this.id = UUID.randomUUID().toString();
-        this.PIN = (long) Math.floor(Math.random()*(100000));
+        generatePIN();
+        this.eventCreatedTS = new Date();
+        this.eventAccessedTS = this.eventCreatedTS;
+        this.securityTokenGenTS = this.eventCreatedTS;
     }
 
     public void update(Event updatedEvent){
@@ -64,6 +69,22 @@ public class Event {
         this.ownerEmail = ownerEmail;
     }
 
+    public Date getEventCreatedTS() {
+        return eventCreatedTS;
+    }
+
+    public void setEventCreatedTS(Date eventCreatedTS) {
+        this.eventCreatedTS = eventCreatedTS;
+    }
+
+    public Date getEventAccessedTS() {
+        return eventAccessedTS;
+    }
+
+    public void setEventAccessedTS(Date eventAccessedTS) {
+        this.eventAccessedTS = eventAccessedTS;
+    }
+
     public Short getFailedLogins() {
         return failedLogins;
     }
@@ -80,11 +101,11 @@ public class Event {
         this.securityToken = securityToken;
     }
 
-    public String getSecurityTokenGenTS() {
+    public Date getSecurityTokenGenTS() {
         return securityTokenGenTS;
     }
 
-    public void setSecurityTokenGenTS(String securityTokenGenTS) {
+    public void setSecurityTokenGenTS(Date securityTokenGenTS) {
         this.securityTokenGenTS = securityTokenGenTS;
     }
 
@@ -108,6 +129,18 @@ public class Event {
             newOrderNr = ((Ordered)arrayList.get(0)).getOrder() + 1;
         }
         return newOrderNr;
+    }
+
+    public void generatePIN(){
+        this.PIN = (long) Math.floor(Math.random()*(100000));
+    }
+
+    public void generatePUK(){
+        this.PIN = (long) Math.floor(Math.random()*(1000000));
+    }
+
+    public void generateToken(){
+        this.securityToken = UUID.randomUUID().toString() + UUID.randomUUID().toString();
     }
 
 }

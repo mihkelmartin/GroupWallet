@@ -31,6 +31,8 @@ public class Application {
     @Autowired
     EmailServiceImpl emailService;
 
+    @Autowired
+    LoginService loginService;
 
 
     public static void main(String[] args) {
@@ -83,6 +85,21 @@ public class Application {
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/login/{eventid}/{pin}", produces = "text/plain")
+    @ResponseBody
+    public String loginEvent(@PathVariable String eventid, @PathVariable  Long pin) {
+        String retVal = "";
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(loginService.loginPIN(event, pin)) {
+                event.generateToken();
+                eventService.save(event, event);
+                retVal = event.getSecurityToken();
+            }
+        return retVal;
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
     @PostMapping(path = "/Event/add/{ReCAPTCHAToken}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Event addEvent(@PathVariable String ReCAPTCHAToken, @RequestBody Event newEvent) {
@@ -113,7 +130,31 @@ public class Application {
     @ResponseBody
     public void updateEvent(@PathVariable String token, @RequestBody Event updatedEvent) {
         Event event = eventService.loadEvent(updatedEvent.getId());
-        eventService.save(event, updatedEvent);
+        if(event.getSecurityToken().equals(token))
+            eventService.save(event, updatedEvent);
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/Event/load/{eventid}/{token}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Event loadEvent(@PathVariable String eventid, @PathVariable  String token) {
+        Event retVal = null;
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getSecurityToken().equals(token))
+                retVal = event;
+
+        return retVal;
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/Event/remove/{eventid}/{token}")
+    @ResponseBody
+    public void removeEvent(@PathVariable String eventid, @PathVariable  String token) {
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getSecurityToken().equals(token))
+                eventService.remove(event);
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
@@ -123,51 +164,33 @@ public class Application {
         return eventService.loadEventsByEmail(email);
     }
 
-    @CrossOrigin(origins = "${clientcors.url}")
-    @GetMapping(path = "/Event/event/{eventid}/PIN/{pin}", produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public Event findEvent(@PathVariable String eventid, @PathVariable  Short pin) {
-        Event retVal = null;
-        Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getPIN().equals(event.getPIN()))
-                retVal = event;
-
-        return retVal;
-    }
 
     @CrossOrigin(origins = "${clientcors.url}")
-    @GetMapping(path = "/Members/Event/{eventid}/PIN/{pin}", produces = "application/json;charset=UTF-8")
+    @GetMapping(path = "/Members/{eventid}/{token}", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public Collection<Member> GetEvents(@PathVariable String eventid, @PathVariable  Short pin) {
+    public Collection<Member> GetEvents(@PathVariable String eventid, @PathVariable  String token) {
         Collection<Member> retVal = null;
         Event event = eventService.loadEvent(eventid);
         if(event != null)
-            if(event.getPIN().equals(event.getPIN()))
+            if(event.getSecurityToken().equals(token))
                 retVal = event.getMembers();
         return retVal;
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
-    @GetMapping(path = "/Transactions/Event/{eventid}/PIN/{pin}", produces = "application/json;charset=UTF-8")
+    @GetMapping(path = "/Transactions/{eventid}/{token}", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public Collection<Transaction> GetTransactions(@PathVariable String eventid, @PathVariable  Short pin) {
+    public Collection<Transaction> GetTransactions(@PathVariable String eventid, @PathVariable  String token) {
         Collection<Transaction> retVal = null;
         Event event = eventService.loadEvent(eventid);
         if(event != null)
-            if(event.getPIN().equals(event.getPIN()))
+            if(event.getSecurityToken().equals(token))
                 retVal = event.getTransactions();
         return retVal;
     }
 
 
 
-    @CrossOrigin(origins = "${clientcors.url}")
-    @GetMapping(path = "/Event/remove/{eventid}")
-    @ResponseBody
-    public void removeEvent(@PathVariable String eventid) {
-        Event event = eventService.loadEvent(eventid);
-        eventService.remove(event);
-    }
+
 
 }

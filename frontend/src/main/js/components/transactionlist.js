@@ -10,7 +10,8 @@ class TransactionList extends React.Component {
     state = {transactions: []};
 
 	componentDidMount(){
-        var url = getBackEndUrl() + 'Transactions/Event/' + this.props.eventId + '/PIN/9999';
+        var url = getBackEndUrl() + 'Transactions/' + this.props.eventId + '/' + this.props.token;
+        console.log(url);
         $.ajax({
             url: url,
             dataType: 'json',

@@ -7,6 +7,7 @@ import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import repository.EventDao;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,7 +47,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event loadEvent(String id) {
         Event event = eventDao.loadEvent(id);
-        loadMembers(event);
+
+        event.setEventAccessedTS(new Date());
+        eventDao.save(event);
+
         loadTransactions(event);
         updateForeignKeys(event);
         return event;

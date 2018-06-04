@@ -12,7 +12,7 @@ class Event extends React.Component {
 		this.state = {eventName:''};
 	    this.handleEventNameChange = this.handleEventNameChange.bind(this);
 
-        var url = getBackEndUrl() + 'Event/event/' + this.props.eventId + '/PIN/9999';
+        var url = getBackEndUrl() + 'Event/load/' + this.props.eventId + '/' + this.props.token;
         $.ajax({
             url: url,
             dataType: 'json',
