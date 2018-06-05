@@ -29,25 +29,21 @@ class MemberList extends React.Component {
                                                                 LoadTransactions={this.props.LoadTransactions}
      	                                                       token = {this.props.token} member={member}/> );
 		return (
-            <div className='ui three column grid'>
-                <div className='column'>
-                    <table className="ui collapsing celled table">
-                        <tbody>
-                            <tr>
-                                <th className = "center aligned">Name</th>
-                                <th className = "center aligned">Nickname</th>
-                                <th className = "center aligned">E-mail</th>
-                                <th className = "center aligned">Bankaccount</th>
-                            </tr>
+            <div>
+                    <div className="ui five column padded grid">
+                            <div className="row">
+                                <div className = "blue column center aligned">Name</div>
+                                <div className = "blue column center aligned">Nickname</div>
+                                <div className = "blue column center aligned">E-mail</div>
+                                <div className = "blue column center aligned">Bankaccount</div>
+                            </div>
                             {members}
-                        </tbody>
-                    </table>
+                     </div>
                     <div className='ui basic content center aligned segment'>
                         <button className='ui basic button icon' onClick={this.handleNewMember}>
                             <i className='plus icon' />
                         </button>
                     </div>
-                </div>
             </div>
 		)
 	}

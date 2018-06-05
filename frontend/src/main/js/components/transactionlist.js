@@ -13,8 +13,7 @@ class TransactionList extends React.Component {
             var membernames = this.props.members.map( member => <th key={member.id} className = "center aligned">{member.nickName}</th>);
             var transactions = this.props.transactions.map( transaction=> <Transaction  key={transaction.id} transaction={transaction}/> );
 		return (
-            <div className='ui three column grid'>
-                <div className='column'>
+                <div>
                     <table className="ui collapsing celled table">
                         <tbody>
                             <tr>
@@ -30,7 +29,6 @@ class TransactionList extends React.Component {
                         </button>
                     </div>
                 </div>
-            </div>
 		)
 	}
 }

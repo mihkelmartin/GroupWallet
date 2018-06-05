@@ -25,11 +25,11 @@ class Member extends React.Component {
 
 	render() {
 		return (
-			<tr>
-				<td><input className='ui input' defaultValue={this.props.member.name}/></td>
-				<td><input className='ui input' defaultValue={this.props.member.nickName}/></td>
-				<td><input className='ui input' defaultValue={this.props.member.eMail}/></td>
-				<td><input className='ui input' defaultValue={this.props.member.bankAccount}/></td>
+            <div className="row">
+				<div className = "column"><input className='ui input' defaultValue={this.props.member.name}/></div>
+				<div className = "column"><input className='ui input' defaultValue={this.props.member.nickName}/></div>
+				<div className = "column"><input className='ui input' defaultValue={this.props.member.eMail}/></div>
+				<div className = "column"><input className='ui input' defaultValue={this.props.member.bankAccount}/></div>
 				<td>
                     <div className='extra content'>
                         <span className='right floated trash icon'>
@@ -37,7 +37,7 @@ class Member extends React.Component {
                         </span>
                     </div>
                 </td>
-			</tr>
+			</div>
 	    )
 	}
 }
