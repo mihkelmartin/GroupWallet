@@ -48,9 +48,12 @@ public class EventServiceImpl implements EventService {
     public Event loadEvent(String id) {
         Event event = eventDao.loadEvent(id);
 
-        event.setEventAccessedTS(new Date());
-        eventDao.save(event);
+        if(event != null) {
+            event.setEventAccessedTS(new Date());
+            eventDao.save(event);
+        }
 
+        loadMembers(event);
         loadTransactions(event);
         updateForeignKeys(event);
         return event;

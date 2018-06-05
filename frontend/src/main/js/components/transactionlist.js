@@ -9,25 +9,9 @@ class TransactionList extends React.Component {
 
     state = {transactions: []};
 
-	componentDidMount(){
-        var url = getBackEndUrl() + 'Transactions/' + this.props.eventId + '/' + this.props.token;
-        console.log(url);
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            cache: false,
-            success: function(data) {
-               this.setState({transactions: data});
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(err.toString());
-            }.bind(this)
-        });
-	}
-
 	render() {
             var membernames = this.props.members.map( member => <th key={member.id} className = "center aligned">{member.nickName}</th>);
-            var transactions = this.state.transactions.map( transaction=> <Transaction  key={transaction.id} transaction={transaction}/> );
+            var transactions = this.props.transactions.map( transaction=> <Transaction  key={transaction.id} transaction={transaction}/> );
 		return (
             <div className='ui three column grid'>
                 <div className='column'>

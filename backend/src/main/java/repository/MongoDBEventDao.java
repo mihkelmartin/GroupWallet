@@ -47,8 +47,9 @@ public class MongoDBEventDao implements EventDao {
 
     @Override
     public List<Event> loadEventsByemail(String eMail) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("members.eMail").is(eMail));
+        Criteria criteria = new Criteria();
+        criteria.orOperator(Criteria.where("members.eMail").is(eMail),Criteria.where("ownerEmail").is(eMail));
+        Query query = new Query(criteria);
         return mongoOps.find(query, Event.class);
     }
 

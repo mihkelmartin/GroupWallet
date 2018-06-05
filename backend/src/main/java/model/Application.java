@@ -168,13 +168,39 @@ public class Application {
     @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Members/{eventid}/{token}", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public Collection<Member> GetEvents(@PathVariable String eventid, @PathVariable  String token) {
+    public Collection<Member> GetMembers(@PathVariable String eventid, @PathVariable  String token) {
         Collection<Member> retVal = null;
         Event event = eventService.loadEvent(eventid);
         if(event != null)
             if(event.getSecurityToken().equals(token))
                 retVal = event.getMembers();
         return retVal;
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/Members/add/{eventid}/{token}")
+    @ResponseBody
+    public void AddMember(@PathVariable String eventid, @PathVariable  String token) {
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getSecurityToken().equals(token)) {
+                // Add default Member
+                Member member = new Member();
+                member.setName("New member");
+                member.seteMail("new.member@gmail.com");
+                memberService.add(event, member);
+            }
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/Members/remove/{eventid}/{token}/{memberid}")
+    @ResponseBody
+    public void RemoveMember(@PathVariable String eventid, @PathVariable  String token, @PathVariable  String memberid) {
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getSecurityToken().equals(token)) {
+                memberService.remove(eventService.findMember(event, memberid));
+            }
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
