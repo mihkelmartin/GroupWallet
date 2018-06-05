@@ -1,4 +1,6 @@
 const React = require('react');
+import createHistory from "history/createBrowserHistory"
+const history = createHistory();
 
 // tag::SearchBar
 class SearchBar extends React.Component {

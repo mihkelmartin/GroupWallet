@@ -9,7 +9,7 @@ export function EventListConditionalRender(props){
 
     let result = [];
 
-    const plusbutton =  <div className="ui centered header">
+    const plusbutton =  <div key ="plusButton" className="ui centered header">
                             <div className='ui basic content center aligned segment'>
                                 <button className='ui basic button icon' onClick={setNewFormVisibility}>
                                     <i className='plus icon' />
@@ -17,9 +17,9 @@ export function EventListConditionalRender(props){
                             </div>
                          </div>;
 
-    const eventlist =  <EventList events={props.this.state.events} onEventSelected = {props.this.props.onEventSelected}/>;
+    const eventlist =  <EventList key ="eventList" events={props.this.state.events} onEventSelected = {props.this.props.onEventSelected}/>;
 
-    const addevent = <AddEvent handleEmailChange={props.this.handleEmailChange}
+    const addevent = <AddEvent key ="addEvent" handleEmailChange={props.this.handleEmailChange}
                                 setNewFormVisibility={props.this.setNewFormVisibility}/>;
 
     function setNewFormVisibility() {

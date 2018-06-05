@@ -11,7 +11,7 @@ import {getBackEndUrl} from './getProperties';
 // tag::MainDashBoard[]
 class MainDashBoard extends React.Component {
 
-    state = {events: [], email:' ', newFormVisible : false};
+    state = {events: [], email:'', newFormVisible : false};
     handleEmailChange = (email) => {
         this.setState({
           email: email

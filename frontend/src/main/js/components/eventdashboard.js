@@ -16,7 +16,9 @@ class EventDashBoard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {members: []};
+	}
 
+    componentDidMount() {
         var url = getBackEndUrl() + 'Members/' + this.props.eventId + '/' + this.props.token;
         console.log(url);
         $.ajax({
@@ -30,8 +32,7 @@ class EventDashBoard extends React.Component {
                 console.error(err.toString());
             }.bind(this)
         });
-	}
-
+    }
  	render() {
 		return (
 		    <div>
