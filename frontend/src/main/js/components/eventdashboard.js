@@ -22,7 +22,8 @@ class EventDashBoard extends React.Component {
             dataType: 'json',
             cache: false,
             success: function(data) {
-               this.setState({members : data});
+                data.sort(function(a,b) {return (a.order > b.order) ? 1 : ((b.order> a.order) ? -1 : 0);} );
+                this.setState({members : data});
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
@@ -37,7 +38,8 @@ class EventDashBoard extends React.Component {
             dataType: 'json',
             cache: false,
             success: function(data) {
-               this.setState({transactions : data});
+                data.sort(function(a,b) {return (a.order > b.order) ? 1 : ((b.order> a.order) ? -1 : 0);} );
+                this.setState({transactions : data});
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
