@@ -1,6 +1,7 @@
 package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
@@ -16,8 +17,10 @@ import java.util.*;
 public class Event {
 
     @Id
+    @Indexed
     private @NonNull String id;
     private @NonNull String name = "";
+    @Indexed
     private @NonNull String ownerEmail = "";
     @JsonIgnore
     private @NonNull Long PIN;
@@ -37,11 +40,11 @@ public class Event {
     private ArrayList<Transaction> transactions = new ArrayList<>();
 
     public Event (){
-        this.id = UUID.randomUUID().toString();
+        setId(UUID.randomUUID().toString());
         generatePIN();
-        this.eventCreatedTS = new Date();
-        this.eventAccessedTS = this.eventCreatedTS;
-        this.securityTokenGenTS = this.eventCreatedTS;
+        setEventCreatedTS(new Date());
+        setEventAccessedTS(getEventCreatedTS());
+        setSecurityTokenGenTS(getEventCreatedTS());
     }
 
     public void update(Event updatedEvent){
@@ -51,6 +54,10 @@ public class Event {
 
     public String getId() {
         return id;
+    }
+
+    private void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -73,11 +80,15 @@ public class Event {
         return PIN;
     }
 
+    private void setPIN(Long PIN) {
+        this.PIN = PIN;
+    }
+
     public Date getEventCreatedTS() {
         return eventCreatedTS;
     }
 
-    public void setEventCreatedTS(Date eventCreatedTS) {
+    private void setEventCreatedTS(Date eventCreatedTS) {
         this.eventCreatedTS = eventCreatedTS;
     }
 
@@ -131,15 +142,17 @@ public class Event {
     }
 
     public void generatePIN(){
-        this.PIN = (long) Math.floor(Math.random()*(100000));
+        setPIN((long) Math.floor(Math.random()*(100000)));
     }
 
     public void generatePUK(){
-        this.PIN = (long) Math.floor(Math.random()*(1000000));
+        setPIN((long) Math.floor(Math.random()*(1000000)));
     }
 
-    public void generateToken(){
-        this.securityToken = UUID.randomUUID().toString() + UUID.randomUUID().toString();
+    public String generateToken(){
+        String retVal = this.securityToken = UUID.randomUUID().toString() + UUID.randomUUID().toString();
+        setSecurityTokenGenTS(new Date());
+        return retVal;
     }
 
 }

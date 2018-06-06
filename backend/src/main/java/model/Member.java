@@ -24,12 +24,14 @@ public class Member implements Comparable<Member>, Ordered {
     private String eMail = "";
     private String bankAccount = "";
     private @NonNull int order = 0;
+    private @NonNull String payor;
     @Transient
     @JsonIgnore
     private @NonNull Event event = null;
 
     public Member (){
         setId(UUID.randomUUID().toString());
+        setPayor(getId());
     }
 
     public void update(Member member) {
@@ -96,6 +98,14 @@ public class Member implements Comparable<Member>, Ordered {
 
     public void setOrder(int order) {
         this.order = order;
+    }
+
+    public String getPayor() {
+        return payor;
+    }
+
+    public void setPayor(String payor) {
+        this.payor = payor;
     }
 
     @Override

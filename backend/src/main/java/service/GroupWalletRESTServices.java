@@ -31,18 +31,33 @@ public class GroupWalletRESTServices {
     LoginService loginService;
 
     @CrossOrigin(origins = "${clientcors.url}")
-    @GetMapping(path = "/login/{eventid}/{pin}", produces = "text/plain")
+    @GetMapping(path = "/Event/find/email/{email}", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public String loginEvent(@PathVariable String eventid, @PathVariable  Long pin) {
+    public List<Event> findEventsByEmail(@PathVariable String email) throws JsonProcessingException {
+        return eventService.loadEventsByEmail(email);
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/login/{eventid}/{PIN}", produces = "text/plain")
+    @ResponseBody
+    public String loginEvent(@PathVariable String eventid, @PathVariable  Long PIN) {
         String retVal = "";
         Event event = eventService.loadEvent(eventid);
         if(event != null)
-            if(loginService.loginPIN(event, pin)) {
-                event.generateToken();
+            if(loginService.loginPIN(event, PIN)) {
+                retVal = event.generateToken();
                 eventService.save(event, event);
-                retVal = event.getSecurityToken();
             }
         return retVal;
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/puk/{eventid}/{PUK}")
+    @ResponseBody
+    public void resetPIN(@PathVariable String eventid, @PathVariable  Long PUK) {
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            loginService.resetPIN(event, PUK);
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
@@ -56,13 +71,18 @@ public class GroupWalletRESTServices {
 
             // Add default Member
             Member member = new Member();
-            member.setName("Member");
+            member.setName("Member1");
+            member.setNickName("M1");
             member.seteMail(event.getOwnerEmail());
+            memberService.add(event, member);
+            member.setName("Member2");
+            member.setNickName("M2");
+            member.seteMail("member.2@gmail.com");
             memberService.add(event, member);
 
             // Add default Transaction
             Transaction transaction = new Transaction();
-            transaction.setName("1. Spending");
+            transaction.setName("Foodmarket");
             transactionService.add(event, transaction);
 
             emailService.sendSimpleMessage(event.getOwnerEmail(), event.getName(),event.getPIN().toString());
@@ -103,13 +123,7 @@ public class GroupWalletRESTServices {
                 eventService.remove(event);
     }
 
-    @CrossOrigin(origins = "${clientcors.url}")
-    @GetMapping(path = "/Event/find/email/{email}", produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public List<Event> findEventsByEmail(@PathVariable String email) throws JsonProcessingException {
-        return eventService.loadEventsByEmail(email);
-    }
-
+    // Members
 
     @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Members/{eventid}/{token}", produces = "application/json;charset=UTF-8")
@@ -130,11 +144,24 @@ public class GroupWalletRESTServices {
         Event event = eventService.loadEvent(eventid);
         if(event != null)
             if(event.getSecurityToken().equals(token)) {
-                // Add default Member
+                // Add new Member
                 Member member = new Member();
                 member.setName("New member");
                 member.seteMail("new.member@gmail.com");
                 memberService.add(event, member);
+            }
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @PostMapping(path = "/Members/update/{eventid}/{token}")
+    @ResponseBody
+    public void updateMember(@PathVariable String eventid, @PathVariable String token, @RequestBody Member updatedMember) {
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getSecurityToken().equals(token)) {
+                Member member = eventService.findMember(event, updatedMember.getId());
+                if(member != null)
+                    memberService.save(member, updatedMember);
             }
     }
 
@@ -149,6 +176,9 @@ public class GroupWalletRESTServices {
             }
     }
 
+
+    // Transactions
+
     @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Transactions/{eventid}/{token}", produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -159,6 +189,94 @@ public class GroupWalletRESTServices {
             if(event.getSecurityToken().equals(token))
                 retVal = event.getTransactions();
         return retVal;
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/Transactions/add/{eventid}/{token}")
+    @ResponseBody
+    public void AddTransaction(@PathVariable String eventid, @PathVariable  String token) {
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getSecurityToken().equals(token)) {
+                // Add new transaction
+                Transaction transaction= new Transaction();
+                transaction.setName("New spending");
+                transactionService.add(event, transaction);
+            }
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @PostMapping(path = "/Transactions/update/{eventid}/{token}")
+    @ResponseBody
+    public void updateTransaction(@PathVariable String eventid, @PathVariable String token,
+                                  @RequestBody Transaction updatedTransaction) {
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getSecurityToken().equals(token)) {
+                Transaction transaction= eventService.findTransaction(event, updatedTransaction.getId());
+                if(transaction!= null)
+                    transactionService.save(transaction, updatedTransaction);
+            }
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/Transactions/remove/{eventid}/{token}/{transactionid}")
+    @ResponseBody
+    public void RemoveTransaction(@PathVariable String eventid, @PathVariable  String token,
+                                  @PathVariable  String transactionid) {
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getSecurityToken().equals(token)) {
+                transactionService.remove(eventService.findTransaction(event, transactionid));
+            }
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/Transactions/addDebit/{eventid}/{token}/{transactionid}/{memberid}/{debit}")
+    @ResponseBody
+    public void addDebitToTransaction(@PathVariable String eventid, @PathVariable String token,
+                                      @PathVariable  String transactionid, @PathVariable  String memberid,
+                                      @PathVariable  double debit) {
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getSecurityToken().equals(token)) {
+                Transaction transaction= eventService.findTransaction(event, transactionid);
+                Member member = eventService.findMember(event, memberid);
+                if(transaction != null && member != null)
+                    transactionService.addDebitForMember(transaction, member, debit);
+            }
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/Transactions/addCredit/{eventid}/{token}/{transactionid}/{memberid}/{credit}")
+    @ResponseBody
+    public void addCreditToTransaction(@PathVariable String eventid, @PathVariable String token,
+                                      @PathVariable  String transactionid, @PathVariable  String memberid,
+                                      @PathVariable  double credit) {
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getSecurityToken().equals(token)) {
+                Transaction transaction= eventService.findTransaction(event, transactionid);
+                Member member = eventService.findMember(event, memberid);
+                if(transaction != null && member != null)
+                    transactionService.addCreditForMember(transaction, member, credit);
+            }
+    }
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/Transactions/setAutoCalc/{eventid}/{token}/{transactionid}/{memberid}/{bAutoCalc}")
+    @ResponseBody
+    public void setTransactionItemAutoCalc(@PathVariable String eventid, @PathVariable String token,
+                                       @PathVariable  String transactionid, @PathVariable  String memberid,
+                                       @PathVariable  boolean bAutoCalc) {
+        Event event = eventService.loadEvent(eventid);
+        if(event != null)
+            if(event.getSecurityToken().equals(token)) {
+                Transaction transaction= eventService.findTransaction(event, transactionid);
+                Member member = eventService.findMember(event, memberid);
+                if(transaction != null && member != null)
+                    transactionService.setAutoCalculationForMember(transaction, member, bAutoCalc);
+            }
     }
 
 }

@@ -41,7 +41,7 @@ public class LoginService {
         return retVal;
     }
 
-    public boolean loginPUK(Event event, Long PUK){
+    public boolean resetPIN(Event event, Long PUK){
         boolean retVal = false;
         if(event.getFailedLogins() >= maxFailedPINLogins) {
             if (event.getPIN().equals(PUK)) {
@@ -49,7 +49,7 @@ public class LoginService {
                 event.generatePIN();
                 eventService.save(event, event);
                 emailService.sendSimpleMessage(event.getOwnerEmail(),
-                        event.getName() + " : PIN:", event.getPIN().toString());
+                        event.getName() + " : New PIN:", event.getPIN().toString());
             }
         }
         return retVal;
