@@ -3,19 +3,17 @@ package aspects;
 import model.Member;
 import model.Transaction;
 import model.TransactionItem;
+import service.TransactionService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
-import service.TransactionService;
-
 
 /**
  * Created by mihkel on 10.04.2018.
  */
+
 @Aspect
-@Order(20)
 public class MoneyCalculationAspect {
 
     @Autowired

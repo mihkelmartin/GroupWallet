@@ -1,24 +1,21 @@
-package model;
+package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import model.Event;
+import model.Member;
+import model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import service.*;
 
-import java.util.*;
-
+import java.util.Collection;
+import java.util.List;
 
 /**
- * Created by mihkel on 5.04.2018.
+ * Created by mihkel on 6.06.2018.
  */
-
-
-@SpringBootApplication
 @Controller
-public class Application {
+public class GroupWalletRESTServices {
 
     @Autowired
     EventService eventService;
@@ -30,59 +27,8 @@ public class Application {
     RecaptchaService recaptchaService;
     @Autowired
     EmailServiceImpl emailService;
-
     @Autowired
     LoginService loginService;
-
-
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-
-    @RequestMapping(value={"/","Event"})
-    String home() {
-
-        Member mihkelmock = new Member();
-        Member alvarmock = new Member();
-        Member peetermock = new Member();
-        Member tonumock = new Member();
-        Member laurimock = new Member();
-        Member munajoodikmock = new Member();
-        mihkelmock.setName("Mihkel Märtin"); mihkelmock.setNickName("Miku");mihkelmock.seteMail("mihkelmartin@gmail.com");mihkelmock.setBankAccount("");
-        alvarmock.setName("Alvar Tõruke"); alvarmock.setNickName("Tõru");alvarmock.seteMail("alvar@gmail.com");alvarmock.setBankAccount("");
-        peetermock.setName("Peeter Kutman"); peetermock.setNickName("Peta");
-        tonumock.setName("Tõnu Riisalo"); tonumock.setNickName("Tõnu");
-        laurimock.setName("Lauri Maisvee"); laurimock.setNickName("Lauri");
-        munajoodikmock.setName("Munajoodik Tuslik"); munajoodikmock.setNickName("Tuslik");munajoodikmock.seteMail("kaarelmartin@gmail.com");
-
-        Transaction taksomock = new Transaction();
-        Transaction poesmock = new Transaction();
-        taksomock.setName("Taksosõit Ivalost Saariselkä");
-        poesmock.setName("Kolmapäevane I poeskäik");
-
-        Event newEvent = new Event();
-        newEvent.setName("Muremõtted 2019");
-        Event event = eventService.add(newEvent);
-        Member mihkel = memberService.add(event,mihkelmock);
-        memberService.add(event, alvarmock);
-        memberService.add(event, peetermock);
-        Member tonu = memberService.add(event, tonumock);
-        Member lauri = memberService.add(event, laurimock);
-        Transaction kustutatav = transactionService.add(event, taksomock);
-        Transaction transaction = transactionService.add(event, poesmock);
-        transactionService.addDebitForMember(transaction, lauri, 320);
-        transactionService.addDebitForMember(transaction, tonu, 225);
-        transactionService.addCreditForMember(transaction, mihkel, 0);
-        transactionService.addDebitForMember(transaction, tonu, 0);
-        transactionService.setAutoCalculationForMember(transaction, mihkel, false);
-        Member munajoodik = memberService.add(event, munajoodikmock);
-        memberService.remove(tonu);
-        laurimock.setName("Lauri Moss");laurimock.seteMail("maisvee@gmail.com");laurimock.setBankAccount("EE124141242");
-        memberService.save(lauri, laurimock);
-        transactionService.remove(kustutatav);
-
-        return "index.html";
-    }
 
     @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/login/{eventid}/{pin}", produces = "text/plain")
@@ -214,9 +160,5 @@ public class Application {
                 retVal = event.getTransactions();
         return retVal;
     }
-
-
-
-
 
 }

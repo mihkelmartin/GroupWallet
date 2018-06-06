@@ -24,13 +24,13 @@ public class Event {
     @JsonIgnore
     private @NonNull Date eventCreatedTS;
     @JsonIgnore
-    private @NonNull Date eventAccessedTS = null;
+    private @NonNull Date eventAccessedTS;
     @JsonIgnore
     private @NonNull Short failedLogins = 0;
     @JsonIgnore
     private @NonNull String securityToken = "";
     @JsonIgnore
-    private @NonNull Date securityTokenGenTS = null;
+    private @NonNull Date securityTokenGenTS;
     @JsonIgnore
     private ArrayList<Member> members = new ArrayList<>();
     @JsonIgnore
@@ -67,6 +67,10 @@ public class Event {
 
     public void setOwnerEmail(String ownerEmail) {
         this.ownerEmail = ownerEmail;
+    }
+
+    public Long getPIN() {
+        return PIN;
     }
 
     public Date getEventCreatedTS() {
@@ -107,11 +111,6 @@ public class Event {
 
     public void setSecurityTokenGenTS(Date securityTokenGenTS) {
         this.securityTokenGenTS = securityTokenGenTS;
-    }
-
-    @JsonIgnore
-    public Long getPIN() {
-        return PIN;
     }
 
     public ArrayList<Member> getMembers() {

@@ -4,11 +4,11 @@ import aspects.MoneyCalculationAspect;
 import com.mongodb.MongoClient;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,7 +19,6 @@ import repository.*;
 import service.*;
 
 import java.util.Properties;
-
 
 /**
  * Created by mihkel on 6.04.2018.
