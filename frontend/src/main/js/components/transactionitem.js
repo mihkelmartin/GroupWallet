@@ -55,8 +55,8 @@ class TransactionItem extends React.Component {
     }
 
     static getDerivedStateFromProps(nextProps) {
-        return {debit: nextProps.debit,
-                credit: nextProps.credit
+        return {debit: parseFloat(nextProps.debit).toFixed(2),
+                credit: parseFloat(nextProps.credit).toFixed(2)
                }
     }
 
@@ -65,12 +65,14 @@ class TransactionItem extends React.Component {
             <td>
                 <form onSubmit={this.onAddDebit}>
                     <div className="ui input">
-                       <input type="number" value = {this.state.debit} onChange={this.onDebitChange}/>
+                       <input type="number" step="0.01" min="0" max="999999.99" pattern="\d+(\.\d{2})?"
+                                value = {this.state.debit} onChange={this.onDebitChange}/>
                     </div>
                 </form>
                 <form onSubmit={this.onAddCredit}>
                     <div className="ui input">
-                       <input type="number" value = {this.state.credit} onChange={this.onCreditChange}/>
+                       <input type="number" step="0.01" min="0" max="999999.99" pattern="\d+(\.\d{2})?"
+                       value = {this.state.credit} onChange={this.onCreditChange}/>
                     </div>
                 </form>
             </td>
