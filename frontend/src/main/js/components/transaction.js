@@ -1,13 +1,19 @@
 const React = require('react');
+import TransactionItem from './transactionitem.js';
 
 class Transaction extends React.Component {
 
 	render() {
 	    var transactionitems = this.props.transaction.items.map(transactionitem =>
-	         <td key={transactionitem.memberId}>
-	         <input type="number" defaultValue={transactionitem.debit}/>
-	         <input type="number" defaultValue={transactionitem.credit}/></td>);
-		return (
+	        <TransactionItem key={transactionitem.memberId}
+	                         eventId = {this.props.eventId}
+	                         token = {this.props.token}
+	                         transactionId = {transactionitem.transactionId}
+	                         memberId={transactionitem.memberId}
+	                         debit = {transactionitem.debit}
+	                         credit = {transactionitem.credit}
+	                         LoadTransactions={this.props.LoadTransactions}/>)
+	    return (
 			<tr>
 				<td><input type="text" defaultValue={this.props.transaction.name}/></td>
 				{transactionitems}
