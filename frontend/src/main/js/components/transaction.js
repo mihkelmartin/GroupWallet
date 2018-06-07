@@ -10,7 +10,8 @@ class Transaction extends React.Component {
 	                         token = {this.props.token}
 	                         transactionId = {transactionitem.transactionId}
 	                         memberId={transactionitem.memberId}
-	                         debit = {transactionitem.debit}
+	                         bcreditAutoCalculated={transactionitem.bcreditAutoCalculated}
+                             debit = {transactionitem.debit}
 	                         credit = {transactionitem.credit}
 	                         LoadTransactions={this.props.LoadTransactions}/>)
 	    return (
