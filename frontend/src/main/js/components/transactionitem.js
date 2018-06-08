@@ -1,3 +1,4 @@
+'use strict';
 const React = require('react');
 var $ = require('jquery');
 import {getBackEndUrl} from './getProperties';
@@ -6,9 +7,12 @@ var genCredit;
 
 class TransactionItem extends React.Component {
 
-    state = {debit : this.props.debit,
-             credit : this.props.credit,
-             bcreditAutoCalculated : this.props.bcreditAutoCalculated};
+    state = {debit : parseFloat(0.0).toFixed(2),
+             credit : parseFloat(0.0).toFixed(2),
+             prevDebitFromProps : 0.0,
+             prevCreditFromProps : 0.0,
+             bcreditAutoCalculated : true
+            };
 
     onAddCredit = (e) => {
         e.preventDefault();
@@ -78,9 +82,16 @@ class TransactionItem extends React.Component {
         this.onChangeAutoCalc(e);
     }
 
-    static getDerivedStateFromProps(nextProps) {
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if(prevState.prevDebitFromProps === nextProps.debit &&
+           prevState.prevCreditFromProps === nextProps.credit ){
+            return null;
+        }
+
         return {debit: parseFloat(nextProps.debit).toFixed(2),
                 credit: parseFloat(nextProps.credit).toFixed(2),
+                prevDebitFromProps : nextProps.debit,
+                prevCreditFromProps : nextProps.credit,
                 bcreditAutoCalculated : nextProps.bcreditAutoCalculated
                }
     }
