@@ -34,7 +34,7 @@ class Event extends React.Component {
     handleEventNameChange(event) {
         this.setState({eventName: event.target.value});
         eventObject.name = event.target.value
-        var url = getBackEndUrl() + '/Event/update/9999';
+        var url = getBackEndUrl() + '/Event/update/' + this.props.token;
         $.ajax({
             url: url,
             type: "POST",
@@ -55,11 +55,6 @@ class Event extends React.Component {
                 <div className='content'>
                     <div className='header'>
                       <input type="text" value={this.state.eventName} onChange={this.handleEventNameChange}/>
-                    </div>
-                    <div className='extra content'>
-                        <span className='right floated edit icon'>
-                            <i className='edit icon' />
-                        </span>
                         <span className='right floated trash icon'>
                             <i className='trash icon' />
                         </span>

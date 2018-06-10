@@ -13,7 +13,7 @@ class EventList extends React.Component {
 			<EventElement key={event.id} event={event} onEventSelected = {this.props.onEventSelected}/>
 		);
 		return (
-            <div className='ui padded grid'>
+            <div className='ui centered padded grid'>
                     <table className="ui collapsing celled table">
                         <tbody>
                             <tr>

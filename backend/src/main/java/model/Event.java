@@ -76,6 +76,7 @@ public class Event {
         this.ownerEmail = ownerEmail;
     }
 
+    @JsonIgnore
     public Long getPIN() {
         return PIN;
     }
