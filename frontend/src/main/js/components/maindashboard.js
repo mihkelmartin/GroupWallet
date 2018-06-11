@@ -22,7 +22,10 @@ class MainDashBoard extends React.Component {
                 dataType: 'json',
                 cache: false,
                 success: function(data) {
-                    this.setState({events: data});
+                data.sort(function(a,b){
+                    return new Date(b.eventCreatedTS) - new Date(a.eventCreatedTS);
+                });
+                this.setState({events: data});
                 }.bind(this),
                 error: function(xhr, status, err) {
                     console.error(err.toString());

@@ -24,7 +24,6 @@ public class Event {
     private @NonNull String ownerEmail = "";
     @JsonIgnore
     private @NonNull Long PIN;
-    @JsonIgnore
     private @NonNull Date eventCreatedTS;
     @JsonIgnore
     private @NonNull Date eventAccessedTS;
