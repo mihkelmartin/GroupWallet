@@ -9,9 +9,10 @@ class TransactionItem extends React.Component {
 
     state = {debit : parseFloat(0.0).toFixed(2),
              credit : parseFloat(0.0).toFixed(2),
+             bcreditAutoCalculated : true,
              prevDebitFromProps : 0.0,
              prevCreditFromProps : 0.0,
-             bcreditAutoCalculated : true
+             prevbcreditAutoCalculated : true
             };
 
     onAddCredit = (e) => {
@@ -26,6 +27,7 @@ class TransactionItem extends React.Component {
             cache: false,
             success: function(data){
                this.props.LoadTransactions();
+               this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
@@ -45,6 +47,7 @@ class TransactionItem extends React.Component {
             cache: false,
             success: function(data){
                this.props.LoadTransactions();
+               this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
@@ -62,6 +65,7 @@ class TransactionItem extends React.Component {
             cache: false,
             success: function(data){
                this.props.LoadTransactions();
+               this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
@@ -81,15 +85,17 @@ class TransactionItem extends React.Component {
 
     static getDerivedStateFromProps(nextProps, prevState) {
         if(prevState.prevDebitFromProps === nextProps.debit &&
-           prevState.prevCreditFromProps === nextProps.credit ){
+           prevState.prevCreditFromProps === nextProps.credit &&
+           prevState.prevbcreditAutoCalculated === nextProps.bcreditAutoCalculated){
             return null;
         }
 
         return {debit: parseFloat(nextProps.debit).toFixed(2),
                 credit: parseFloat(nextProps.credit).toFixed(2),
+                bcreditAutoCalculated: nextProps.bcreditAutoCalculated,
                 prevDebitFromProps : nextProps.debit,
                 prevCreditFromProps : nextProps.credit,
-                bcreditAutoCalculated : nextProps.bcreditAutoCalculated
+                prevbcreditAutoCalculated : nextProps.bcreditAutoCalculated
                }
     }
 

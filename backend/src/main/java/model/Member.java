@@ -25,6 +25,8 @@ public class Member implements Comparable<Member>, Ordered {
     private String bankAccount = "";
     private @NonNull int order = 0;
     private @NonNull String payor;
+    private double debit = 0.0;
+    private double credit = 0.0;
     @Transient
     @JsonIgnore
     private @NonNull Event event = null;
@@ -106,6 +108,22 @@ public class Member implements Comparable<Member>, Ordered {
 
     public void setPayor(String payor) {
         this.payor = payor;
+    }
+
+    public double getDebit() {
+        return debit;
+    }
+
+    public void setDebit(double debit) {
+        this.debit = debit;
+    }
+
+    public double getCredit() {
+        return credit;
+    }
+
+    public void setCredit(double credit) {
+        this.credit = credit;
     }
 
     @Override

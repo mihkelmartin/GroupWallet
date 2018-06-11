@@ -3,6 +3,7 @@ package aspects;
 import model.Member;
 import model.Transaction;
 import model.TransactionItem;
+import service.MemberService;
 import service.TransactionService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -18,6 +19,8 @@ public class MoneyCalculationAspect {
 
     @Autowired
     private TransactionService transactionService;
+    @Autowired
+    private MemberService memberService;
 
     @AfterReturning(value="(execution(* service.TransactionService.addDebitForMember(..)) || " +
             "execution(* service.TransactionService.addCreditForMember(..)) || " +
@@ -26,6 +29,7 @@ public class MoneyCalculationAspect {
     returning = "retVal")
     public void doCalculationTransaction(JoinPoint jp, TransactionService bean, TransactionItem retVal) {
         bean.calculateCredits(retVal.getTransaction());
+        memberService.calculateMembersMoney(retVal.getTransaction().getEvent());
     }
 
     @AfterReturning(value="execution(* service.MemberService.add(..)) || " +
@@ -35,6 +39,20 @@ public class MoneyCalculationAspect {
         for(Transaction transaction : retVal.getEvent().getTransactions()){
             transactionService.calculateCredits(transaction);
         }
+        memberService.calculateMembersMoney(retVal.getEvent());
+    }
+
+    @AfterReturning(value="execution(* service.MemberService.save(..))",
+            returning = "retVal")
+    public void doCalculateMembersMoneyMember(JoinPoint jp, Member retVal) {
+        memberService.calculateMembersMoney(retVal.getEvent());
+    }
+
+    @AfterReturning(value="execution(* service.TransactionService.add(..)) || " +
+            "execution(* service.TransactionService.remove(..))",
+            returning = "retVal")
+    public void doCalculateMembersMoneyTransaction(JoinPoint jp, Transaction retVal) {
+        memberService.calculateMembersMoney(retVal.getEvent());
     }
 
 }

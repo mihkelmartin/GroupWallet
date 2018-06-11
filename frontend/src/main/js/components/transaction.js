@@ -70,6 +70,7 @@ class Transaction extends React.Component {
 	                         bcreditAutoCalculated={transactionitem.bcreditAutoCalculated}
                              debit = {transactionitem.debit}
 	                         credit = {transactionitem.credit}
+	                         LoadMembers={this.props.LoadMembers}
 	                         LoadTransactions={this.props.LoadTransactions}/>)
 	    return (
 			<div className="row">

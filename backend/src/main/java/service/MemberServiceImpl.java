@@ -2,6 +2,8 @@ package service;
 
 import model.Event;
 import model.Member;
+import model.Transaction;
+import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import repository.MemberDao;
 
@@ -49,6 +51,28 @@ public class MemberServiceImpl implements MemberService {
         memberDao.remove(member);
         recalculateOrderNumbers(member);
         return member;
+    }
+
+    @Override
+    public void calculateMemberMoney(Member member) {
+        member.setDebit(0.0);
+        member.setCredit(0.0);
+        for(Transaction transaction : member.getEvent().getTransactions()){
+            for(TransactionItem transactionItem : transaction.getItems()){
+                if(transactionItem.getMemberId().equals(member.getId())) {
+                    member.setCredit(member.getCredit() + transactionItem.getCredit());
+                    member.setDebit(member.getDebit() + transactionItem.getDebit());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void calculateMembersMoney(Event  event) {
+        for(Member member : event.getMembers()){
+            calculateMemberMoney(member);
+            memberDao.save(member);
+        }
     }
 
     @Override
