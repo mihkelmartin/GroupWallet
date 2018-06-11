@@ -14,7 +14,6 @@ class MemberList extends React.Component {
             cache: false,
             success: function(data) {
                this.props.LoadMembers();
-               this.props.LoadTransactions();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
@@ -25,21 +24,20 @@ class MemberList extends React.Component {
 	render() {
      	var members = this.props.members.map( (member) => <Member key={member.id} eventId = {this.props.eventId}
                                                                 LoadMembers={this.props.LoadMembers}
-                                                                LoadTransactions={this.props.LoadTransactions}
      	                                                       token = {this.props.token} member={member}/> );
 		return (
             <div>
                 <div className= "ui container">
                     <div className="ui six column grid">
                         <div className="row">
-                            <div className = "two wide orange column">
+                            <div className = "three wide orange column">
                                 <div className = "ui center aligned inverted orange raised segment">
                                     <h2 className = "ui teal large header">
                                         Name
                                     </h2>
                                 </div>
                             </div>
-                            <div className = "two wide orange column">
+                            <div className = "three wide orange column">
                                 <div className = "ui center aligned inverted orange raised segment">
                                     <h2 className = "ui teal large header">
                                         Nickname

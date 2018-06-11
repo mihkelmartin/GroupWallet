@@ -26,7 +26,6 @@ class TransactionItem extends React.Component {
             dataType: 'text',
             cache: false,
             success: function(data){
-               this.props.LoadTransactions();
                this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
@@ -46,7 +45,6 @@ class TransactionItem extends React.Component {
             dataType: 'text',
             cache: false,
             success: function(data){
-               this.props.LoadTransactions();
                this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
@@ -64,7 +62,6 @@ class TransactionItem extends React.Component {
             dataType: 'text',
             cache: false,
             success: function(data){
-               this.props.LoadTransactions();
                this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
@@ -101,7 +98,7 @@ class TransactionItem extends React.Component {
 
 	render() {
         return (
-            <div className = "column">
+            <div className = "two wide orange column center aligned">
                 <form onSubmit={this.onAddDebit}>
                     <div className="ui input mini">
                        <input type="number" step="0.01" min="0" max="999999.99" pattern="\d+(\.\d{2})?"

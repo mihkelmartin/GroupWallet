@@ -14,7 +14,7 @@ class TransactionList extends React.Component {
             dataType: 'text',
             cache: false,
             success: function(data) {
-               this.props.LoadTransactions();
+               this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
@@ -23,19 +23,18 @@ class TransactionList extends React.Component {
     }
 
 	render() {
-            var membernames = this.props.members.map( member => <div className = "column center aligned" key={member.id}>{member.nickName}</div>);
+            var membernames = this.props.members.map( member => <div className = "two wide orange column center aligned" key={member.id}>{member.nickName}</div>);
             var transactions = this.props.transactions.map( transaction=>
                             <Transaction  key={transaction.id} eventId = {this.props.eventId}
                                         token = {this.props.token} transaction={transaction}
-                                        LoadMembers={this.props.LoadMembers}
-                                        LoadTransactions={this.props.LoadTransactions}/> );
+                                        LoadMembers={this.props.LoadMembers}/> );
 		return (
 
                 <div className= "ui container">
                     <div>
                         <div className="ui grid">
                             <div className="row">
-                               <div className = "column"><p> </p></div>
+                               <div className = "two wide orange column center aligned"><p> </p></div>
                                {membernames}
                             </div>
                                {transactions}

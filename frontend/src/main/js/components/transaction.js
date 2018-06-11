@@ -17,7 +17,6 @@ class Transaction extends React.Component {
             cache: false,
             success: function(data){
                this.props.LoadMembers();
-               this.props.LoadTransactions();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
@@ -35,7 +34,7 @@ class Transaction extends React.Component {
             data: JSON.stringify(newTransaction),
             cache: false,
             success: function(data) {
-               this.props.LoadTransactions()
+               this.props.LoadMembers()
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
@@ -70,8 +69,7 @@ class Transaction extends React.Component {
 	                         bcreditAutoCalculated={transactionitem.bcreditAutoCalculated}
                              debit = {transactionitem.debit}
 	                         credit = {transactionitem.credit}
-	                         LoadMembers={this.props.LoadMembers}
-	                         LoadTransactions={this.props.LoadTransactions}/>)
+	                         LoadMembers={this.props.LoadMembers}/>)
 	    return (
 			<div className="row">
 				<div className = "two wide column"><input type="text" name = "name"

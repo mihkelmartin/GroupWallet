@@ -23,13 +23,14 @@ class EventDashBoard extends React.Component {
             success: function(data) {
                 data.sort(function(a,b) {return (a.order > b.order) ? 1 : ((b.order> a.order) ? -1 : 0);} );
                 this.setState({members : data});
+                this.LoadTransactions(data);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
             }.bind(this)
         });
     }
-    LoadTransactions = () => {
+    LoadTransactions = (members) => {
         var url = getBackEndUrl() + 'Transactions/' + this.props.eventId + '/' + this.props.token;
         $.ajax({
             url: url,
@@ -37,6 +38,18 @@ class EventDashBoard extends React.Component {
             cache: false,
             success: function(data) {
                 data.sort(function(a,b) {return (a.order < b.order) ? 1 : ((b.order < a.order) ? -1 : 0);} );
+                data.forEach(
+                    function(element){
+                        element.items.sort(
+                            function(a,b){
+                                var memberA = members.find(function(element){return element.id === a.memberId});
+                                var memberB = members.find(function(element){return element.id === b.memberId});
+                                console.log('A:' + memberA.order + ' B:' + memberB.order);
+                                return (memberA.order > memberB.order) ? 1 : ((memberB.order > memberA.order) ? -1 : 0);
+                            }.bind(this)
+                        );
+                    }.bind(this)
+                );
                 this.setState({transactions : data});
             }.bind(this),
             error: function(xhr, status, err) {
@@ -47,7 +60,6 @@ class EventDashBoard extends React.Component {
 
     componentDidMount() {
         this.LoadMembers();
-        this.LoadTransactions();
     }
  	render() {
 		return (
@@ -56,13 +68,11 @@ class EventDashBoard extends React.Component {
                 <div className="ui divider"></div>
                 <MemberList eventId = {this.props.eventId} token = {this.props.token}
                     members={this.state.members}
-                    LoadMembers={this.LoadMembers}
-                    LoadTransactions={this.LoadTransactions}/>
+                    LoadMembers={this.LoadMembers}/>
                 <div className="ui divider"></div>
                 <TransactionList eventId = {this.props.eventId} token = {this.props.token}
                         members={this.state.members} transactions={this.state.transactions}
-                        LoadMembers={this.LoadMembers}
-                        LoadTransactions={this.LoadTransactions}/>
+                        LoadMembers={this.LoadMembers}/>
                 <div className="ui divider"></div>
 		    </div>
 		)

@@ -18,7 +18,6 @@ class Member extends React.Component {
             cache: false,
             success: function(data){
                this.props.LoadMembers();
-               this.props.LoadTransactions();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
@@ -36,7 +35,6 @@ class Member extends React.Component {
             cache: false,
             success: function(data) {
               this.props.LoadMembers();
-               this.props.LoadTransactions()
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(err.toString());
@@ -65,12 +63,12 @@ class Member extends React.Component {
 	render() {
 		return (
             <div className="row">
-				<div className = "two wide orange column center aligned">
+				<div className = "three wide orange column center aligned">
 				    <div className = "ui fluid input">
 				        <input type = "text" name="name" value={this.state.member.name} onChange = {this.onInputChange}/>
 				    </div>
                 </div>
-				<div className = "two wide orange column center aligned">
+				<div className = "three wide orange column center aligned">
 				    <div className = "ui fluid input">
                         <input type = "text" name="nickName" value={this.state.member.nickName} onChange = {this.onInputChange}/>
                     </div>
