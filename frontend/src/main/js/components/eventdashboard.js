@@ -16,7 +16,6 @@ class EventDashBoard extends React.Component {
 	state = {members: [], transactions : []};
     LoadMembers = () => {
         var url = getBackEndUrl() + 'Members/' + this.props.eventId + '/' + this.props.token;
-        console.log(url);
         $.ajax({
             url: url,
             dataType: 'json',
@@ -32,7 +31,6 @@ class EventDashBoard extends React.Component {
     }
     LoadTransactions = () => {
         var url = getBackEndUrl() + 'Transactions/' + this.props.eventId + '/' + this.props.token;
-        console.log(url);
         $.ajax({
             url: url,
             dataType: 'json',
@@ -63,6 +61,7 @@ class EventDashBoard extends React.Component {
                 <div className="ui divider"></div>
                 <TransactionList eventId = {this.props.eventId} token = {this.props.token}
                         members={this.state.members} transactions={this.state.transactions}
+                        LoadMembers={this.LoadMembers}
                         LoadTransactions={this.LoadTransactions}/>
                 <div className="ui divider"></div>
 		    </div>

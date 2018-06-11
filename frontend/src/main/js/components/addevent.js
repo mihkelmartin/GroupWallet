@@ -37,7 +37,6 @@ class AddEvent extends React.Component {
         var url = getBackEndUrl() + '/Event/add/' + token;
         var eventJson = '{"name" : "' + this.refs.eventNameField.value +
                           '", "ownerEmail" : "' + this.refs.eMailField.value + '"}';
-        console.log(eventJson);
         $.ajax({
             url: url,
             type: "POST",

@@ -9,7 +9,6 @@ class TransactionList extends React.Component {
 
     handleNewTransaction = () => {
         var url = getBackEndUrl() + 'Transactions/add/' + this.props.eventId + '/' + this.props.token;
-        console.log(url);
         $.ajax({
             url: url,
             dataType: 'text',
@@ -24,26 +23,28 @@ class TransactionList extends React.Component {
     }
 
 	render() {
-            var membernames = this.props.members.map( member => <th key={member.id} className = "center aligned">{member.nickName}</th>);
+            var membernames = this.props.members.map( member => <div className = "column center aligned" key={member.id}>{member.nickName}</div>);
             var transactions = this.props.transactions.map( transaction=>
                             <Transaction  key={transaction.id} eventId = {this.props.eventId}
                                         token = {this.props.token} transaction={transaction}
+                                        LoadMembers={this.props.LoadMembers}
                                         LoadTransactions={this.props.LoadTransactions}/> );
 		return (
-                <div>
-                    <table className="ui collapsing celled table">
-                        <tbody>
-                            <tr>
-     				           <td><p> </p></td>
+
+                <div className= "ui container">
+                    <div>
+                        <div className="ui grid">
+                            <div className="row">
+                               <div className = "column"><p> </p></div>
                                {membernames}
-                            </tr>
+                            </div>
                                {transactions}
-                        </tbody>
-                    </table>
-                    <div className='ui basic content center aligned segment'>
-                        <button className='ui basic button icon' onClick={this.handleNewTransaction}>
-                            <i className='plus icon' />
-                        </button>
+                        </div>
+                        <div className='ui basic content center aligned segment'>
+                            <button className='ui basic button icon' onClick={this.handleNewTransaction}>
+                                <i className='plus icon' />
+                            </button>
+                        </div>
                     </div>
                 </div>
 		)

@@ -1,6 +1,5 @@
 const React = require('react');
 var $ = require('jquery');
-
 import {getBackEndUrl} from './getProperties';
 
 class Member extends React.Component {
@@ -13,7 +12,6 @@ class Member extends React.Component {
     handleDeleteMember = () => {
         var url = getBackEndUrl() + 'Members/remove/' + this.props.eventId + '/' +
                     this.props.token + '/' + this.props.member.id;
-        console.log(url);
         $.ajax({
             url: url,
             dataType: 'text',
@@ -28,18 +26,16 @@ class Member extends React.Component {
         });
     }
 
-    handleUpdateMember = () => {
+    handleUpdateMember = (newMember) => {
         var url = getBackEndUrl() + '/Members/update/' + this.props.eventId + '/' + this.props.token;
-   	    console.log('before call' + this.state.member);
         $.ajax({
             url: url,
             type: "POST",
             contentType: 'application/json;charset=UTF-8',
-            data: JSON.stringify(this.state.member),
+            data: JSON.stringify(newMember),
             cache: false,
             success: function(data) {
-         	    console.log('handleUpdateMember ' + this.state.member);
-               this.props.LoadMembers();
+              this.props.LoadMembers();
                this.props.LoadTransactions()
             }.bind(this),
             error: function(xhr, status, err) {
@@ -48,50 +44,45 @@ class Member extends React.Component {
         });
     }
 
-    onNameChange = (e) => {
-        var newName = e.target.value;
-        this.setState(prevState => ({
-          member: Object.assign({}, prevState.member, {name: newName})
-        }), this.handleUpdateMember());
-    }
-
-    onNickNameChange = (e) => {
-        var newNickName = e.target.value;
-   	    console.log('var ' + newNickName);
-        this.setState(prevState => ({
-          member: Object.assign({}, prevState.member, {nickName: newNickName})
-        }), this.handleUpdateMember());
+    onInputChange = (e) => {
+        const newMember = Object.assign({}, this.state.member);
+        newMember[e.target.name] = e.target.value;
+   	    this.setState({member: newMember});
+        this.handleUpdateMember(newMember);
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if(prevState.prevMember.name === nextProps.member.name)
+        if(prevState.prevMember.name === nextProps.member.name &&
+           prevState.prevMember.nickName === nextProps.member.nickName &&
+            prevState.prevMember.eMail=== nextProps.member.eMail &&
+            prevState.prevMember.bankAccount === nextProps.member.bankAccount)
             return null;
+
         return {member: nextProps.member,
                 prevMember: nextProps.member}
     }
 
 	render() {
-	    console.log(this.state.member);
 		return (
             <div className="row">
 				<div className = "two wide orange column center aligned">
 				    <div className = "ui fluid input">
-				        <input type = "text" value={this.state.member.name} onChange = {this.onNameChange}/>
+				        <input type = "text" name="name" value={this.state.member.name} onChange = {this.onInputChange}/>
 				    </div>
                 </div>
 				<div className = "two wide orange column center aligned">
 				    <div className = "ui fluid input">
-                        <input type = "text" value={this.state.member.nickName} onChange = {this.onNickNameChange}/>
+                        <input type = "text" name="nickName" value={this.state.member.nickName} onChange = {this.onInputChange}/>
                     </div>
                 </div>
 				<div className = "three wide orange column center aligned">
                     <div className = "ui fluid input">
-                        <input type = "text" value={this.state.member.eMail}/>
+                        <input type = "text" name="eMail" value={this.state.member.eMail} onChange = {this.onInputChange}/>
                     </div>
                 </div>
 				<div className = "three wide orange column center aligned">
 				    <div className = "ui fluid input">
-                        <input type = "text" value={this.state.member.bankAccount}/>
+                        <input type = "text" name="bankAccount" value={this.state.member.bankAccount} onChange = {this.onInputChange}/>
                     </div>
                 </div>
 				<div className = "three wide orange column center aligned">

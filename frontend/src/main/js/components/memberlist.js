@@ -8,8 +8,7 @@ class MemberList extends React.Component {
 
     handleNewMember = () => {
         var url = getBackEndUrl() + 'Members/add/' + this.props.eventId + '/' + this.props.token;
-        console.log(url);
-        $.ajax({
+         $.ajax({
             url: url,
             dataType: 'text',
             cache: false,

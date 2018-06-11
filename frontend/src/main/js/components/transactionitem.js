@@ -20,7 +20,6 @@ class TransactionItem extends React.Component {
         var url = getBackEndUrl() + 'Transactions/addCredit/' + this.props.eventId + '/' +
                     this.props.token + '/' + this.props.transactionId + '/' + this.props.memberId +
                     '/' + this.state.credit;
-        console.log(url);
         $.ajax({
             url: url,
             dataType: 'text',
@@ -40,7 +39,6 @@ class TransactionItem extends React.Component {
         var url = getBackEndUrl() + 'Transactions/addDebit/' + this.props.eventId + '/' +
                     this.props.token + '/' + this.props.transactionId + '/' + this.props.memberId +
                     '/' + this.state.debit;
-        console.log(url);
         $.ajax({
             url: url,
             dataType: 'text',
@@ -58,7 +56,6 @@ class TransactionItem extends React.Component {
         var url = getBackEndUrl() + 'Transactions/setAutoCalc/' + this.props.eventId + '/' +
                     this.props.token + '/' + this.props.transactionId + '/' + this.props.memberId +
                     '/' + e.target.checked;
-        console.log(url);
         $.ajax({
             url: url,
             dataType: 'text',
@@ -98,7 +95,7 @@ class TransactionItem extends React.Component {
 
 	render() {
         return (
-            <td>
+            <div className = "column">
                 <form onSubmit={this.onAddDebit}>
                     <div className="ui input mini">
                        <input type="number" step="0.01" min="0" max="999999.99" pattern="\d+(\.\d{2})?"
@@ -118,7 +115,7 @@ class TransactionItem extends React.Component {
                        <label>Credit calculated?</label>
                     </div>
                 </form>
-            </td>
+            </div>
 	    )
 	}
 }
