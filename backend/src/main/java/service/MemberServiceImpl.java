@@ -28,6 +28,8 @@ public class MemberServiceImpl implements MemberService {
 
         Member retVal = new Member();
         retVal.update(newMember);
+        // Set Payour to itself
+        retVal.setPayor(retVal.getId());
 
         event.getMembers().add(retVal);
         memberDao.add(retVal);

@@ -30,7 +30,7 @@ class MemberList extends React.Component {
 		return (
             <div>
                 <div className= "ui container">
-                    <div className="ui seven column padded grid">
+                    <div className="ui seven column grid">
                         <div className="row">
                             <div className = "three wide green column">
                                 <div className = "ui center aligned inverted green raised segment">

@@ -72,7 +72,7 @@ class Transaction extends React.Component {
 	                         LoadMembers={this.props.LoadMembers}/>)
 	    return (
 			<div className="row">
-				<div className = "three wide grey column center aligned">
+				<div className = "three wide grey column stretched center aligned">
                     <div className = "ui fluid input">
                         <input type="text" name = "name"
 				            defaultValue={this.state.transaction.name} onChange = {this.onInputChange}/>

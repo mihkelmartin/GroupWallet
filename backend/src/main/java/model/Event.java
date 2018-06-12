@@ -7,7 +7,11 @@ import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
 import org.springframework.lang.NonNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.UUID;
+
 
 /**
  * Created by mihkel on 5.04.2018.
@@ -135,6 +139,7 @@ public class Event {
     public int getNextOrderNr(ArrayList arrayList){
         int newOrderNr = 1;
         if(!arrayList.isEmpty()){
+            Collections.sort(arrayList);
             Collections.reverse(arrayList);
             newOrderNr = ((Ordered)arrayList.get(0)).getOrder() + 1;
         }
