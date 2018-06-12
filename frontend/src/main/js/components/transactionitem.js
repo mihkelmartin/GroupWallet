@@ -98,7 +98,7 @@ class TransactionItem extends React.Component {
 
 	render() {
         return (
-            <div className = "two wide orange column center aligned">
+            <div className = "two wide grey column center aligned">
                 <form onSubmit={this.onAddDebit}>
                     <div className="ui input mini">
                        <input type="number" step="0.01" min="0" max="999999.99" pattern="\d+(\.\d{2})?"
@@ -115,7 +115,7 @@ class TransactionItem extends React.Component {
                     <div className="ui input mini">
                        <input type="checkbox" checked={this.state.bcreditAutoCalculated}
                             onChange={this.onbcreditAutoCalculatedChange}/>
-                       <label>Credit calculated?</label>
+                       <label>Autocalc ?</label>
                     </div>
                 </form>
             </div>

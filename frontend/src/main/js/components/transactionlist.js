@@ -23,29 +23,27 @@ class TransactionList extends React.Component {
     }
 
 	render() {
-            var membernames = this.props.members.map( member => <div className = "two wide orange column center aligned" key={member.id}>{member.nickName}</div>);
+            var membernames = this.props.members.map( member => <div className = "two wide blue column center aligned" key={member.id}>{member.nickName}</div>);
             var transactions = this.props.transactions.map( transaction=>
                             <Transaction  key={transaction.id} eventId = {this.props.eventId}
                                         token = {this.props.token} transaction={transaction}
                                         LoadMembers={this.props.LoadMembers}/> );
 		return (
-
-                <div className= "ui container center">
-                    <div>
-                        <div className='ui basic content center aligned segment'>
-                            <button className='ui basic button icon' onClick={this.handleNewTransaction}>
-                                Add transaction  <i className='plus icon' />
-                            </button>
-                        </div>
-                        <div className="ui grid">
-                            <div className="row">
-                               <div className = "three wide orange column center aligned"><p> </p></div>
-                               {membernames}
-                            </div>
-                               {transactions}
-                        </div>
-                    </div>
+            <div className= "ui container">
+                <div className='ui basic content center aligned segment'>
+                    <button className='ui basic blue button icon' onClick={this.handleNewTransaction}>
+                        Add transaction  <i className='plus icon' />
+                    </button>
                 </div>
+                <div className="ui grid center aligned">
+                    <div className="row">
+                       <div className = "three wide blue column center aligned"><p></p></div>
+                       {membernames}
+                       <div className = "one wide blue column center aligned"><p></p></div>
+                    </div>
+                    {transactions}
+                </div>
+            </div>
 		)
 	}
 }

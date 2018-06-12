@@ -67,37 +67,39 @@ class Member extends React.Component {
                                                           </option> );
 		return (
             <div className="row">
-				<div className = "three wide orange column center aligned">
+				<div className = "three wide light grey column center aligned">
 				    <div className = "ui fluid input">
 				        <input type = "text" name="name" value={this.state.member.name} onChange = {this.onInputChange}/>
 				    </div>
                 </div>
-				<div className = "two wide orange column center aligned">
+				<div className = "two wide light grey column center aligned">
 				    <div className = "ui fluid input">
                         <input type = "text" name="nickName" value={this.state.member.nickName} onChange = {this.onInputChange}/>
                     </div>
                 </div>
-				<div className = "three wide orange column center aligned">
+				<div className = "three wide light grey column center aligned">
                     <div className = "ui fluid input">
                         <input type = "text" name="eMail" value={this.state.member.eMail} onChange = {this.onInputChange}/>
                     </div>
                 </div>
-				<div className = "three wide orange column center aligned">
+				<div className = "three wide light grey column center aligned">
 				    <div className = "ui fluid input">
                         <input type = "text" name="bankAccount" value={this.state.member.bankAccount} onChange = {this.onInputChange}/>
                     </div>
                 </div>
-				<div className = "two wide orange column center aligned">
+				<div className = "two wide light grey column center aligned">
 				    <div className = "ui fluid input">
 				        <select defaultValue={this.state.member.payor} name="payor" onChange = {this.onInputChange}>
 				            {options}
 				        </select>
                     </div>
                 </div>
-                <div className = "two wide orange column center aligned">
+                <div className = "two wide light grey column center aligned">
                     <p>{parseFloat(this.state.member.debit-this.state.member.credit).toFixed(2)}</p>
                 </div>
-                <i className="trash icon" onClick={this.handleDeleteMember}></i>
+                <div className = "one wide light grey column center aligned">
+                    <i className="trash icon" onClick={this.handleDeleteMember}></i>
+                </div>
 			</div>
 	    )
 	}

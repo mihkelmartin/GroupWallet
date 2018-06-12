@@ -29,57 +29,58 @@ class MemberList extends React.Component {
                                                                 LoadMembers={this.props.LoadMembers}/> );
 		return (
             <div>
-                <div className= "ui container center aligned">
+                <div className= "ui container">
                     <div className="ui seven column padded grid">
                         <div className="row">
-                            <div className = "three wide orange column">
-                                <div className = "ui center aligned inverted orange raised segment">
-                                    <h2 className = "ui teal large header">
+                            <div className = "three wide green column">
+                                <div className = "ui center aligned inverted green raised segment">
+                                    <h3 className = "ui header">
                                         Name
-                                    </h2>
+                                    </h3>
                                 </div>
                             </div>
-                            <div className = "two wide orange column">
-                                <div className = "ui center aligned inverted orange raised segment">
-                                    <h2 className = "ui teal large header">
+                            <div className = "two wide green column">
+                                <div className = "ui center aligned inverted green raised segment">
+                                    <h3 className = "ui header">
                                         Nickname
-                                    </h2>
+                                    </h3>
                                 </div>
                             </div>
-                            <div className = "three wide orange column">
-                                <div className = "ui center aligned inverted orange raised segment">
-                                    <h2 className = "ui teal large header">
-                                        E-Mail
-                                    </h2>
+                            <div className = "three wide green column">
+                                <div className = "ui center aligned inverted green raised segment">
+                                    <h3 className = "ui header">
+                                        e-mail
+                                    </h3>
                                 </div>
                             </div>
-                            <div className = "three wide orange column">
-                                <div className = "ui center aligned inverted orange raised segment">
-                                    <h2 className = "ui teal large header">
-                                        Bankaccount
-                                    </h2>
+                            <div className = "three wide green column">
+                                <div className = "ui center aligned inverted green raised segment">
+                                    <h3 className = "ui header">
+                                        IBAN
+                                    </h3>
                                 </div>
                             </div>
-                            <div className = "two wide orange column">
-                                 <div className = "ui center aligned inverted orange raised segment">
-                                     <h2 className = "ui teal large header">
+                            <div className = "two wide green column">
+                                 <div className = "ui center aligned inverted green raised segment">
+                                     <h3 className = "ui header">
                                          Payor
-                                     </h2>
+                                     </h3>
                                  </div>
                             </div>
-                            <div className = "two wide orange column">
-                                 <div className = "ui center aligned inverted orange raised segment">
-                                     <h2 className = "ui teal large header">
+                            <div className = "two wide green column">
+                                 <div className = "ui center aligned inverted green raised segment">
+                                     <h3 className = "ui header">
                                          Saldo
-                                     </h2>
+                                     </h3>
                                  </div>
                             </div>
+                            <div className = "one wide green column center aligned"><p></p></div>
                         </div>
                         {members}
                     </div>
                 </div>
                 <div className='ui basic content center aligned segment'>
-                    <button className='ui basic button icon' onClick={this.handleNewMember}>
+                    <button className='ui basic green button icon' onClick={this.handleNewMember}>
                         Add member  <i className='plus icon' />
                     </button>
                 </div>
