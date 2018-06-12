@@ -19,7 +19,6 @@ class Groupwallet extends React.Component {
     state = {selectedEvent:''};
 
     handleEventSelected = (eventSelected, pin) => {
-         console.log(pin);
         if(pin){
             var url = getBackEndUrl() + 'login/' + eventSelected + '/' + pin;
             console.log(url);

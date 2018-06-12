@@ -30,19 +30,19 @@ class TransactionList extends React.Component {
                                         LoadMembers={this.props.LoadMembers}/> );
 		return (
 
-                <div className= "ui container">
+                <div className= "ui container center">
                     <div>
+                        <div className='ui basic content center aligned segment'>
+                            <button className='ui basic button icon' onClick={this.handleNewTransaction}>
+                                Add transaction  <i className='plus icon' />
+                            </button>
+                        </div>
                         <div className="ui grid">
                             <div className="row">
-                               <div className = "two wide orange column center aligned"><p> </p></div>
+                               <div className = "three wide orange column center aligned"><p> </p></div>
                                {membernames}
                             </div>
                                {transactions}
-                        </div>
-                        <div className='ui basic content center aligned segment'>
-                            <button className='ui basic button icon' onClick={this.handleNewTransaction}>
-                                <i className='plus icon' />
-                            </button>
                         </div>
                     </div>
                 </div>

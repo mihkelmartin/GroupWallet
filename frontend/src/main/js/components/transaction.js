@@ -5,8 +5,8 @@ import {getBackEndUrl} from './getProperties';
 
 class Transaction extends React.Component {
 
-    state = {transaction : {"id": "", "bmanualCalculation": "", "order": ""},
-             prevTransaction : {"id": "", "bmanualCalculation": "", "order": ""}};
+    state = {transaction : '',
+             prevTransaction : ''};
 
     handleDeleteTransaction = () => {
         var url = getBackEndUrl() + '/Transactions/remove/' + this.props.eventId + '/' +
@@ -72,8 +72,12 @@ class Transaction extends React.Component {
 	                         LoadMembers={this.props.LoadMembers}/>)
 	    return (
 			<div className="row">
-				<div className = "two wide column"><input type="text" name = "name"
-				    defaultValue={this.state.transaction.name} onChange = {this.onInputChange}/></div>
+				<div className = "three wide orange column center aligned">
+                    <div className = "ui fluid input">
+                        <input type="text" name = "name"
+				            defaultValue={this.state.transaction.name} onChange = {this.onInputChange}/>
+				    </div>
+				</div>
 				{transactionitems}
 				<div className = "column"><i className="trash icon" onClick={this.handleDeleteTransaction}></i></div>
 			</div>

@@ -37,11 +37,12 @@ public class Member implements Comparable<Member>, Ordered {
     }
 
     public void update(Member member) {
-        setName(member.name);
-        setNickName(member.nickName);
-        seteMail(member.eMail);
-        setBankAccount(member.bankAccount);
-        setOrder(member.order);
+        setName(member.getName());
+        setNickName(member.getNickName());
+        seteMail(member.geteMail());
+        setBankAccount(member.getBankAccount());
+        setOrder(member.getOrder());
+        setPayor(member.getPayor());
         setEvent(member.getEvent());
     }
 

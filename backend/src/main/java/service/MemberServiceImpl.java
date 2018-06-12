@@ -7,6 +7,7 @@ import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import repository.MemberDao;
 
+import java.util.ArrayList;
 
 /**
  * Created by mihkel on 11.04.2018.
@@ -55,13 +56,22 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void calculateMemberMoney(Member member) {
+
         member.setDebit(0.0);
         member.setCredit(0.0);
-        for(Transaction transaction : member.getEvent().getTransactions()){
-            for(TransactionItem transactionItem : transaction.getItems()){
-                if(transactionItem.getMemberId().equals(member.getId())) {
-                    member.setCredit(member.getCredit() + transactionItem.getCredit());
-                    member.setDebit(member.getDebit() + transactionItem.getDebit());
+
+        Event event = member.getEvent();
+        ArrayList<Transaction> transactions= event.getTransactions();
+
+        for(Member slave : event.getMembers()) {
+            if(member.getId().equals(slave.getPayor())) {
+                for (Transaction transaction : transactions) {
+                    for (TransactionItem transactionItem : transaction.getItems()) {
+                        if (transactionItem.getMemberId().equals(slave.getId())) {
+                            member.setCredit(member.getCredit() + transactionItem.getCredit());
+                            member.setDebit(member.getDebit() + transactionItem.getDebit());
+                        }
+                    }
                 }
             }
         }

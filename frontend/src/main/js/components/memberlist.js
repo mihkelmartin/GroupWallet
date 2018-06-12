@@ -22,13 +22,15 @@ class MemberList extends React.Component {
     }
 
 	render() {
-     	var members = this.props.members.map( (member) => <Member key={member.id} eventId = {this.props.eventId}
-                                                                LoadMembers={this.props.LoadMembers}
-     	                                                       token = {this.props.token} member={member}/> );
+     	var members = this.props.members.map( (member) => <Member key={member.id} eventId={this.props.eventId}
+     	                                                        token = {this.props.token}
+     	                                                        members={this.props.members}
+     	                                                        member={member}
+                                                                LoadMembers={this.props.LoadMembers}/> );
 		return (
             <div>
-                <div className= "ui container">
-                    <div className="ui six column grid">
+                <div className= "ui container center aligned">
+                    <div className="ui seven column padded grid">
                         <div className="row">
                             <div className = "three wide orange column">
                                 <div className = "ui center aligned inverted orange raised segment">
@@ -37,7 +39,7 @@ class MemberList extends React.Component {
                                     </h2>
                                 </div>
                             </div>
-                            <div className = "three wide orange column">
+                            <div className = "two wide orange column">
                                 <div className = "ui center aligned inverted orange raised segment">
                                     <h2 className = "ui teal large header">
                                         Nickname
@@ -58,20 +60,27 @@ class MemberList extends React.Component {
                                     </h2>
                                 </div>
                             </div>
-                            <div className = "three wide orange column">
+                            <div className = "two wide orange column">
                                  <div className = "ui center aligned inverted orange raised segment">
                                      <h2 className = "ui teal large header">
                                          Payor
                                      </h2>
                                  </div>
-                             </div>
+                            </div>
+                            <div className = "two wide orange column">
+                                 <div className = "ui center aligned inverted orange raised segment">
+                                     <h2 className = "ui teal large header">
+                                         Saldo
+                                     </h2>
+                                 </div>
+                            </div>
                         </div>
                         {members}
                     </div>
                 </div>
                 <div className='ui basic content center aligned segment'>
                     <button className='ui basic button icon' onClick={this.handleNewMember}>
-                        <i className='plus icon' />
+                        Add member  <i className='plus icon' />
                     </button>
                 </div>
             </div>

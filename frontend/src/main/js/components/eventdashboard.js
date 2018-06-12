@@ -44,7 +44,6 @@ class EventDashBoard extends React.Component {
                             function(a,b){
                                 var memberA = members.find(function(element){return element.id === a.memberId});
                                 var memberB = members.find(function(element){return element.id === b.memberId});
-                                console.log('A:' + memberA.order + ' B:' + memberB.order);
                                 return (memberA.order > memberB.order) ? 1 : ((memberB.order > memberA.order) ? -1 : 0);
                             }.bind(this)
                         );
