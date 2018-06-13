@@ -51,11 +51,11 @@ class Event extends React.Component {
 
 	render() {
 		return (
-            <div className='ui centered card'>
+            <div className='ui centered blue card'>
                 <div className='content'>
                     <div className='header'>
                       <input type="text" value={this.state.eventName} onChange={this.handleEventNameChange}/>
-                        <span className='right floated trash icon'>
+                        <span className='right floated blue icon'>
                             <i className='trash icon' />
                         </span>
                     </div>

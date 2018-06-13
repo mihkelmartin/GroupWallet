@@ -32,55 +32,55 @@ class MemberList extends React.Component {
                 <div className= "ui container">
                     <div className="ui seven column grid">
                         <div className="row">
-                            <div className = "three wide green column">
-                                <div className = "ui center aligned inverted green raised segment">
+                            <div className = "three wide blue column">
+                                <div className = "ui center aligned inverted blue raised segment">
                                     <h3 className = "ui header">
                                         Name
                                     </h3>
                                 </div>
                             </div>
-                            <div className = "two wide green column">
-                                <div className = "ui center aligned inverted green raised segment">
+                            <div className = "two wide blue column">
+                                <div className = "ui center aligned inverted blue raised segment">
                                     <h3 className = "ui header">
                                         Nickname
                                     </h3>
                                 </div>
                             </div>
-                            <div className = "three wide green column">
-                                <div className = "ui center aligned inverted green raised segment">
+                            <div className = "three wide blue column">
+                                <div className = "ui center aligned inverted blue raised segment">
                                     <h3 className = "ui header">
                                         e-mail
                                     </h3>
                                 </div>
                             </div>
-                            <div className = "three wide green column">
-                                <div className = "ui center aligned inverted green raised segment">
+                            <div className = "three wide blue column">
+                                <div className = "ui center aligned inverted blue raised segment">
                                     <h3 className = "ui header">
                                         IBAN
                                     </h3>
                                 </div>
                             </div>
-                            <div className = "two wide green column">
-                                 <div className = "ui center aligned inverted green raised segment">
+                            <div className = "two wide blue column">
+                                 <div className = "ui center aligned inverted blue raised segment">
                                      <h3 className = "ui header">
                                          Payor
                                      </h3>
                                  </div>
                             </div>
-                            <div className = "two wide green column">
-                                 <div className = "ui center aligned inverted green raised segment">
+                            <div className = "two wide blue column">
+                                 <div className = "ui center aligned inverted blue raised segment">
                                      <h3 className = "ui header">
                                          Saldo
                                      </h3>
                                  </div>
                             </div>
-                            <div className = "one wide green column center aligned"><p></p></div>
+                            <div className = "one wide blue column center aligned"><p></p></div>
                         </div>
                         {members}
                     </div>
                 </div>
                 <div className='ui basic content center aligned segment'>
-                    <button className='ui basic green button icon' onClick={this.handleNewMember}>
+                    <button className='ui basic blue button icon' onClick={this.handleNewMember}>
                         Add member  <i className='plus icon' />
                     </button>
                 </div>

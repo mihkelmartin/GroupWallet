@@ -60,13 +60,21 @@ class AddEvent extends React.Component {
 	render() {
 		return (
 		<form onSubmit={this.onSubmit}>
-            <div className='ui centered card'>
+            <div className='ui centered blue card'>
                 <div className='content'>
                     <div className='header'>
-                        <input ref="eventNameField" type="text" placeholder="Event name"/>
-                        <input ref="eMailField" type="text" placeholder="e-mail"/>
+                        <div className = "ui fluid input">
+                            <input ref="eventNameField" type="text" placeholder="Event name"/>
+                        </div>
+                        <br></br>
+                        <div className = "ui fluid input">
+                            <input ref="eMailField" type="email" placeholder="e-mail"/>
+                        </div>
                         <input type="submit" style={{display:"none"}}/>
-                        <p>{this.state.msgText}</p>
+                        <br></br>
+                        <div className = "ui label">
+                            <a>{this.state.msgText}</a>
+                        </div>
                         <ReCAPTCHA
                           ref={(el) => { captcha = el; }}
                           size="invisible"

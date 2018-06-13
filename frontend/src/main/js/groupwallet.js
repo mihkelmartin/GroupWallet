@@ -27,7 +27,7 @@ class Groupwallet extends React.Component {
                 dataType: 'text',
                 cache: false,
                 success: function(data) {
-                    history.replace({ pathname: '/Event/'+ eventSelected + '/' + data});
+                    history.push({ pathname: '/Event/'+ eventSelected + '/' + data});
                     this.setState({selectedEvent: eventSelected});
               }.bind(this),
                 error: function(xhr, status, err) {

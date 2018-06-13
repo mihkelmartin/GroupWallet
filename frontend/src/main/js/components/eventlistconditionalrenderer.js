@@ -9,13 +9,11 @@ export function EventListConditionalRender(props){
 
     let result = [];
 
-    const plusbutton =  <div key ="plusButton" className="ui centered header">
-                            <div className='ui basic content center aligned segment'>
-                                <button className='ui basic button icon' onClick={setNewFormVisibility}>
-                                    <i className='plus icon' />
-                                </button>
-                            </div>
-                         </div>;
+    const plusbutton =  <div key ="plusButton" className='ui basic content center aligned segment'>
+                            <button className='ui basic blue button icon' onClick={setNewFormVisibility}>
+                                Add event  <i className='plus icon' />
+                            </button>
+                        </div>;
 
     const eventlist =  <EventList key ="eventList" events={props.this.state.events} onEventSelected = {props.this.props.onEventSelected}/>;
 

@@ -18,7 +18,7 @@ class SearchBar extends React.Component {
 	render() {
 		return (
 		<form onSubmit={this.onSubmit}>
-            <div className="ui centered header">
+            <div className="ui blue centered header">
                 <div className="icon input">
                     <input ref="eventEmail" type="text" placeholder="Event member e-mail..." value = {this.props.email}
                                             onFocus={this.setNewFormVisibility}/>

@@ -7,16 +7,25 @@ import {Link} from 'react-router-dom';
 // tag::EventElement[]
 class EventElement extends React.Component{
 
-    onEventClick = (e) => {
+    onSubmit = (e) => {
+        e.preventDefault();
         this.props.onEventSelected(this.props.event.id, this.refs.EventPIN.value);
     }
 
 	render() {
 		return (
-			<tr>
-				<td><Link to='/Event' onClick={this.onEventClick}>{this.props.event.name}</Link></td>
-				<td><input ref="EventPIN" type="number" placeholder="Enter PIN and click link" name="PIN" /></td>
-			</tr>
+			<div className="row" >
+                    <div className = "three wide column center aligned">
+                        <a>{this.props.event.name}</a>
+                    </div>
+                    <div className = "three wide column center aligned">
+                    <form onSubmit={this.onSubmit}>
+                        <div className = "ui fluid input">
+                            <input ref="EventPIN" type="number" placeholder="Enter PIN and press ENTER"/>
+                        </div>
+                    </form>
+				</div>
+			</div>
 		)
 	}
 }

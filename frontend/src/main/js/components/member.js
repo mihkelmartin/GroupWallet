@@ -79,7 +79,7 @@ class Member extends React.Component {
                 </div>
 				<div className = "three wide light grey column center aligned">
                     <div className = "ui fluid input">
-                        <input type = "text" name="eMail" value={this.state.member.eMail} onChange = {this.onInputChange}/>
+                        <input type = "email" name="eMail" value={this.state.member.eMail} onChange = {this.onInputChange}/>
                     </div>
                 </div>
 				<div className = "three wide light grey column center aligned">

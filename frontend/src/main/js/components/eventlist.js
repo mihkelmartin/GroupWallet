@@ -13,16 +13,12 @@ class EventList extends React.Component {
 			<EventElement key={event.id} event={event} onEventSelected = {this.props.onEventSelected}/>
 		);
 		return (
-            <div className='ui centered padded grid'>
-                    <table className="ui collapsing celled table">
-                        <tbody>
-                            <tr>
-                                <th className = "center aligned">Name</th>
-                                <th className = "center aligned">PIN</th>
-                            </tr>
-                            {events}
-                        </tbody>
-                    </table>
+            <div className='ui grid center aligned'>
+                <div className="row">
+                    <div className = "three wide blue column center aligned">Name</div>
+                    <div className = "three wide blue column center aligned">PIN</div>
+                </div>
+                {events}
             </div>
 		)
 	}
