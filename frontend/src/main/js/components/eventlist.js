@@ -14,10 +14,6 @@ class EventList extends React.Component {
 		);
 		return (
             <div className='ui grid center aligned'>
-                <div className="row">
-                    <div className = "three wide blue column center aligned">Name</div>
-                    <div className = "three wide blue column center aligned">PIN</div>
-                </div>
                 {events}
             </div>
 		)
