@@ -85,7 +85,8 @@ public class GroupWalletRESTServices {
             transaction.setName("Foodmarket");
             transactionService.add(event, transaction);
 
-            emailService.sendSimpleMessage(event.getOwnerEmail(), event.getName(),event.getPIN().toString());
+            emailService.sendSimpleMessage(event.getOwnerEmail(), event.getName(),
+                    LoginService.newEventMailContent.replaceAll("%PIN%",event.getPIN().toString()));
         }
         return event;
     }
