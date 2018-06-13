@@ -8,6 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class LoginService {
 
+    public static String newEventMailContent = "Welcome to Wallet for Team !\n\nYour PIN code is:%PIN%\n\n Thank You!";
+    public static String eventLockedMailContent = "Hi from Wallet for Team !\n\nDue to multiple failed logins Your event was locked.\n" +
+            "To unlock it, enter PUK code given below to PIN entry field and click to \'Reset PIN with PUK\' label.\n\nPUK code:%PUK%\n\n" +
+            "Thank You!";
+    public static String newPINMailContent = "Hi from Wallet for Team !\n\nNew PIN code was generated!\n\n" +
+            "Your new PIN code is:%PIN%\n\nThank You!";;
+
     @Autowired
     EventService eventService;
 
@@ -35,7 +42,7 @@ public class LoginService {
                event.generatePUK();
                eventService.save(event, event);
                emailService.sendSimpleMessage(event.getOwnerEmail(),
-                       event.getName() + " : PUK:",event.getPIN().toString());
+                       event.getName(),eventLockedMailContent.replaceAll("%PUK%",event.getPIN().toString()));
            }
         }
         return retVal;
@@ -49,7 +56,7 @@ public class LoginService {
                 event.generatePIN();
                 eventService.save(event, event);
                 emailService.sendSimpleMessage(event.getOwnerEmail(),
-                        event.getName() + " : New PIN:", event.getPIN().toString());
+                        event.getName(), newPINMailContent.replaceAll("%PIN%",event.getPIN().toString()));
             }
         }
         return retVal;
