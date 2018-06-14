@@ -14,9 +14,7 @@ class EventElement extends React.Component{
 	render() {
         var PINError;
         if(this.props.event.id === this.props.loginFailedEventID){
-            PINError =  <div className="ui red basic label">
-                          Incorrect PIN!
-                        </div>;
+            PINError =  <div className="floating ui red label">Incorrect PIN!</div>;
         }
 
 		return (
@@ -30,9 +28,9 @@ class EventElement extends React.Component{
                 <div className = "three wide column middle aligned">
                     <form name="PIN" onSubmit={this.onSubmit}>
                     <div className = "ui fluid input">
+                        {PINError}
                         <input ref="EventPIN" type="number" placeholder="Enter PIN and press ENTER"/>
                     </div>
-                    {PINError}
                     </form>
 				</div>
 			</div>
