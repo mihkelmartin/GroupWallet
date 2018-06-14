@@ -3,7 +3,6 @@
 // tag::vars[]
 const React = require('react');
 const ReactDOM = require('react-dom');
-var $ = require('jquery');
 
 import {Router, Switch, Route} from 'react-router-dom';
 
@@ -12,29 +11,14 @@ import EventDashBoard from './components/eventdashboard.js';
 import createHistory from "history/createBrowserHistory"
 const history = createHistory();
 
-import {getBackEndUrl} from './components/getProperties';
 
 class Groupwallet extends React.Component {
 
     state = {selectedEvent:''};
 
-    handleEventSelected = (eventSelected, pin) => {
-        if(pin){
-            var url = getBackEndUrl() + 'login/' + eventSelected + '/' + pin;
-            console.log(url);
-            $.ajax({
-                url: url,
-                dataType: 'text',
-                cache: false,
-                success: function(data) {
-                    history.push({ pathname: '/Event/'+ eventSelected + '/' + data});
-                    this.setState({selectedEvent: eventSelected});
-              }.bind(this),
-                error: function(xhr, status, err) {
-                    console.error(err.toString());
-                }.bind(this)
-            });
-        }
+    handleEventSelected = (eventSelected, data) => {
+        this.setState({selectedEvent: eventSelected});
+        history.push({ pathname: '/Event/'+ eventSelected + '/' + data});
     }
 	render() {
 		return (

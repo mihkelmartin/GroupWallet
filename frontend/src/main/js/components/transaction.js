@@ -49,15 +49,15 @@ class Transaction extends React.Component {
         this.handleUpdateTransaction(newTransaction);
     }
 
-        static getDerivedStateFromProps(nextProps, prevState) {
-            if(prevState.prevTransaction.name === nextProps.transaction.name &&
-               prevState.prevTransaction.order === nextProps.transaction.order &&
-                prevState.prevTransaction.bmanualCalculation === nextProps.transaction.bmanualCalculation)
-                return null;
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if(prevState.prevTransaction.name === nextProps.transaction.name &&
+           prevState.prevTransaction.order === nextProps.transaction.order &&
+            prevState.prevTransaction.bmanualCalculation === nextProps.transaction.bmanualCalculation)
+            return null;
 
-            return {transaction: nextProps.transaction,
-                    prevTransaction: nextProps.transaction}
-        }
+        return {transaction: nextProps.transaction,
+                prevTransaction: nextProps.transaction}
+    }
 
 	render() {
 	    var transactionitems = this.props.transaction.items.map(transactionitem =>

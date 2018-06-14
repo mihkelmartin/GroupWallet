@@ -1,7 +1,6 @@
 // tag::vars[]
 const React = require('react');
 var $ = require('jquery');
-var eventObject;
 var captcha;
 
 import ReCAPTCHA from 'react-google-recaptcha'
@@ -63,24 +62,30 @@ class AddEvent extends React.Component {
             <div className='ui centered blue card'>
                 <div className='content'>
                     <div className='header'>
+
                         <div className = "ui fluid input">
                             <input ref="eventNameField" type="text" placeholder="Event name"/>
                         </div>
                         <br></br>
+
                         <div className = "ui fluid input">
                             <input ref="eMailField" type="email" placeholder="e-mail"/>
                         </div>
                         <input type="submit" style={{display:"none"}}/>
+
                         <br></br>
+
                         <div className = "ui label">
                             <a>{this.state.msgText}</a>
                         </div>
+
                         <ReCAPTCHA
                           ref={(el) => { captcha = el; }}
                           size="invisible"
                           sitekey="6LdhaFwUAAAAAIorazYNYgkIr_sps2S2hrdMDxRa"
                           onChange={this.onChange}
                         />
+
                     </div>
                 </div>
             </div>

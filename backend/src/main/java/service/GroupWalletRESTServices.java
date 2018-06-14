@@ -38,26 +38,30 @@ public class GroupWalletRESTServices {
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
-    @GetMapping(path = "/login/{eventid}/{PIN}", produces = "text/plain")
+    @GetMapping(path = "/login/{eventid}/{PIN}/{ReCAPTCHAToken}", produces = "text/plain")
     @ResponseBody
-    public String loginEvent(@PathVariable String eventid, @PathVariable  Long PIN) {
+    public String loginEvent(@PathVariable String eventid, @PathVariable  Long PIN, @PathVariable String ReCAPTCHAToken) {
         String retVal = "";
-        Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(loginService.loginPIN(event, PIN)) {
-                retVal = event.generateToken();
-                eventService.save(event, event);
-            }
+        if(recaptchaService.verifyRecaptcha("",ReCAPTCHAToken).equals("")) {
+            Event event = eventService.loadEvent(eventid);
+            if (event != null)
+                if (loginService.loginPIN(event, PIN)) {
+                    retVal = event.generateToken();
+                    eventService.save(event, event);
+                }
+        }
         return retVal;
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
-    @GetMapping(path = "/puk/{eventid}/{PUK}")
+    @GetMapping(path = "/puk/{eventid}/{PUK}/{ReCAPTCHAToken}")
     @ResponseBody
-    public void resetPIN(@PathVariable String eventid, @PathVariable  Long PUK) {
-        Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            loginService.resetPIN(event, PUK);
+    public void resetPIN(@PathVariable String eventid, @PathVariable  Long PUK, @PathVariable String ReCAPTCHAToken) {
+        if(recaptchaService.verifyRecaptcha("",ReCAPTCHAToken).equals("")) {
+            Event event = eventService.loadEvent(eventid);
+            if (event != null)
+                loginService.resetPIN(event, PUK);
+        }
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
