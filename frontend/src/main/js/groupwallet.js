@@ -18,7 +18,10 @@ class Groupwallet extends React.Component {
 
     handleEventSelected = (eventSelected, data) => {
         this.setState({selectedEvent: eventSelected});
-        history.push({ pathname: '/Event/'+ eventSelected + '/' + data});
+        if(eventSelected !== '')
+            history.push({ pathname: '/Event/'+ eventSelected + '/' + data});
+        else
+            history.replace({ pathname: '/'});
     }
 	render() {
 		return (
@@ -26,7 +29,8 @@ class Groupwallet extends React.Component {
                 <Switch>
                   <Route exact path='/' render={(props) => <MainDashBoard{...props} onEventSelected = {this.handleEventSelected}/>}/>
                   <Route path='/Event/:eventId/:token' render={(props) => <EventDashBoard{...props}
-                        eventId = {props.match.params.eventId} token={props.match.params.token}/>}/>
+                        eventId = {props.match.params.eventId} token={props.match.params.token}
+                        onEventSelected = {this.handleEventSelected}/>}/>
                 </Switch>
             </Router>
         )

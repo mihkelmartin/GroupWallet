@@ -3,16 +3,14 @@ const React = require('react');
 var $ = require('jquery');
 var eventObject;
 
-import {getBackEndUrl} from './getProperties';
+import ReactModal from 'react-modal';
+import {getBackEndUrl, dialogStyles} from './getProperties';
+
+ReactModal.setAppElement('#react');
 
 class Event extends React.Component {
 
-	constructor(props) {
-        super(props);
-		this.state = {eventName:''};
-	    this.handleEventNameChange = this.handleEventNameChange.bind(this);
-
-	}
+	state = {eventName:'', bDeleteDialogOpen : false};
 
 	componentDidMount(){
         var url = getBackEndUrl() + 'Event/load/' + this.props.eventId + '/' + this.props.token;
@@ -31,7 +29,7 @@ class Event extends React.Component {
 
 	}
 
-    handleEventNameChange(event) {
+    handleEventNameChange = (event) => {
         this.setState({eventName: event.target.value});
         eventObject.name = event.target.value
         var url = getBackEndUrl() + '/Event/update/' + this.props.token;
@@ -49,17 +47,55 @@ class Event extends React.Component {
         });
     }
 
+    handleEventDelete = () => {
+        var url = getBackEndUrl() + '/Event/remove/' + this.props.eventId + '/' + this.props.token;
+        $.ajax({
+            url: url,
+            dataType: 'text',
+            cache: false,
+            success: function(data){
+                this.props.onEventSelected('','');
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(err.toString());
+            }.bind(this)
+        });
+        this.closeModal();
+    }
+
+    onEventDelete = (e) => {
+       this.setState({bDeleteDialogOpen : true});
+    }
+
+    closeModal = (e) => {
+       this.setState({bDeleteDialogOpen : false});
+    }
+
 	render() {
 		return (
-            <div className='ui centered blue card'>
-                <div className='content'>
-                    <div className='header'>
-                      <input type="text" value={this.state.eventName} onChange={this.handleEventNameChange}/>
-                        <span className='right floated blue icon'>
-                            <i className='trash icon' />
-                        </span>
+            <div>
+                <div className='ui centered blue card'>
+                    <div className='content'>
+                        <div className='header'>
+                          <input type="text" value={this.state.eventName} onChange={this.handleEventNameChange}/>
+                            <span className='right floated blue icon'>
+                                <i className='trash icon' onClick={this.onEventDelete} />
+                            </span>
+                        </div>
                     </div>
                 </div>
+                <ReactModal
+                    isOpen={this.state.bDeleteDialogOpen}
+                    onRequestClose={this.closeModal}
+                    style={dialogStyles}
+                    contentLabel='Delete Event?'>
+                    <p>This will delete event! It cannot be restored.</p>
+                    <p>Delete event?</p>
+                    <div className="ui two buttons">
+                      <div className="ui basic black button" onClick={this.handleEventDelete}>Yes</div>
+                      <div className="ui basic black button" onClick={this.closeModal}>No</div>
+                    </div>
+                </ReactModal>
             </div>
 		)
 	}
