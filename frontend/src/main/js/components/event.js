@@ -89,11 +89,11 @@ class Event extends React.Component {
                     onRequestClose={this.closeModal}
                     style={dialogStyles}
                     contentLabel='Delete Event?'>
-                    <p>This will delete event! It cannot be restored.</p>
-                    <p>Delete event?</p>
+                    <p>This will delete {this.state.eventName}! It cannot be restored.</p>
+                    <p>Delete {this.state.eventName}?</p>
                     <div className="ui two buttons">
-                      <div className="ui basic black button" onClick={this.handleEventDelete}>Yes</div>
-                      <div className="ui basic black button" onClick={this.closeModal}>No</div>
+                      <div className="ui basic blue button" onClick={this.handleEventDelete}>Yes</div>
+                      <div className="ui basic blue button" onClick={this.closeModal}>No</div>
                     </div>
                 </ReactModal>
             </div>

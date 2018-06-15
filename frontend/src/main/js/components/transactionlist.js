@@ -31,7 +31,7 @@ class TransactionList extends React.Component {
 		return (
             <div className= "ui container">
                 <div className='ui basic content center aligned segment'>
-                    <button className='ui basic blue button icon' onClick={this.handleNewTransaction}>
+                    <button className='ui basic green button icon' onClick={this.handleNewTransaction}>
                         Add transaction  <i className='plus icon' />
                     </button>
                 </div>

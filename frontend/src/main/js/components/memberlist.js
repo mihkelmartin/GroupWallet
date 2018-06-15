@@ -80,7 +80,7 @@ class MemberList extends React.Component {
                     </div>
                 </div>
                 <div className='ui basic content center aligned segment'>
-                    <button className='ui basic blue button icon' onClick={this.handleNewMember}>
+                    <button className='ui basic green button icon' onClick={this.handleNewMember}>
                         Add member  <i className='plus icon' />
                     </button>
                 </div>

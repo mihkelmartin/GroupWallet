@@ -1,12 +1,16 @@
 const React = require('react');
 import TransactionItem from './transactionitem.js';
 var $ = require('jquery');
-import {getBackEndUrl} from './getProperties';
+import ReactModal from 'react-modal';
+import {getBackEndUrl, dialogStyles} from './getProperties';
+
+ReactModal.setAppElement('#react');
 
 class Transaction extends React.Component {
 
     state = {transaction : '',
-             prevTransaction : ''};
+             prevTransaction : '',
+             bDeleteDialogOpen : false};
 
     handleDeleteTransaction = () => {
         var url = getBackEndUrl() + '/Transactions/remove/' + this.props.eventId + '/' +
@@ -59,6 +63,14 @@ class Transaction extends React.Component {
                 prevTransaction: nextProps.transaction}
     }
 
+    onTransactionDelete = (e) => {
+       this.setState({bDeleteDialogOpen : true});
+    }
+
+    closeModal = (e) => {
+       this.setState({bDeleteDialogOpen : false});
+    }
+
 	render() {
 	    var transactionitems = this.props.transaction.items.map(transactionitem =>
 	        <TransactionItem key={transactionitem.memberId}
@@ -80,8 +92,20 @@ class Transaction extends React.Component {
 				</div>
 				{transactionitems}
 				<div className = "one wide grey column center aligned">
-				    <i className="trash icon" onClick={this.handleDeleteTransaction}></i>
+				    <i className="trash icon" onClick={this.onTransactionDelete}></i>
 				</div>
+                <ReactModal
+                    isOpen={this.state.bDeleteDialogOpen}
+                    onRequestClose={this.closeModal}
+                    style={dialogStyles}
+                    contentLabel='Delete Transaction?'>
+                    <p>This will remove {this.state.transaction.name} from Event!</p>
+                    <p>Remove {this.state.transaction.name}?</p>
+                    <div className="ui two buttons">
+                      <div className="ui basic blue button" onClick={this.handleDeleteTransaction}>Yes</div>
+                      <div className="ui basic blue button" onClick={this.closeModal}>No</div>
+                    </div>
+                </ReactModal>
 			</div>
 	    )
 	}
