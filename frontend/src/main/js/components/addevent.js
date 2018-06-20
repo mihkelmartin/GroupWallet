@@ -17,11 +17,11 @@ class AddEvent extends React.Component {
     state = {msgText : 'Fill in and press Enter', eventname : '', email : ''};
 
     setResult = (data) => {
+        captcha.reset();
         if(data.id == null){
             this.setState({
                  msgText: 'Adding new event failed'
              });
-             captcha.reset();
 
         } else {
              this.props.setNewFormVisibility(false);
@@ -64,7 +64,7 @@ class AddEvent extends React.Component {
                     <div className='header'>
 
                         <div className = "ui fluid input">
-                            <input ref="eventNameField" type="text" placeholder="Event name"/>
+                            <input ref="eventNameField" type="text" maxLength="32" placeholder="Event name"/>
                         </div>
                         <br></br>
 

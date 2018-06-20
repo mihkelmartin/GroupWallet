@@ -23,7 +23,7 @@ class Transaction extends React.Component {
                this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
     }
@@ -41,7 +41,7 @@ class Transaction extends React.Component {
                this.props.LoadMembers()
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
     }
@@ -81,12 +81,13 @@ class Transaction extends React.Component {
 	                         bcreditAutoCalculated={transactionitem.bcreditAutoCalculated}
                              debit = {transactionitem.debit}
 	                         credit = {transactionitem.credit}
-	                         LoadMembers={this.props.LoadMembers}/>)
+	                         LoadMembers={this.props.LoadMembers}
+	                         handleRESTError = {this.props.handleRESTError}/>)
 	    return (
 			<div className="row">
-				<div className = "three wide grey column stretched center aligned">
+				<div className = "three wide grey column">
                     <div className = "ui fluid input">
-                        <input type="text" name = "name"
+                        <input type="text" name = "name" maxLength="48"
 				            defaultValue={this.state.transaction.name} onChange = {this.onInputChange}/>
 				    </div>
 				</div>

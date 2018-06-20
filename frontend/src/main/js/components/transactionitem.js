@@ -29,7 +29,7 @@ class TransactionItem extends React.Component {
                this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
     }
@@ -48,7 +48,7 @@ class TransactionItem extends React.Component {
                this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
     }
@@ -65,7 +65,7 @@ class TransactionItem extends React.Component {
                this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
     }

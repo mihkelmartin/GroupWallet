@@ -20,7 +20,8 @@ class SearchBar extends React.Component {
 		<form onSubmit={this.onSubmit}>
             <div className="ui blue centered header">
                 <div className="icon input">
-                    <input ref="eventEmail" type="text" placeholder="Event member e-mail..." value = {this.props.email}
+                    <input ref="eventEmail" type="text" autoFocus
+                        placeholder="Event creator e-mail..." value = {this.props.email}
                                             onFocus={this.setNewFormVisibility}/>
                     <i className="search icon" onClick={this.onSubmit}></i>
                 </div>

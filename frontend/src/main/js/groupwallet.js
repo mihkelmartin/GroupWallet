@@ -8,13 +8,21 @@ import {Router, Switch, Route} from 'react-router-dom';
 
 import MainDashBoard from './components/maindashboard.js';
 import EventDashBoard from './components/eventdashboard.js';
+import Error from './components/error.js';
 import createHistory from "history/createBrowserHistory"
 const history = createHistory();
 
 
 class Groupwallet extends React.Component {
 
-    state = {selectedEvent:''};
+    state = {selectedEvent : '', errorText : ''};
+
+    handleRESTError = (xhr) => {
+        if(xhr.responseJSON.status == 403){
+            this.setState({errorText : 'Session expired or invalid security token. Relogin to Event.'});
+            history.replace({ pathname: '/Error'});
+        }
+    }
 
     handleEventSelected = (eventSelected, data) => {
         this.setState({selectedEvent: eventSelected});
@@ -27,10 +35,13 @@ class Groupwallet extends React.Component {
 		return (
             <Router history = {history}>
                 <Switch>
-                  <Route exact path='/' render={(props) => <MainDashBoard{...props} onEventSelected = {this.handleEventSelected}/>}/>
+                  <Route exact path='/' render={(props) => <MainDashBoard{...props}
+                                            onEventSelected={this.handleEventSelected}
+                                            handleRESTError = {this.handleRESTError}/>}/>
                   <Route path='/Event/:eventId/:token' render={(props) => <EventDashBoard{...props}
                         eventId = {props.match.params.eventId} token={props.match.params.token}
-                        onEventSelected = {this.handleEventSelected}/>}/>
+                        onEventSelected = {this.handleEventSelected} handleRESTError = {this.handleRESTError}/>}/>
+                  <Route exact path='/Error' render={(props) => <Error{...props} errorText={this.state.errorText}/>}/>
                 </Switch>
             </Router>
         )

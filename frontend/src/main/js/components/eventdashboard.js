@@ -26,7 +26,7 @@ class EventDashBoard extends React.Component {
                 this.LoadTransactions(data);
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
     }
@@ -52,7 +52,7 @@ class EventDashBoard extends React.Component {
                 this.setState({transactions : data});
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
     }
@@ -64,15 +64,19 @@ class EventDashBoard extends React.Component {
 		return (
 		    <div>
 		        <Event eventId = {this.props.eventId} token = {this.props.token}
-		            onEventSelected = {this.props.onEventSelected}/>
+		            onEventSelected = {this.props.onEventSelected}
+		            handleRESTError = {this.props.handleRESTError}/>
                 <div className="ui divider"></div>
                 <MemberList eventId = {this.props.eventId} token = {this.props.token}
                     members={this.state.members}
-                    LoadMembers={this.LoadMembers}/>
+                    LoadMembers={this.LoadMembers}
+                    handleRESTError = {this.props.handleRESTError}/>
                 <div className="ui divider"></div>
                 <TransactionList eventId = {this.props.eventId} token = {this.props.token}
-                        members={this.state.members} transactions={this.state.transactions}
-                        LoadMembers={this.LoadMembers}/>
+                        members={this.state.members}
+                        transactions={this.state.transactions}
+                        LoadMembers={this.LoadMembers}
+                        handleRESTError = {this.props.handleRESTError}/>
                 <div className="ui divider"></div>
 		    </div>
 		)

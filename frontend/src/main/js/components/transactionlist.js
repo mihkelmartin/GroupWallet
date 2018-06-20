@@ -17,7 +17,7 @@ class TransactionList extends React.Component {
                this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
     }
@@ -27,7 +27,8 @@ class TransactionList extends React.Component {
             var transactions = this.props.transactions.map( transaction=>
                             <Transaction  key={transaction.id} eventId = {this.props.eventId}
                                         token = {this.props.token} transaction={transaction}
-                                        LoadMembers={this.props.LoadMembers}/> );
+                                        LoadMembers={this.props.LoadMembers}
+                                        handleRESTError = {this.props.handleRESTError}/> );
 		return (
             <div className= "ui container">
                 <div className='ui basic content center aligned segment'>

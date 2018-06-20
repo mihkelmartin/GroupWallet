@@ -23,7 +23,7 @@ class Member extends React.Component {
                 this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
     }
@@ -40,13 +40,12 @@ class Member extends React.Component {
               this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
     }
 
     onInputChange = (e) => {
-    console.log(e.target.name + ' value:' + e.target.value);
         const newMember = Object.assign({}, this.state.member);
         newMember[e.target.name] = e.target.value;
    	    this.setState({member: newMember});
@@ -82,12 +81,14 @@ class Member extends React.Component {
             <div className="row">
 				<div className = "three wide light grey column center aligned">
 				    <div className = "ui fluid input">
-				        <input type = "text" name="name" value={this.state.member.name} onChange = {this.onInputChange}/>
+				        <input type = "text" name="name" maxLength="24"
+				           value={this.state.member.name} onChange = {this.onInputChange}/>
 				    </div>
                 </div>
 				<div className = "two wide light grey column center aligned">
 				    <div className = "ui fluid input ">
-                        <input type = "text" name="nickName" value={this.state.member.nickName} onChange = {this.onInputChange}/>
+                        <input type = "text" name="nickName" maxLength="6" size="6"
+                           value={this.state.member.nickName} onChange = {this.onInputChange}/>
                     </div>
                 </div>
 				<div className = "three wide light grey column center aligned">
@@ -97,7 +98,8 @@ class Member extends React.Component {
                 </div>
 				<div className = "three wide light grey column center aligned">
 				    <div className = "ui fluid input">
-                        <input type = "text" name="bankAccount" value={this.state.member.bankAccount} onChange = {this.onInputChange}/>
+                        <input type = "text" name="bankAccount" maxLength="34"
+                          value={this.state.member.bankAccount} onChange = {this.onInputChange}/>
                     </div>
                 </div>
 				<div className = "two wide light grey column center aligned">

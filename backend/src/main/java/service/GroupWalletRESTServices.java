@@ -17,6 +17,7 @@ import java.util.List;
 @Controller
 public class GroupWalletRESTServices {
 
+    static final short SECURITY_TOKEN_VALID = 0;
     @Autowired
     EventService eventService;
     @Autowired
@@ -101,8 +102,10 @@ public class GroupWalletRESTServices {
     @ResponseBody
     public void updateEvent(@PathVariable String token, @RequestBody Event updatedEvent) {
         Event event = eventService.loadEvent(updatedEvent.getId());
-        if(event.getSecurityToken().equals(token))
+        if(event.validateToken(token) == SECURITY_TOKEN_VALID)
             eventService.save(event, updatedEvent);
+        else
+            throw new TokenNotValidException("Session expired or security token not valid");
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
@@ -112,8 +115,11 @@ public class GroupWalletRESTServices {
         Event retVal = null;
         Event event = eventService.loadEvent(eventid);
         if(event != null)
-            if(event.getSecurityToken().equals(token))
+            if(event.validateToken(token) == SECURITY_TOKEN_VALID)
                 retVal = event;
+            else
+                throw new TokenNotValidException("Session expired or security token not valid");
+
 
         return retVal;
     }
@@ -123,9 +129,12 @@ public class GroupWalletRESTServices {
     @ResponseBody
     public void removeEvent(@PathVariable String eventid, @PathVariable  String token) {
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token))
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID)
                 eventService.remove(event);
+            else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
     }
 
     // Members
@@ -136,9 +145,12 @@ public class GroupWalletRESTServices {
     public Collection<Member> GetMembers(@PathVariable String eventid, @PathVariable  String token) {
         Collection<Member> retVal = null;
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token))
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID)
                 retVal = event.getMembers();
+            else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
         return retVal;
     }
 
@@ -147,14 +159,17 @@ public class GroupWalletRESTServices {
     @ResponseBody
     public void AddMember(@PathVariable String eventid, @PathVariable  String token) {
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token)) {
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID) {
                 // Add new Member
                 Member member = new Member();
                 member.setName("New member");
                 member.seteMail("new.member@gmail.com");
                 memberService.add(event, member);
-            }
+            } else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
+
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
@@ -162,12 +177,15 @@ public class GroupWalletRESTServices {
     @ResponseBody
     public void updateMember(@PathVariable String eventid, @PathVariable String token, @RequestBody Member updatedMember) {
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token)) {
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID) {
                 Member member = eventService.findMember(event, updatedMember.getId());
-                if(member != null)
+                if (member != null)
                     memberService.save(member, updatedMember);
-            }
+            } else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
+
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
@@ -175,10 +193,12 @@ public class GroupWalletRESTServices {
     @ResponseBody
     public void RemoveMember(@PathVariable String eventid, @PathVariable  String token, @PathVariable  String memberid) {
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token)) {
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID) {
                 memberService.remove(eventService.findMember(event, memberid));
-            }
+            } else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
     }
 
 
@@ -190,9 +210,12 @@ public class GroupWalletRESTServices {
     public Collection<Transaction> GetTransactions(@PathVariable String eventid, @PathVariable  String token) {
         Collection<Transaction> retVal = null;
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token))
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID)
                 retVal = event.getTransactions();
+            else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
         return retVal;
     }
 
@@ -201,13 +224,16 @@ public class GroupWalletRESTServices {
     @ResponseBody
     public void AddTransaction(@PathVariable String eventid, @PathVariable  String token) {
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token)) {
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID) {
                 // Add new transaction
-                Transaction transaction= new Transaction();
+                Transaction transaction = new Transaction();
                 transaction.setName("New spending");
                 transactionService.add(event, transaction);
-            }
+            } else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
+
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
@@ -216,12 +242,14 @@ public class GroupWalletRESTServices {
     public void updateTransaction(@PathVariable String eventid, @PathVariable String token,
                                   @RequestBody Transaction updatedTransaction) {
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token)) {
-                Transaction transaction= eventService.findTransaction(event, updatedTransaction.getId());
-                if(transaction!= null)
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID) {
+                Transaction transaction = eventService.findTransaction(event, updatedTransaction.getId());
+                if (transaction != null)
                     transactionService.save(transaction, updatedTransaction);
-            }
+            } else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
@@ -230,10 +258,12 @@ public class GroupWalletRESTServices {
     public void RemoveTransaction(@PathVariable String eventid, @PathVariable  String token,
                                   @PathVariable  String transactionid) {
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token)) {
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID) {
                 transactionService.remove(eventService.findTransaction(event, transactionid));
-            }
+            } else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
@@ -243,13 +273,15 @@ public class GroupWalletRESTServices {
                                       @PathVariable  String transactionid, @PathVariable  String memberid,
                                       @PathVariable  double debit) {
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token)) {
-                Transaction transaction= eventService.findTransaction(event, transactionid);
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID) {
+                Transaction transaction = eventService.findTransaction(event, transactionid);
                 Member member = eventService.findMember(event, memberid);
-                if(transaction != null && member != null)
+                if (transaction != null && member != null)
                     transactionService.addDebitForMember(transaction, member, debit);
-            }
+            } else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
@@ -259,13 +291,15 @@ public class GroupWalletRESTServices {
                                       @PathVariable  String transactionid, @PathVariable  String memberid,
                                       @PathVariable  double credit) {
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token)) {
-                Transaction transaction= eventService.findTransaction(event, transactionid);
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID) {
+                Transaction transaction = eventService.findTransaction(event, transactionid);
                 Member member = eventService.findMember(event, memberid);
-                if(transaction != null && member != null)
+                if (transaction != null && member != null)
                     transactionService.addCreditForMember(transaction, member, credit);
-            }
+            } else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
     }
 
     @CrossOrigin(origins = "${clientcors.url}")
@@ -275,13 +309,15 @@ public class GroupWalletRESTServices {
                                        @PathVariable  String transactionid, @PathVariable  String memberid,
                                        @PathVariable  boolean bAutoCalc) {
         Event event = eventService.loadEvent(eventid);
-        if(event != null)
-            if(event.getSecurityToken().equals(token)) {
-                Transaction transaction= eventService.findTransaction(event, transactionid);
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID) {
+                Transaction transaction = eventService.findTransaction(event, transactionid);
                 Member member = eventService.findMember(event, memberid);
-                if(transaction != null && member != null)
+                if (transaction != null && member != null)
                     transactionService.setAutoCalculationForMember(transaction, member, bAutoCalc);
-            }
+            } else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
     }
 
 }

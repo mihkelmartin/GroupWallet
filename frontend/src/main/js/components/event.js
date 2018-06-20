@@ -23,7 +23,7 @@ class Event extends React.Component {
                eventObject = data;
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
 
@@ -42,7 +42,7 @@ class Event extends React.Component {
             success: function(data) {
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
     }
@@ -57,7 +57,7 @@ class Event extends React.Component {
                 this.props.onEventSelected('','');
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
         this.closeModal();
@@ -77,7 +77,8 @@ class Event extends React.Component {
                 <div className='ui centered blue card'>
                     <div className='content'>
                         <div className='header'>
-                          <input type="text" value={this.state.eventName} onChange={this.handleEventNameChange}/>
+                          <input type="text" maxLength="32" value={this.state.eventName}
+                             onChange={this.handleEventNameChange}/>
                             <span className='right floated blue icon'>
                                 <i className='trash icon' onClick={this.onEventDelete} />
                             </span>

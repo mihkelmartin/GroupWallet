@@ -7,6 +7,7 @@ import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
 import org.springframework.lang.NonNull;
 
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -160,4 +161,14 @@ public class Event {
         return retVal;
     }
 
+    public short validateToken(String token){
+        short retVal = 1; // Request denied, invalid token
+        if(getSecurityToken().equals(token)){
+            retVal = 2; // Token is expired
+            if(Duration.between(getSecurityTokenGenTS().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                    LocalDateTime.now()).getSeconds() <= 60 * 20)
+                retVal = 0;
+        }
+        return retVal;
+    }
 }
