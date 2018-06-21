@@ -64,12 +64,12 @@ class AddEvent extends React.Component {
                     <div className='header'>
 
                         <div className = "ui fluid input">
-                            <input ref="eventNameField" type="text" maxLength="32" placeholder="Event name"/>
+                            <input ref="eventNameField" type="text" maxLength="32" autoFocus placeholder="Event name"/>
                         </div>
                         <br></br>
 
                         <div className = "ui fluid input">
-                            <input ref="eMailField" type="email" placeholder="e-mail"/>
+                            <input ref="eMailField" type="email" maxLength="64" placeholder="e-mail"/>
                         </div>
                         <input type="submit" style={{display:"none"}}/>
 

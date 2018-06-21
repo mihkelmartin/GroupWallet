@@ -58,7 +58,8 @@ class Member extends React.Component {
             prevState.prevMember.eMail === nextProps.member.eMail &&
             prevState.prevMember.bankAccount === nextProps.member.bankAccount &&
             prevState.prevMember.credit=== nextProps.member.credit &&
-            prevState.prevMember.debit === nextProps.member.debit)
+            prevState.prevMember.debit === nextProps.member.debit &&
+            prevState.prevMember.payor === nextProps.member.payor)
             return null;
 
         return {member: nextProps.member,
@@ -93,7 +94,8 @@ class Member extends React.Component {
                 </div>
 				<div className = "three wide light grey column center aligned">
                     <div className = "ui fluid input">
-                        <input type = "email" name="eMail" value={this.state.member.eMail} onChange = {this.onInputChange}/>
+                        <input type = "email" name="eMail" maxLength="64"
+                          value={this.state.member.eMail} onChange = {this.onInputChange}/>
                     </div>
                 </div>
 				<div className = "three wide light grey column center aligned">
@@ -104,7 +106,7 @@ class Member extends React.Component {
                 </div>
 				<div className = "two wide light grey column center aligned">
 				    <div className = "ui fluid input">
-				        <select defaultValue={this.state.member.payor} name="payor" onChange = {this.onInputChange}>
+				        <select value={this.state.member.payor} name="payor" onChange = {this.onInputChange}>
 				            {options}
 				        </select>
                     </div>

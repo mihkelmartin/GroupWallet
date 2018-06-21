@@ -51,13 +51,22 @@ public class MemberServiceImpl implements MemberService {
     public Member remove(Member member) {
         transactionService.removeMemberFromTransactions(member);
         member.getEvent().getMembers().remove(member);
+        reassignRemovedPayor(member);
         memberDao.remove(member);
         recalculateOrderNumbers(member);
         return member;
     }
 
-    @Override
-    public void calculateMemberMoney(Member member) {
+    private void reassignRemovedPayor(Member removedMember){
+        for(Member member : removedMember.getEvent().getMembers()) {
+            if(member.getPayor().equals(removedMember.getId())) {
+                member.setPayor(member.getId());
+                memberDao.save(member);
+            }
+        }
+    }
+
+    private void calculateMemberMoney(Member member) {
 
         member.setDebit(0.0);
         member.setCredit(0.0);

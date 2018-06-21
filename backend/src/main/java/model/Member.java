@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.Size;
 import java.util.UUID;
 
 
@@ -17,19 +18,23 @@ import java.util.UUID;
 public class Member implements Comparable<Member>, Ordered {
 
     @Id
-    private @NonNull String id;
-    private @NonNull String name = "";
+    private String id;
+    @Size(max = 24)
+    private String name = "";
+    @Size(max = 6)
     private String nickName = "";
     @Indexed
+    @Size(max = 64)
     private String eMail = "";
+    @Size(max = 34)
     private String bankAccount = "";
-    private @NonNull int order = 0;
-    private @NonNull String payor;
+    private int order = 0;
+    private String payor;
     private double debit = 0.0;
     private double credit = 0.0;
     @Transient
     @JsonIgnore
-    private @NonNull Event event = null;
+    private Event event = null;
 
     public Member (){
         setId(UUID.randomUUID().toString());

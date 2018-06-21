@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Transient;
 import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 
 
@@ -13,9 +15,11 @@ import java.util.ArrayList;
  */
 public class TransactionItem {
 
-    private @NonNull String transactionId;
-    private @NonNull String memberId;
+    private String transactionId;
+    private String memberId;
+    @Min(0) @Max(999999)
     private double debit = 0.0;
+    @Min(0) @Max(999999)
     private double credit = 0.0;
     private boolean bcreditAutoCalculated = true;
     @Transient

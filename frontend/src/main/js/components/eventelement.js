@@ -91,13 +91,14 @@ class EventElement extends React.Component{
         var PINInput;
         if(this.state.loginError === false){
             PINInput =  <div className = "ui fluid input">
-                            <input ref="EventPIN" type="number" placeholder="Enter PIN and press ENTER"
+                            <input ref="EventPIN" type="number" min="0" max="999999999"
+                                placeholder="Enter PIN and press ENTER"
                                 value={this.state.pin} onChange={this.onPinChange} onBlur={this.onPinBlur}
                                     onFocus={this.onPinFocus}/>
                         </div>;
         } else {
             PINInput =  <div className = "ui fluid error input">
-                            <input ref="EventPIN" type="number" placeholder="Incorrect PIN"
+                            <input ref="EventPIN" type="number" min="0" max="999999999" placeholder="Incorrect PIN"
                                 value={this.state.pin} onChange={this.onPinChange} onBlur={this.onPinBlur}
                                     onFocus={this.onPinFocus}/>
                         </div>;

@@ -11,6 +11,5 @@ public interface MemberService {
     Member save(Member member, Member updatedMember);
     Member remove(Member member);
     void loadMembers(Event event);
-    void calculateMemberMoney(Member member);
     void calculateMembersMoney(Event event);
 }

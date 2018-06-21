@@ -7,11 +7,10 @@ import org.springframework.core.Ordered;
 import org.springframework.data.annotation.Id;
 import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 import java.time.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -23,21 +22,24 @@ public class Event {
 
     @Id
     @Indexed
-    private @NonNull String id;
-    private @NonNull String name = "";
+    private String id;
+    @Size(max = 32)
+    private String name = "";
     @Indexed
-    private @NonNull String ownerEmail = "";
+    @Size(max = 64)
+    private String ownerEmail = "";
     @JsonIgnore
-    private @NonNull Long PIN;
-    private @NonNull Date eventCreatedTS;
+    @Max(999999999)
+    private Long PIN;
+    private Date eventCreatedTS;
     @JsonIgnore
-    private @NonNull Date eventAccessedTS;
+    private Date eventAccessedTS;
     @JsonIgnore
-    private @NonNull Short failedLogins = 0;
+    private Short failedLogins = 0;
     @JsonIgnore
-    private @NonNull String securityToken = "";
+    private String securityToken = "";
     @JsonIgnore
-    private @NonNull Date securityTokenGenTS;
+    private Date securityTokenGenTS;
     @JsonIgnore
     private ArrayList<Member> members = new ArrayList<>();
     @JsonIgnore
@@ -49,6 +51,7 @@ public class Event {
         setEventCreatedTS(new Date());
         setEventAccessedTS(getEventCreatedTS());
         setSecurityTokenGenTS(getEventCreatedTS());
+        generateToken();
     }
 
     public void update(Event updatedEvent){
@@ -156,7 +159,21 @@ public class Event {
     }
 
     public String generateToken(){
-        String retVal = this.securityToken = UUID.randomUUID().toString() + UUID.randomUUID().toString();
+
+        String retVal = UUID.randomUUID().toString() + UUID.randomUUID().toString();
+
+        // Suffle token so it can't be re-engineered
+        List<Character> tokenCharacters = new ArrayList<Character>();
+        for(char c : retVal.toCharArray()) {
+            tokenCharacters.add(c);
+        }
+        Collections.shuffle(tokenCharacters);
+        StringBuilder sb = new StringBuilder();
+        tokenCharacters.forEach(c -> sb.append(c));
+        retVal = sb.toString();
+        // end suffle
+
+        setSecurityToken(retVal);
         setSecurityTokenGenTS(new Date());
         return retVal;
     }

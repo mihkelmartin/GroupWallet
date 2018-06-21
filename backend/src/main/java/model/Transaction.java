@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -16,14 +17,15 @@ import java.util.UUID;
 public class Transaction implements Comparable<Transaction>, Ordered {
 
     @Id
-    private @NonNull String id;
-    private @NonNull String name = "";
+    private String id;
+    @Size(max = 48)
+    private String name = "";
     private boolean bmanualCalculation = false;
-    private @NonNull int order = 0;
+    private int order = 0;
     private ArrayList<TransactionItem> items = new ArrayList<>();
     @Transient
     @JsonIgnore
-    private @NonNull Event event = null;
+    private Event event = null;
 
     public Transaction(){
         this.id = UUID.randomUUID().toString();
