@@ -2,3 +2,6 @@
 .idea/
 GroupWallet.iml
 target/
+node_modules/
+package-lock.json
+bundle.js*
