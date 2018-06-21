@@ -132,6 +132,9 @@ public class Member implements Comparable<Member>, Ordered {
         this.credit = credit;
     }
 
+    public double getBalance(){
+        return getDebit()- getCredit();
+    }
     @Override
     public int compareTo(Member o) {
         return (this.getOrder() < o.getOrder() ? -1 :
