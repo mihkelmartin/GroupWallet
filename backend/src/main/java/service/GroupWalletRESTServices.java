@@ -3,6 +3,7 @@ package service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import model.Event;
 import model.Member;
+import model.Payment;
 import model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,11 +26,28 @@ public class GroupWalletRESTServices {
     @Autowired
     TransactionService transactionService;
     @Autowired
+    PaymentService paymentService;
+    @Autowired
     RecaptchaService recaptchaService;
     @Autowired
     EmailServiceImpl emailService;
     @Autowired
     LoginService loginService;
+
+    @CrossOrigin(origins = "${clientcors.url}")
+    @GetMapping(path = "/Payments/{eventid}/{token}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public List<Payment> calculatePayments(@PathVariable String eventid, @PathVariable  String token) throws JsonProcessingException {
+        List<Payment> retVal = null;
+        Event event = eventService.loadEvent(eventid);
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID)
+                retVal = paymentService.calculatePayments(event);
+            else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
+        return retVal;
+    }
 
     @CrossOrigin(origins = "${clientcors.url}")
     @GetMapping(path = "/Event/find/email/{email}", produces = "application/json;charset=UTF-8")
@@ -102,10 +120,12 @@ public class GroupWalletRESTServices {
     @ResponseBody
     public void updateEvent(@PathVariable String token, @RequestBody Event updatedEvent) {
         Event event = eventService.loadEvent(updatedEvent.getId());
-        if(event.validateToken(token) == SECURITY_TOKEN_VALID)
-            eventService.save(event, updatedEvent);
-        else
-            throw new TokenNotValidException("Session expired or security token not valid");
+        if(event != null) {
+            if (event.validateToken(token) == SECURITY_TOKEN_VALID)
+                eventService.save(event, updatedEvent);
+            else
+                throw new TokenNotValidException("Session expired or security token not valid");
+        }
     }
 
     @CrossOrigin(origins = "${clientcors.url}")

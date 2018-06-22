@@ -3,11 +3,10 @@ package service;
 import model.Event;
 import model.Member;
 import model.Payment;
+import model.TransactionItem;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Math.abs;
 
@@ -16,63 +15,90 @@ import static java.lang.Math.abs;
  */
 public class PaymentServiceImpl implements PaymentService{
 
-    static final Comparator<Member> AMOUNT_ORDER =
-            new Comparator<Member>() {
-                public int compare(Member m1, Member m2) {
-                    return (int)(m1.getBalance() - m2.getBalance());
-                }
-            };
+    @Autowired
+    EventService eventService;
 
     @Override
     public List<Payment> calculatePayments(Event event) {
 
-        List<Payment> retVal = new ArrayList<>();
-        List<Member> debitors = new ArrayList<>();
-        List<Member> creditors = new ArrayList<>();
-        fillArrays(event, debitors, creditors);
-        createPaymentsExactMatch(retVal, debitors, creditors);
-        createPaymentsPairMatch(retVal, debitors, creditors);
-        createPaymentsRandom(retVal, debitors, creditors);
+        List<Payment> retVal = null;
+        List<PaymentCombination> runningCombinations = new ArrayList<>();
+        List<PaymentCombination> finalCombinations = new ArrayList<>();
+        PaymentCombination initialPaymentCombination = new PaymentCombination();
+        initialLoad(event, initialPaymentCombination);
+        runningCombinations.add(initialPaymentCombination);
+
+        createBestCombination(runningCombinations, finalCombinations);
+        retVal = findBest(finalCombinations);
+        fillPaymentData(event, retVal);
         return retVal;
     }
 
-    private void fillArrays(Event event, List<Member> debitors, List<Member> creditors){
+    private void initialLoad(Event event, PaymentCombination paymentCombination){
         event.getMembers().forEach(member ->
          {if(member.getBalance() > 0)
-             creditors.add(member);
+             paymentCombination.getCreditors().put(member.getId(), member.getBalance());
          else if (member.getBalance() < 0)
-             debitors.add(member);
+             paymentCombination.getDebitors().put(member.getId(), abs(member.getBalance()));
          });
-        Collections.sort(debitors, AMOUNT_ORDER);
-        Collections.sort(creditors, AMOUNT_ORDER);
     }
 
-    private void createPaymentsExactMatch(List<Payment> payments,
-                                          List<Member> debitors,
-                                          List<Member> creditors ){
-        for(Member memberCreditor : creditors) {
-            for (Member memberDebitor : debitors) {
-                if(memberCreditor.getBalance() == abs(memberDebitor.getBalance())){
-                    Payment payment = new Payment();
-                    payment.setAmount(memberCreditor.getBalance());
-                    payment.setBankAccount(memberCreditor.getBankAccount());
-                    payment.setPayor(memberDebitor.getName());
-                    payment.setReceiver(memberCreditor.getName());
-                    payment.setReceivereMail(memberCreditor.geteMail());
-                    payments.add(payment);
-                }
+    private void createBestCombination(List<PaymentCombination> runningCombinations,
+                                          List<PaymentCombination> finalCombinations){
+
+        List<PaymentCombination> localrunningCombinations = new ArrayList<>();
+        List<PaymentCombination> localfinalCombinations = new ArrayList<>();
+
+        if(runningCombinations.size() == 0)
+            return;
+
+        Iterator<PaymentCombination> iter = runningCombinations.iterator();
+        while (iter.hasNext()) {
+            PaymentCombination paymentCombination = iter.next();
+
+            List<PaymentCombination> newPaymentCombinations = new ArrayList<>();
+            paymentCombination.calculatePaymentCombinations(newPaymentCombinations);
+
+            iter.remove();
+
+            for(PaymentCombination newPaymentCombination : newPaymentCombinations){
+                if(newPaymentCombination.isDone())
+                    localfinalCombinations.add(newPaymentCombination);
+                else
+                    localrunningCombinations.add(newPaymentCombination);
             }
         }
+
+        runningCombinations.addAll(localrunningCombinations);
+        finalCombinations.addAll(localfinalCombinations);
+        createBestCombination(runningCombinations, finalCombinations);
     }
 
-    private void createPaymentsPairMatch(List<Payment> payments,
-                                          List<Member> debitors,
-                                          List<Member> creditors ){
-
+    private List<Payment> findBest(List<PaymentCombination> paymentCombinations){
+        List<Payment> retVal = null;
+        for (PaymentCombination paymentCombination : paymentCombinations){
+            if(retVal == null){
+                retVal = paymentCombination.getPayments();
+            } else
+            if(retVal.size() > paymentCombination.payments.size()){
+                retVal = paymentCombination.payments;
+            }
+        }
+        return retVal;
     }
-    private void createPaymentsRandom(List<Payment> payments,
-                                         List<Member> debitors,
-                                         List<Member> creditors ){
 
+    private void fillPaymentData(Event event, List<Payment> paymentList){
+        for (Payment payment : paymentList){
+            Member payor = eventService.findMember(event, payment.getPayor());
+            Member receiver = eventService.findMember(event, payment.getReceiver());
+            if(payor != null){
+                payment.setPayor(payor.getName());
+            }
+            if(receiver!= null){
+                payment.setReceiver(receiver.getName());
+                payment.setReceivereMail(receiver.geteMail());
+                payment.setBankAccount(receiver.getBankAccount());
+            }
+        }
     }
 }

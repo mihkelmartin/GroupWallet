@@ -112,6 +112,11 @@ public class AppConfig {
     }
 
     public @Bean
+    PaymentService paymentService() throws Exception {
+        return new PaymentServiceImpl();
+    }
+
+    public @Bean
     MoneyCalculationAspect moneyCalculationAspect() {
         return new MoneyCalculationAspect();
     }

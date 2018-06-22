@@ -13,7 +13,7 @@ import java.util.UUID;
  * Created by mihkel on 21.06.2018.
  */
 @Document
-public class Payment {
+public class Payment implements Comparable<Payment> {
 
     @Id
     @Indexed
@@ -28,6 +28,7 @@ public class Payment {
     private double amount = 0.0;
     @Size(max = 64)
     private String receivereMail = "";
+    private int order = 0;
 
     public Payment (){
         setId(UUID.randomUUID().toString());
@@ -79,5 +80,19 @@ public class Payment {
 
     public void setReceivereMail(String receivereMail) {
         this.receivereMail = receivereMail;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    @Override
+    public int compareTo(Payment o) {
+        return (this.getOrder() < o.getOrder() ? -1 :
+                (this.getOrder() == o.getOrder() ? 0 : 1));
     }
 }
