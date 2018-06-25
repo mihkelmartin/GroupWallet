@@ -183,8 +183,11 @@ public class Event {
         if(getSecurityToken().equals(token)){
             retVal = 2; // Token is expired
             if(Duration.between(getSecurityTokenGenTS().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
-                    LocalDateTime.now()).getSeconds() <= 60 * 20)
+                    LocalDateTime.now()).getSeconds() <= 60 * 20) {
+                // Renew token timestamp
+                setSecurityTokenGenTS(new Date());
                 retVal = 0;
+            }
         }
         return retVal;
     }

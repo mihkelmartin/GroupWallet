@@ -28,6 +28,7 @@ class MemberList extends React.Component {
     }
 
     handlePayments = () => {
+        this.setState({payments: []});
         var url = getBackEndUrl() + 'Payments/' + this.props.eventId + '/' + this.props.token;
         $.ajax({
             url: url,
@@ -55,8 +56,31 @@ class MemberList extends React.Component {
      	                                                        member={member}
                                                                 LoadMembers={this.props.LoadMembers}
                                                                 handleRESTError = {this.props.handleRESTError}/> );
-     	var payments = this.state.payments.map( (payment) => <Payment key={payment.payor+payment.reveiver}
+     	var payments = this.state.payments.map( (payment) => <Payment key={payment.payor+payment.receiver}
      	                                                                payment = {payment}/> );
+
+        var content;
+        if(payments.length === 0){
+            content =   <div>
+                            <div className="ui divider"></div>
+                            <div className="ui loading segment">
+                               <div className="ui blue centered header">
+                                  Calculating ...
+                              </div>
+                            </div>
+                        </div>;
+        } else {
+            content =   <div>
+                            <div className="ui blue centered header">
+                            Payments
+                            </div>
+                            <div className="ui divider"></div>
+                            <div className="ui five column centered grid">
+                                    {payments}
+                            </div>
+                        </div>;
+        }
+
 		return (
             <div className= "ui container">
                 <div className="ui seven column grid">
@@ -130,12 +154,13 @@ class MemberList extends React.Component {
                     onRequestClose={this.closeModal}
                     style={dialogStyles}
                     contentLabel='Create payments'>
-                    <div className="ui five column grid">
-                        {payments}
-                    </div>
-                    <div className="ui two buttons">
-                      <div className="ui basic blue button" onClick={this.closeModal}>Cancel</div>
-                      <div className="ui basic blue button" onClick={this.closeModal}>Send e-mails</div>
+                    <div className= "ui container">
+                            {content}
+                       <div className="ui divider"></div>
+                        <div className="ui two buttons">
+                          <div className="ui basic blue button" onClick={this.closeModal}>Cancel</div>
+                          <div className="ui basic blue button" onClick={this.closeModal}>Send e-mails</div>
+                        </div>
                     </div>
                 </ReactModal>
             </div>

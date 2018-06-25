@@ -3,7 +3,6 @@ package service;
 import model.Event;
 import model.Member;
 import model.Payment;
-import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;

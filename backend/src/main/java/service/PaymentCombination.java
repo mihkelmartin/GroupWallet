@@ -1,8 +1,6 @@
 package service;
 
-import model.Member;
 import model.Payment;
-import org.springframework.core.Ordered;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +59,6 @@ public class PaymentCombination {
                 paymentCombination.addPayment(debitor.getKey(), creditor.getKey(), amount);
             }
         }
-
     }
 
     public boolean isDone(){
