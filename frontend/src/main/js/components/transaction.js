@@ -74,16 +74,14 @@ class Transaction extends React.Component {
 
 	render() {
 	    return (
-			<div className="row">
-				<div className = "three wide grey column">
-                    <div className = "ui fluid input">
-                        <input type="text" name = "name" maxLength="48"
-				            value={this.state.transaction.name} onChange = {this.onInputChange}/>
-				    </div>
-				</div>
-				<div className = "one wide grey column center aligned">
-				    <i className="trash icon" onClick={this.onTransactionDelete}></i>
-				</div>
+			<div>
+                <div className="ui left action input">
+                    <button class="ui icon button">
+                        <i className="trash icon" onClick={this.onTransactionDelete}></i>
+                    </button>
+                    <input type="text" name = "name" maxLength="48"
+                        value={this.state.transaction.name} onChange = {this.onInputChange}/>
+                </div>
                 <ReactModal
                     isOpen={this.state.bDeleteDialogOpen}
                     onRequestClose={this.closeModal}

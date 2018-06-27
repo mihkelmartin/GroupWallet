@@ -81,9 +81,12 @@ class Member extends React.Component {
 		return (
             <div className="row">
 				<div className = "three wide light grey column center aligned">
-				    <div className = "ui fluid input">
-				        <input type = "text" name="name" maxLength="24"
-				           value={this.state.member.name} onChange = {this.onInputChange}/>
+				    <div className="ui left action input">
+                        <button class="ui icon button">
+                            <i className="trash icon" onClick={this.onMemberDelete}></i>
+                        </button>
+                        <input type = "text" name="name" maxLength="24"
+                               value={this.state.member.name} onChange = {this.onInputChange}/>
 				    </div>
                 </div>
 				<div className = "two wide light grey column center aligned">
@@ -113,9 +116,6 @@ class Member extends React.Component {
                 </div>
                 <div className = "two wide light grey column center aligned">
                     <p>{parseFloat(this.state.member.debit-this.state.member.credit).toFixed(2)}</p>
-                </div>
-                <div className = "one wide light grey column center aligned">
-                    <i className="trash icon" onClick={this.onMemberDelete}></i>
                 </div>
                 <ReactModal
                     isOpen={this.state.bDeleteDialogOpen}

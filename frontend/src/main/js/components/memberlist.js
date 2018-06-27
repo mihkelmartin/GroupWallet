@@ -87,47 +87,46 @@ class MemberList extends React.Component {
                     <div className="row">
                         <div className = "three wide blue column">
                             <div className = "ui center aligned inverted blue raised segment">
-                                <h3 className = "ui header">
+                                <h4 className = "ui header">
                                     Name
-                                </h3>
+                                </h4>
                             </div>
                         </div>
                         <div className = "two wide blue column">
                             <div className = "ui center aligned inverted blue raised segment">
-                                <h3 className = "ui header">
+                                <h4 className = "ui header">
                                     Nickname
-                                </h3>
+                                </h4>
                             </div>
                         </div>
                         <div className = "three wide blue column">
                             <div className = "ui center aligned inverted blue raised segment">
-                                <h3 className = "ui header">
+                                <h4 className = "ui header">
                                     e-mail
-                                </h3>
+                                </h4>
                             </div>
                         </div>
                         <div className = "three wide blue column">
                             <div className = "ui center aligned inverted blue raised segment">
-                                <h3 className = "ui header">
+                                <h4 className = "ui header">
                                     IBAN
-                                </h3>
+                                </h4>
                             </div>
                         </div>
                         <div className = "two wide blue column">
                              <div className = "ui center aligned inverted blue raised segment">
-                                 <h3 className = "ui header">
+                                 <h4 className = "ui header">
                                      Payor
-                                 </h3>
+                                 </h4>
                              </div>
                         </div>
                         <div className = "two wide blue column">
                              <div className = "ui center aligned inverted blue raised segment">
-                                 <h3 className = "ui header">
+                                 <h4 className = "ui header">
                                      Saldo
-                                 </h3>
+                                 </h4>
                              </div>
                         </div>
-                        <div className = "one wide blue column center aligned"><p></p></div>
                     </div>
                     {members}
                     <div className="row">

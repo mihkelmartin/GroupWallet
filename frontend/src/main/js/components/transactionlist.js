@@ -30,7 +30,9 @@ class TransactionList extends React.Component {
                 membersInTransactions = this.props.transactions[0].items.map(transactionitem => transactionitem.memberId );
 
             var columns = [];
-            columns.push({Header:"", accessor:"transaction",
+            columns.push({Header: "",
+                        minWidth: 210,
+                         accessor:"transaction",
                         Cell: props => (<Transaction  eventId = {this.props.eventId}
                                             token = {this.props.token} transaction={props.value}
                                             LoadMembers={this.props.LoadMembers}
@@ -82,6 +84,20 @@ class TransactionList extends React.Component {
                     defaultPageSize= {5}
                     data={data}
                     columns={columns}
+                    getTrProps={(state, rowInfo, column) => {
+                      return {
+                        style: {
+                        background: '#767676'
+                          }
+                      };
+                    }}
+                    getTheadTrProps={(state, rowInfo, column) => {
+                      return {
+                        style: {
+                            background:    '#2185D0'
+                        }
+                      };
+                    }}
                 />
             </div>
 		)
