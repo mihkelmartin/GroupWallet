@@ -19,8 +19,8 @@ class EventElement extends React.Component{
     state = {pin : '', loginError : false};
 
     onPINLogin = (token) => {
-        if(this.state.pin){
-            var url = getBackEndUrl() + 'login/' + this.props.event.id + '/' + this.refs.EventPIN.value + '/' + token;
+        if(this.pin){
+            var url = getBackEndUrl() + 'login/' + this.props.event.id + '/' + this.pin + '/' + token;
             console.log(url);
             $.ajax({
                 url: url,
@@ -76,6 +76,7 @@ class EventElement extends React.Component{
 
     onPinChange = (e) => {
         this.puk = e.target.value;
+        this.pin = e.target.value;
         this.setState({pin : e.target.value});
     }
 

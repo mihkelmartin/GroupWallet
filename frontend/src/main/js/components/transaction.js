@@ -20,6 +20,7 @@ class Transaction extends React.Component {
             dataType: 'text',
             cache: false,
             success: function(data){
+               this.closeModal();
                this.props.LoadMembers();
             }.bind(this),
             error: function(xhr, status, err) {
@@ -72,26 +73,14 @@ class Transaction extends React.Component {
     }
 
 	render() {
-	    var transactionitems = this.props.transaction.items.map(transactionitem =>
-	        <TransactionItem key={transactionitem.memberId}
-	                         eventId = {this.props.eventId}
-	                         token = {this.props.token}
-	                         transactionId = {transactionitem.transactionId}
-	                         memberId={transactionitem.memberId}
-	                         bcreditAutoCalculated={transactionitem.bcreditAutoCalculated}
-                             debit = {transactionitem.debit}
-	                         credit = {transactionitem.credit}
-	                         LoadMembers={this.props.LoadMembers}
-	                         handleRESTError = {this.props.handleRESTError}/>)
 	    return (
 			<div className="row">
 				<div className = "three wide grey column">
                     <div className = "ui fluid input">
                         <input type="text" name = "name" maxLength="48"
-				            defaultValue={this.state.transaction.name} onChange = {this.onInputChange}/>
+				            value={this.state.transaction.name} onChange = {this.onInputChange}/>
 				    </div>
 				</div>
-				{transactionitems}
 				<div className = "one wide grey column center aligned">
 				    <i className="trash icon" onClick={this.onTransactionDelete}></i>
 				</div>
