@@ -57,7 +57,9 @@ public class MongoDBEventDao implements EventDao {
     @Override    public void removeUnusedEvents() {
         BasicDBObject basicDBObject =
                 new BasicDBObject("$where",
-                        "return this.eventCreatedTS.valueOf() === this.securityTokenGenTS.valueOf()");
+                        "d1 = new Date(this.eventCreatedTS);\n" +
+                        "d2 = new Date();\n" +
+                        "return this.eventCreatedTS.valueOf() === this.securityTokenGenTS.valueOf() && d2 - d1 > 86400000");
         BasicQuery query = new BasicQuery(basicDBObject.toJson());
         mongoOps.remove(query, Event.class);
     }
