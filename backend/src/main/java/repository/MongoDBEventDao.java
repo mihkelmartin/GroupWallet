@@ -1,9 +1,11 @@
 package repository;
 
+import com.mongodb.BasicDBObject;
 import model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -50,6 +52,14 @@ public class MongoDBEventDao implements EventDao {
         criteria.orOperator(Criteria.where("members.eMail").is(eMail),Criteria.where("ownerEmail").is(eMail));
         Query query = new Query(criteria);
         return mongoOps.find(query, Event.class);
+    }
+
+    @Override    public void removeUnusedEvents() {
+        BasicDBObject basicDBObject =
+                new BasicDBObject("$where",
+                        "return this.eventCreatedTS.valueOf() === this.securityTokenGenTS.valueOf()");
+        BasicQuery query = new BasicQuery(basicDBObject.toJson());
+        mongoOps.remove(query, Event.class);
     }
 
 }

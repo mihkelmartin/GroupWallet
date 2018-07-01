@@ -38,7 +38,7 @@ class MemberList extends React.Component {
                 this.setState({payments: data});
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
 
@@ -83,7 +83,25 @@ class MemberList extends React.Component {
 
 		return (
             <div className= "ui container">
-                <div className="ui seven column grid">
+                <div className="ui seven column centered grid">
+                    <div className="row">
+                        <div className = "four wide column">
+                            <div className='ui basic content left aligned segment'>
+                                <button className='ui basic green button icon' onClick={this.handlePayments}>
+                                    Payments  <i className='calculator icon' />
+                                </button>
+                            </div>
+                        </div>
+                        <div className = "eight wide column">
+                            <div className='ui basic content center aligned segment'>
+                            <button className='ui basic green button icon' onClick={this.handleNewMember}>
+                                Add member  <i className='plus icon' />
+                            </button>
+                            </div>
+                        </div>
+                        <div className = "four wide column">
+                        </div>
+                    </div>
                     <div className="row">
                         <div className = "three wide blue column">
                             <div className = "ui center aligned inverted blue raised segment">
@@ -129,24 +147,6 @@ class MemberList extends React.Component {
                         </div>
                     </div>
                     {members}
-                    <div className="row">
-                        <div className = "four wide column">
-                            <div className='ui basic content left aligned segment'>
-                                <button className='ui basic green button icon' onClick={this.handlePayments}>
-                                    Payments  <i className='calculator icon' />
-                                </button>
-                            </div>
-                        </div>
-                        <div className = "eight wide column">
-                            <div className='ui basic content center aligned segment'>
-                            <button className='ui basic green button icon' onClick={this.handleNewMember}>
-                                Add member  <i className='plus icon' />
-                            </button>
-                            </div>
-                        </div>
-                        <div className = "four wide column">
-                        </div>
-                    </div>
                 </div>
                 <ReactModal
                     isOpen={this.state.bPaymentsDialogOpen}

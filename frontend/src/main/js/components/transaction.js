@@ -76,7 +76,7 @@ class Transaction extends React.Component {
 	    return (
 			<div>
                 <div className="ui left action input">
-                    <button class="ui icon button">
+                    <button className="ui icon button">
                         <i className="trash icon" onClick={this.onTransactionDelete}></i>
                     </button>
                     <input type="text" name = "name" maxLength="48"

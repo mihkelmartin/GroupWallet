@@ -10,4 +10,5 @@ import java.util.List;
 public interface EventDao extends GeneralDao<Event> {
     Event loadEvent(String id);
     List<Event> loadEventsByemail(String eMail);
+    void removeUnusedEvents();
 }

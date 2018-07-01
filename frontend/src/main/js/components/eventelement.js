@@ -35,7 +35,7 @@ class EventElement extends React.Component{
                         this.props.onEventSelected(this.props.event.id, data);
               }.bind(this),
                 error: function(xhr, status, err) {
-                    console.error(err.toString());
+                    this.props.handleRESTError(xhr);
                 }.bind(this)
             });
         }
@@ -54,7 +54,7 @@ class EventElement extends React.Component{
                     this.puk = -1;
               }.bind(this),
                 error: function(xhr, status, err) {
-                    console.error(err.toString());
+                    this.props.handleRESTError(xhr);
                 }.bind(this)
             });
         }

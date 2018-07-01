@@ -4,10 +4,7 @@ import aspects.MoneyCalculationAspect;
 import com.mongodb.MongoClient;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.*;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -15,6 +12,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import repository.*;
 import service.*;
 
@@ -25,6 +26,8 @@ import java.util.Properties;
  */
 @Configuration
 @EnableAspectJAutoProxy
+@EnableAsync
+@EnableScheduling
 @ComponentScan("service")
 public class AppConfig {
 
@@ -34,6 +37,11 @@ public class AppConfig {
     private Integer mongoPort;
     @Value( "${mongoDB.DBName}" )
     private String mongoDBName;
+
+    @Bean
+    public TaskScheduler taskScheduler() {
+        return new ConcurrentTaskScheduler();
+    }
 
     public @Bean
     MongoDbFactory mongoDbSimpleFactory() throws Exception {

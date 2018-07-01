@@ -41,4 +41,9 @@ public class JDBCEventDao implements EventDao {
     public List<Event> loadEventsByemail(String eMail) {
         return null;
     }
+
+    @Override
+    public void removeUnusedEvents() {
+
+    }
 }

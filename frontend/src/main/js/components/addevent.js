@@ -44,7 +44,7 @@ class AddEvent extends React.Component {
             cache: false,
             success: this.setResult,
             error: function(xhr, status, err) {
-                console.error(err.toString());
+                this.props.handleRESTError(xhr);
             }.bind(this)
         });
 

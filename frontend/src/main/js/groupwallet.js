@@ -18,10 +18,17 @@ class Groupwallet extends React.Component {
     state = {selectedEvent : '', errorText : ''};
 
     handleRESTError = (xhr) => {
-        if(xhr.responseJSON.status == 403){
-            this.setState({errorText : 'Session expired or invalid security token. Relogin to Event.'});
-            history.replace({ pathname: '/Error'});
+        console.log(xhr);
+        if(xhr.responseJSON){
+            if(xhr.responseJSON.status == 403){
+                this.setState({errorText : 'Session expired or invalid security token. Relogin to Event.'});
+            } else {
+                this.setState({errorText : 'Network error ' + xhr.responseJSON.status + '. Try again later'});
+            }
+        } else {
+            this.setState({errorText : 'Wallet for Team service temporary unavailable. Try again later.'});
         }
+        history.replace({ pathname: '/Error'});
     }
 
     handleEventSelected = (eventSelected, data) => {

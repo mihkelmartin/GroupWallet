@@ -28,7 +28,7 @@ class MainDashBoard extends React.Component {
                 this.setState({events: data});
                 }.bind(this),
                 error: function(xhr, status, err) {
-                    console.error(err.toString());
+                    this.props.handleRESTError(xhr);
                 }.bind(this)
             });
         });

@@ -5,6 +5,7 @@ import model.Member;
 import model.Transaction;
 import model.TransactionItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import repository.EventDao;
 
 import java.util.Date;
@@ -62,6 +63,12 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> loadEventsByEmail(String eMail) {
         return eventDao.loadEventsByemail(eMail);
+    }
+
+    // 1 hour
+    @Scheduled(fixedDelay=3600000)
+    public void removeUnusedEvents() {
+        eventDao.removeUnusedEvents();
     }
 
     @Override

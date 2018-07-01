@@ -82,7 +82,7 @@ class Member extends React.Component {
             <div className="row">
 				<div className = "three wide light grey column center aligned">
 				    <div className="ui left action input">
-                        <button class="ui icon button">
+                        <button className="ui icon button">
                             <i className="trash icon" onClick={this.onMemberDelete}></i>
                         </button>
                         <input type = "text" name="name" maxLength="24"

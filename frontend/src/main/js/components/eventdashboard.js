@@ -67,16 +67,16 @@ class EventDashBoard extends React.Component {
 		            onEventSelected = {this.props.onEventSelected}
 		            handleRESTError = {this.props.handleRESTError}/>
                 <div className="ui divider"></div>
-                <MemberList eventId = {this.props.eventId} token = {this.props.token}
-                    members={this.state.members}
-                    LoadMembers={this.LoadMembers}
-                    handleRESTError = {this.props.handleRESTError}/>
-                <div className="ui divider"></div>
                 <TransactionList eventId = {this.props.eventId} token = {this.props.token}
                         members={this.state.members}
                         transactions={this.state.transactions}
                         LoadMembers={this.LoadMembers}
                         handleRESTError = {this.props.handleRESTError}/>
+                <div className="ui divider"></div>
+                <MemberList eventId = {this.props.eventId} token = {this.props.token}
+                    members={this.state.members}
+                    LoadMembers={this.LoadMembers}
+                    handleRESTError = {this.props.handleRESTError}/>
                 <div className="ui divider"></div>
 		    </div>
 		)
