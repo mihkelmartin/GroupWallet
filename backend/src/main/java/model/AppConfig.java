@@ -3,6 +3,9 @@ package model;
 import aspects.MoneyCalculationAspect;
 import com.mongodb.MongoClient;
 
+import com.mongodb.MongoClientOptions;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -35,17 +38,27 @@ public class AppConfig {
     private String mongoHost;
     @Value( "${mongoDB.mongoPort}" )
     private Integer mongoPort;
+    @Value( "${mongoDB.authDBName}" )
+    private String mongoAuthDBName;
     @Value( "${mongoDB.DBName}" )
     private String mongoDBName;
-
-    @Bean
-    public TaskScheduler taskScheduler() {
-        return new ConcurrentTaskScheduler();
-    }
+    @Value( "${mongoDB.username}" )
+    private String mongoUsername;
+    @Value( "${mongoDB.password}" )
+    private String mongoPassword;
 
     public @Bean
     MongoDbFactory mongoDbSimpleFactory() throws Exception {
-        return new SimpleMongoDbFactory(new MongoClient(mongoHost, mongoPort), mongoDBName);
+        return new SimpleMongoDbFactory(
+                new MongoClient(new ServerAddress(mongoHost, mongoPort),
+                        MongoCredential.createCredential(mongoUsername,mongoAuthDBName,
+                                mongoPassword.toCharArray()),
+                        new MongoClientOptions.Builder().build()),
+                mongoDBName);
+    }
+    @Bean
+    public TaskScheduler taskScheduler() {
+        return new ConcurrentTaskScheduler();
     }
 
     public @Bean

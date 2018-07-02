@@ -30,6 +30,8 @@ public class PaymentServiceImpl implements PaymentService{
         createBestCombination(runningCombinations, finalCombinations);
         retVal = findBest(finalCombinations);
         fillPaymentData(event, retVal);
+        if(retVal == null)
+            retVal = new ArrayList<>();
         return retVal;
     }
 
@@ -87,16 +89,18 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     private void fillPaymentData(Event event, List<Payment> paymentList){
-        for (Payment payment : paymentList){
-            Member payor = eventService.findMember(event, payment.getPayor());
-            Member receiver = eventService.findMember(event, payment.getReceiver());
-            if(payor != null){
-                payment.setPayor(payor.getName());
-            }
-            if(receiver!= null){
-                payment.setReceiver(receiver.getName());
-                payment.setReceivereMail(receiver.geteMail());
-                payment.setBankAccount(receiver.getBankAccount());
+        if(paymentList != null) {
+            for (Payment payment : paymentList) {
+                Member payor = eventService.findMember(event, payment.getPayor());
+                Member receiver = eventService.findMember(event, payment.getReceiver());
+                if (payor != null) {
+                    payment.setPayor(payor.getName());
+                }
+                if (receiver != null) {
+                    payment.setReceiver(receiver.getName());
+                    payment.setReceivereMail(receiver.geteMail());
+                    payment.setBankAccount(receiver.getBankAccount());
+                }
             }
         }
     }

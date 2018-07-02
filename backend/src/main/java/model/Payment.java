@@ -12,7 +12,6 @@ import java.util.UUID;
 /**
  * Created by mihkel on 21.06.2018.
  */
-@Document
 public class Payment implements Comparable<Payment> {
 
     @Id

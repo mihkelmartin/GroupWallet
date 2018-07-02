@@ -10,7 +10,8 @@ ReactModal.setAppElement('#react');
 class MemberList extends React.Component {
 
     state = {payments : [],
-             bPaymentsDialogOpen : false};
+             bPaymentsDialogOpen : false,
+             bPaymentsReceived : false};
 
     handleNewMember = () => {
         var url = getBackEndUrl() + 'Members/add/' + this.props.eventId + '/' + this.props.token;
@@ -28,14 +29,14 @@ class MemberList extends React.Component {
     }
 
     handlePayments = () => {
-        this.setState({payments: []});
+        this.setState({payments: [], bPaymentsReceived : false});
         var url = getBackEndUrl() + 'Payments/' + this.props.eventId + '/' + this.props.token;
         $.ajax({
             url: url,
             dataType: 'json',
             cache: false,
             success: function(data) {
-                this.setState({payments: data});
+                this.setState({payments: data, bPaymentsReceived : true});
             }.bind(this),
             error: function(xhr, status, err) {
                 this.props.handleRESTError(xhr);
@@ -61,15 +62,23 @@ class MemberList extends React.Component {
 
         var content;
         if(payments.length === 0){
-            content =   <div>
-                            <div className="ui divider"></div>
-                            <div className="ui loading segment">
+            if(this.state.bPaymentsReceived === false)
+                content =   <div>
+                                <div className="ui divider"></div>
+                                 <div className="ui loading segment">
+                                  <div className="ui blue centered header">
+                                       Calculating ...
+                                  </div>
+                                </div>
+                            </div>;
+            else
+                content =   <div>
+                             <div className="ui divider"></div>
                                <div className="ui blue centered header">
-                                  Calculating ...
-                              </div>
-                            </div>
-                        </div>;
-        } else {
+                                    No payments required !
+                               </div>
+                         </div>;
+            } else {
             content =   <div>
                             <div className="ui blue centered header">
                             Payments
